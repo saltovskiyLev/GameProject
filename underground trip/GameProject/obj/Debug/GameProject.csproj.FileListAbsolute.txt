@@ -1,0 +1,74 @@
+C:\rep\camino\unium\code\GameProject\GameProject\bin\Debug\GameProject.exe.config
+C:\rep\camino\unium\code\GameProject\GameProject\bin\Debug\GameProject.exe
+C:\rep\camino\unium\code\GameProject\GameProject\bin\Debug\GameProject.pdb
+C:\rep\camino\unium\code\GameProject\GameProject\bin\Debug\BaseLogic.dll
+C:\rep\camino\unium\code\GameProject\GameProject\bin\Debug\CanvasVisualisation.dll
+C:\rep\camino\unium\code\GameProject\GameProject\bin\Debug\Interaction.dll
+C:\rep\camino\unium\code\GameProject\GameProject\bin\Debug\LabLib.dll
+C:\rep\camino\unium\code\GameProject\GameProject\obj\Debug\GameProject.csprojAssemblyReference.cache
+C:\rep\camino\unium\code\GameProject\GameProject\obj\Debug\MainWindow.g.cs
+C:\rep\camino\unium\code\GameProject\GameProject\obj\Debug\App.g.cs
+C:\rep\camino\unium\code\GameProject\GameProject\obj\Debug\GameProject_MarkupCompile.cache
+C:\rep\camino\unium\code\GameProject\GameProject\obj\Debug\GameProject_MarkupCompile.lref
+C:\rep\camino\unium\code\GameProject\GameProject\obj\Debug\MainWindow.baml
+C:\rep\camino\unium\code\GameProject\GameProject\obj\Debug\GameProject.g.resources
+C:\rep\camino\unium\code\GameProject\GameProject\obj\Debug\GameProject.Properties.Resources.resources
+C:\rep\camino\unium\code\GameProject\GameProject\obj\Debug\GameProject.csproj.GenerateResource.cache
+C:\rep\camino\unium\code\GameProject\GameProject\obj\Debug\GameProject.csproj.CoreCompileInputs.cache
+C:\rep\camino\unium\code\GameProject\GameProject\obj\Debug\GameProject.csproj.CopyComplete
+C:\rep\camino\unium\code\GameProject\GameProject\obj\Debug\GameProject.exe
+C:\rep\camino\unium\code\GameProject\GameProject\obj\Debug\GameProject.pdb
+C:\prog\GameProject\GameProject\bin\Debug\GameProject.exe.config
+C:\prog\GameProject\GameProject\obj\Debug\GameProject.exe
+C:\prog\GameProject\GameProject\obj\Debug\GameProject.pdb
+C:\prog\GameProject\GameProject\bin\Debug\GameProject.exe
+C:\prog\GameProject\GameProject\bin\Debug\GameProject.pdb
+C:\prog\GameProject\GameProject\bin\Debug\BaseLogic.dll
+C:\prog\GameProject\GameProject\bin\Debug\CanvasVisualisation.dll
+C:\prog\GameProject\GameProject\bin\Debug\Interaction.dll
+C:\prog\GameProject\GameProject\bin\Debug\LabLib.dll
+C:\prog\GameProject\GameProject\obj\Debug\GameProject.csprojResolveAssemblyReference.cache
+C:\prog\GameProject\GameProject\obj\Debug\MainWindow.g.cs
+C:\prog\GameProject\GameProject\obj\Debug\App.g.cs
+C:\prog\GameProject\GameProject\obj\Debug\GameProject_MarkupCompile.cache
+C:\prog\GameProject\GameProject\obj\Debug\GameProject_MarkupCompile.lref
+C:\prog\GameProject\GameProject\obj\Debug\MainWindow.baml
+C:\prog\GameProject\GameProject\obj\Debug\GameProject.g.resources
+C:\prog\GameProject\GameProject\obj\Debug\GameProject.Properties.Resources.resources
+C:\prog\GameProject\GameProject\obj\Debug\GameProject.csproj.GenerateResource.Cache
+C:\Левино программирование\GameProject\GameProject\bin\Debug\GameProject.exe.config
+C:\Левино программирование\GameProject\GameProject\obj\Debug\GameProject.exe
+C:\Левино программирование\GameProject\GameProject\obj\Debug\GameProject.pdb
+C:\Левино программирование\GameProject\GameProject\bin\Debug\GameProject.exe
+C:\Левино программирование\GameProject\GameProject\bin\Debug\GameProject.pdb
+C:\Левино программирование\GameProject\GameProject\bin\Debug\BaseLogic.dll
+C:\Левино программирование\GameProject\GameProject\bin\Debug\CanvasVisualisation.dll
+C:\Левино программирование\GameProject\GameProject\bin\Debug\Interaction.dll
+C:\Левино программирование\GameProject\GameProject\bin\Debug\LabLib.dll
+C:\Левино программирование\GameProject\GameProject\obj\Debug\GameProject.csprojResolveAssemblyReference.cache
+C:\Левино программирование\GameProject\GameProject\obj\Debug\MainWindow.g.cs
+C:\Левино программирование\GameProject\GameProject\obj\Debug\App.g.cs
+C:\Левино программирование\GameProject\GameProject\obj\Debug\GameProject_MarkupCompile.cache
+C:\Левино программирование\GameProject\GameProject\obj\Debug\GameProject_MarkupCompile.lref
+C:\Левино программирование\GameProject\GameProject\obj\Debug\MainWindow.baml
+C:\Левино программирование\GameProject\GameProject\obj\Debug\GameProject.g.resources
+C:\Левино программирование\GameProject\GameProject\obj\Debug\GameProject.Properties.Resources.resources
+C:\Левино программирование\GameProject\GameProject\obj\Debug\GameProject.csproj.GenerateResource.Cache
+C:\repo\GameProject\underground trip\GameProject\bin\Debug\GameProject.exe.config
+C:\repo\GameProject\underground trip\GameProject\obj\Debug\GameProject.exe
+C:\repo\GameProject\underground trip\GameProject\obj\Debug\GameProject.pdb
+C:\repo\GameProject\underground trip\GameProject\bin\Debug\GameProject.exe
+C:\repo\GameProject\underground trip\GameProject\bin\Debug\GameProject.pdb
+C:\repo\GameProject\underground trip\GameProject\bin\Debug\BaseLogic.dll
+C:\repo\GameProject\underground trip\GameProject\bin\Debug\CanvasVisualisation.dll
+C:\repo\GameProject\underground trip\GameProject\bin\Debug\Interaction.dll
+C:\repo\GameProject\underground trip\GameProject\bin\Debug\LabLib.dll
+C:\repo\GameProject\underground trip\GameProject\obj\Debug\GameProject.csprojResolveAssemblyReference.cache
+C:\repo\GameProject\underground trip\GameProject\obj\Debug\MainWindow.g.cs
+C:\repo\GameProject\underground trip\GameProject\obj\Debug\App.g.cs
+C:\repo\GameProject\underground trip\GameProject\obj\Debug\GameProject_MarkupCompile.cache
+C:\repo\GameProject\underground trip\GameProject\obj\Debug\GameProject_MarkupCompile.lref
+C:\repo\GameProject\underground trip\GameProject\obj\Debug\MainWindow.baml
+C:\repo\GameProject\underground trip\GameProject\obj\Debug\GameProject.g.resources
+C:\repo\GameProject\underground trip\GameProject\obj\Debug\GameProject.Properties.Resources.resources
+C:\repo\GameProject\underground trip\GameProject\obj\Debug\GameProject.csproj.GenerateResource.Cache
