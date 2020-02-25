@@ -1,0 +1,58 @@
+C:\rep\camino\unium\code\GameProject\GameProject\bin\Debug\GameProject.exe.config
+C:\rep\camino\unium\code\GameProject\GameProject\bin\Debug\GameProject.exe
+C:\rep\camino\unium\code\GameProject\GameProject\bin\Debug\GameProject.pdb
+C:\rep\camino\unium\code\GameProject\GameProject\bin\Debug\BaseLogic.dll
+C:\rep\camino\unium\code\GameProject\GameProject\bin\Debug\CanvasVisualisation.dll
+C:\rep\camino\unium\code\GameProject\GameProject\bin\Debug\Interaction.dll
+C:\rep\camino\unium\code\GameProject\GameProject\bin\Debug\LabLib.dll
+C:\rep\camino\unium\code\GameProject\GameProject\obj\Debug\GameProject.csprojAssemblyReference.cache
+C:\rep\camino\unium\code\GameProject\GameProject\obj\Debug\MainWindow.g.cs
+C:\rep\camino\unium\code\GameProject\GameProject\obj\Debug\App.g.cs
+C:\rep\camino\unium\code\GameProject\GameProject\obj\Debug\GameProject_MarkupCompile.cache
+C:\rep\camino\unium\code\GameProject\GameProject\obj\Debug\GameProject_MarkupCompile.lref
+C:\rep\camino\unium\code\GameProject\GameProject\obj\Debug\MainWindow.baml
+C:\rep\camino\unium\code\GameProject\GameProject\obj\Debug\GameProject.g.resources
+C:\rep\camino\unium\code\GameProject\GameProject\obj\Debug\GameProject.Properties.Resources.resources
+C:\rep\camino\unium\code\GameProject\GameProject\obj\Debug\GameProject.csproj.GenerateResource.cache
+C:\rep\camino\unium\code\GameProject\GameProject\obj\Debug\GameProject.csproj.CoreCompileInputs.cache
+C:\rep\camino\unium\code\GameProject\GameProject\obj\Debug\GameProject.csproj.CopyComplete
+C:\rep\camino\unium\code\GameProject\GameProject\obj\Debug\GameProject.exe
+C:\rep\camino\unium\code\GameProject\GameProject\obj\Debug\GameProject.pdb
+C:\Temp\2020-02-14\GameProject\GameProject\bin\Debug\GameProject.exe.config
+C:\Temp\2020-02-14\GameProject\GameProject\bin\Debug\GameProject.exe
+C:\Temp\2020-02-14\GameProject\GameProject\bin\Debug\GameProject.pdb
+C:\Temp\2020-02-14\GameProject\GameProject\bin\Debug\BaseLogic.dll
+C:\Temp\2020-02-14\GameProject\GameProject\bin\Debug\CanvasVisualisation.dll
+C:\Temp\2020-02-14\GameProject\GameProject\bin\Debug\Interaction.dll
+C:\Temp\2020-02-14\GameProject\GameProject\bin\Debug\LabLib.dll
+C:\Temp\2020-02-14\GameProject\GameProject\obj\Debug\GameProject.csprojAssemblyReference.cache
+C:\Temp\2020-02-14\GameProject\GameProject\obj\Debug\MainWindow.g.cs
+C:\Temp\2020-02-14\GameProject\GameProject\obj\Debug\App.g.cs
+C:\Temp\2020-02-14\GameProject\GameProject\obj\Debug\GameProject_MarkupCompile.cache
+C:\Temp\2020-02-14\GameProject\GameProject\obj\Debug\GameProject_MarkupCompile.lref
+C:\Temp\2020-02-14\GameProject\GameProject\obj\Debug\MainWindow.baml
+C:\Temp\2020-02-14\GameProject\GameProject\obj\Debug\GameProject.g.resources
+C:\Temp\2020-02-14\GameProject\GameProject\obj\Debug\GameProject.Properties.Resources.resources
+C:\Temp\2020-02-14\GameProject\GameProject\obj\Debug\GameProject.csproj.GenerateResource.cache
+C:\Temp\2020-02-14\GameProject\GameProject\obj\Debug\GameProject.csproj.CoreCompileInputs.cache
+C:\Temp\2020-02-14\GameProject\GameProject\obj\Debug\GameProject.csproj.CopyComplete
+C:\Temp\2020-02-14\GameProject\GameProject\obj\Debug\GameProject.exe
+C:\Temp\2020-02-14\GameProject\GameProject\obj\Debug\GameProject.pdb
+C:\prog\редактор карт\GameProject\bin\Debug\GameProject.exe.config
+C:\prog\редактор карт\GameProject\obj\Debug\GameProject.exe
+C:\prog\редактор карт\GameProject\obj\Debug\GameProject.pdb
+C:\prog\редактор карт\GameProject\bin\Debug\GameProject.exe
+C:\prog\редактор карт\GameProject\bin\Debug\GameProject.pdb
+C:\prog\редактор карт\GameProject\bin\Debug\BaseLogic.dll
+C:\prog\редактор карт\GameProject\bin\Debug\CanvasVisualisation.dll
+C:\prog\редактор карт\GameProject\bin\Debug\Interaction.dll
+C:\prog\редактор карт\GameProject\bin\Debug\LabLib.dll
+C:\prog\редактор карт\GameProject\obj\Debug\GameProject.csprojResolveAssemblyReference.cache
+C:\prog\редактор карт\GameProject\obj\Debug\MainWindow.g.cs
+C:\prog\редактор карт\GameProject\obj\Debug\App.g.cs
+C:\prog\редактор карт\GameProject\obj\Debug\GameProject_MarkupCompile.cache
+C:\prog\редактор карт\GameProject\obj\Debug\GameProject_MarkupCompile.lref
+C:\prog\редактор карт\GameProject\obj\Debug\MainWindow.baml
+C:\prog\редактор карт\GameProject\obj\Debug\GameProject.g.resources
+C:\prog\редактор карт\GameProject\obj\Debug\GameProject.Properties.Resources.resources
+C:\prog\редактор карт\GameProject\obj\Debug\GameProject.csproj.GenerateResource.Cache
