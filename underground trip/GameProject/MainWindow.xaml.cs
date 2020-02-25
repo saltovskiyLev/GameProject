@@ -73,10 +73,8 @@ namespace GameProject
            
             ipan.AddItem("arrow", "arrow","0");
 
-            map.Library.AddPicture("hole", "hole.png");
             ipan.AddItem("hole", "hole", "");
             PrintHolesNum();      
-           map.DrawInCell("wall", 3, 6);
             int x = 10, y = 9;
             while (x <= 19)
             {
@@ -97,10 +95,7 @@ namespace GameProject
                 map.DrawInCell("wall", 11, y);
                 y = y - 1;
             }
-            map.Library.AddPicture("pick", "pick.png");
             map.DrawInCell("pick", 7, 2);
-            map.Library.AddPicture("DINAMIT", "143108_800x355_creeper_tnt_wallpaper_by_shadowe56b0cb7b.png");
-            map.DrawInCell("DINAMIT", 2, 3);
             AnimationDefinition a = new AnimationDefinition();
             ipan.AddItem("DINAMIT", "DINAMIT", "динамит");
             ipan.SetText("DINAMIT", hasTNT.ToString());
@@ -202,10 +197,13 @@ namespace GameProject
             map.Library.AddPicture("clock", "clock.png");
             map.Library.AddPicture("fire1", "fire1.png");
             map.Library.AddPicture("fire2", "fire2.png");
+            map.Library.AddPicture("hole", "hole.png");
             map.Library.AddPicture("arrow", "untitled.png");
             map.Library.AddPicture("bow", "untitled2.png");
             map.Library.AddPicture("fire3", "fire3.png");
             map.Library.AddPicture("fire4", "fire4.png");
+            map.Library.AddPicture("pick", "pick.png");
+            map.Library.AddPicture("DINAMIT", "143108_800x355_creeper_tnt_wallpaper_by_shadowe56b0cb7b.png");
             map.Library.AddPicture("fire5", "fire5.png");
             map.Library.AddPicture("rip2", "rip2.png");
             map.Library.AddPicture("wall", "wall.png");
@@ -270,6 +268,7 @@ namespace GameProject
             map.DrawInCell("wall", 1, 0);
             map.DrawInCell("wall", 1, 2);
             map.DrawInCell("wall", 1, 3);
+            map.DrawInCell("wall", 3, 1);
             map.DrawInCell("wall", 3, 5);
             map.DrawInCell("wall", 2, 5);
             map.DrawInCell("wall", 1, 3);
@@ -317,6 +316,7 @@ namespace GameProject
             map.DrawInCell("wall", 6, 3);
             map.DrawInCell("wall", 5, 3);
             map.DrawInCell("camen", 9, 4);
+            map.DrawInCell("DINAMIT", 2, 3);
         }
         void DrawPlayerEnergy(int Energy)
         {
@@ -412,18 +412,15 @@ namespace GameProject
         {
             ipan.SetText("hole","пропасть: "+holes);
         }
-                      
-
-
-
-
-
-
-
-
-
-
-
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
         // В этой функции проверяем, какая клавиша была нажата
         void CheckKey(Key k)
         {
@@ -702,14 +699,15 @@ namespace GameProject
                 map.ContainerSetCoordinate("fell", map.XAbsolute / 2, map.YAbsolute / 2);
             }
         }
-
-
-
-
-
-
-
-
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
         void LeftClick(int x, int y, int Xcell, int Ycell)
         {
            // MessageBox.Show(Xcell.ToString());
