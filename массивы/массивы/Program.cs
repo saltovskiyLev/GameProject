@@ -15,6 +15,7 @@ namespace массивы
             cites[1] = "Moscow";
             cites[2] = "Dubna";
             cites[3] = "Berlin";
+            cites[4] = "Sakura";
             for (int i = 0; i < cites.Length; i++)
             {
                Console.WriteLine(cites[i]);
