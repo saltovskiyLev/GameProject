@@ -22,7 +22,7 @@ namespace GameProject
     public partial class MainWindow : Window
     {
         Random r = new Random();
-        int EnergyPlayer = 600;
+        int EnergyPlayer = 6;
         int EnergyEvil = 6;
         bool Delete;
         bool isEvilElive = true;
