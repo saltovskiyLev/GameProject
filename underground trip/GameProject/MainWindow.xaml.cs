@@ -22,11 +22,12 @@ namespace GameProject
     public partial class MainWindow : Window
     {
         Random r = new Random();
-        int EnergyPlayer = 6;
+        int EnergyPlayer = 600;
         int EnergyEvil = 6;
         bool Delete;
         bool isEvilElive = true;
-        bool isPlayerAlive = true; 
+        bool isPlayerAlive = true;
+        int portals = 5;
         int holes = 5;
         int swordX = 9,swordY =5;
         int potionX = 12;
@@ -43,6 +44,8 @@ namespace GameProject
         bool hasPick = false;
         bool hasBow = false;
         int arrow = 0;
+        int[] portalX;
+        int[] portalY;
         int Player2X, Player2Y;
         int PlayerX, PlayerY;
         public MainWindow()
@@ -58,7 +61,16 @@ namespace GameProject
             lay.Attach(EnergyPanel,1);
             map.Keyboard.SetSingleKeyEventHandler(CheckKey);
             //map.DrawGrid();
-
+            portalX = new int[portals];
+            portalY = new int[portals];
+            for (int i = 0; i < portalX.Length; i++)
+            {
+                portalX[i] = r.Next(1,map.XCells - 1);
+            }
+            for(int i = 0; i < portalY.Length; i++)
+            {
+                portalY[i] = r.Next(1, map.YCells - 1);
+            }
             AddPictures();
               DrawMaps();
 
@@ -175,6 +187,8 @@ namespace GameProject
         }
         void AddPictures()
         {
+            map.Library.ImagesFolder = new PathInfo { Path = "..\\..\\images", Type = PathType.Relative };
+            map.Library.AddPicture("portal", "portal.png");
             map.Library.AddPicture("green0", "green0.png");
             map.Library.AddPicture("green1", "green1.png");
             map.Library.AddPicture("green2", "green2.png");
@@ -241,6 +255,10 @@ namespace GameProject
         }
         void DrawMaps()
         {
+            for(int i = 0;i < portals; i++)
+            {
+                map.DrawInCell("portal",portalX[i],portalY[i]);
+            }
             map.DrawInCell("potionRed", potionX, potionY);
             map.DrawInCell("wall", 1, 2);
             map.DrawInCell("wall", 0, 0);
@@ -710,8 +728,15 @@ namespace GameProject
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         void LeftClick(int x, int y, int Xcell, int Ycell)
         {
+            for (int i = 0; i < portals; i++)
+            {
+                if (PlayerX == portalX[i] && PlayerY == portalY[i])
+                {
+                    DrawPlayer(Xcell, Ycell);
+                }
+            }
            // MessageBox.Show(Xcell.ToString());
-            if (hasBow == true && arrow >= 1)
+                if (hasBow == true && arrow >= 1)
             {
                 arrow = arrow - 1;
                 ipan.SetText("arrow",arrow.ToString());
@@ -737,6 +762,12 @@ namespace GameProject
                     }
                 }
             }
+        }
+        void  DrawPlayer(int x, int y)
+        {
+            map.RemoveFromCell("smile",PlayerX,PlayerY);
+            PlayerX = x; PlayerY = y;
+            map.DrawInCell("smile",x,y);
         }
     }
 }
