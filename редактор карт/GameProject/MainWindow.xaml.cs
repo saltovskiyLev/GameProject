@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,9 +23,9 @@ namespace GameProject
     /// </summary>
     public partial class MainWindow : Window
     {
-        string Picture;
+        string Picture = "";
         InventoryPanel ipan;
-        CellMapInfo cellMap = new CellMapInfo(20, 10, 50, 0);
+        CellMapInfo cellMap = new CellMapInfo(100, 100, 50,0);
         IGameScreenLayout lay;
         UniversalMap_Wpf map;
         public MainWindow()
@@ -41,7 +42,7 @@ namespace GameProject
             AddPictures();
             map.Mouse.SetMouseSingleLeftClickHandler(MouseHandler);
             map.Mouse.SetMouseRightClickHandler(RightClick);
-         //   map.Library.AddAnimation("fire", a);
+            //map.Library.AddAnimation("fire", a);
             /*a = new AnimationDefinition();
             a.AddFrame(50, "fire1");
             a.AddFrame(50, "fire2");
@@ -52,7 +53,18 @@ namespace GameProject
         }
         void AddPictures()
         {
-            map.Library.AddPicture("ЗАБОР", "ЗАБОР.png");
+            int point;
+            string name;
+            string[] Files = File.ReadAllLines("..//..//objects.txt"); 
+            for(int i = 0; i < Files.Length; i++)
+            {
+                point = Files[i].IndexOf('.');
+                name = Files[i].Substring(0,point);
+                map.Library.AddPicture(name,Files[i]);
+                ipan.AddItem(name,name,name);
+            }
+            ipan.SetMouseClickHandler(CheckInventory);
+            /*map.Library.AddPicture("ЗАБОР", "ЗАБОР.png");
             map.Library.AddPicture("wall", "wall.png");
             map.Library.AddPicture("stone", "stone.png");
             map.Library.AddPicture("gem_blue", "gem_blue.png");
@@ -66,9 +78,17 @@ namespace GameProject
             map.Library.AddPicture("fire2", "fire2.png");
             map.Library.AddPicture("fire3", "fire3.png");
             map.Library.AddPicture("fire4", "fire4.png");
-            map.Library.AddPicture("fire5", "fire5.png");
+            map.Library.AddPicture("fire5", "fire5.png");*/
         }
-
+        void CheckInventory(string element)
+        {
+            if (Picture != "")
+            {
+                ipan.SetItemBackground(Picture,Brushes.Wheat);
+            }
+            ipan.SetItemBackground(element,Brushes.Salmon);
+            Picture = element;
+        }
         // В этой функции проверяем, какая клавиша была нажата
         void CheckKey(Key k)
         {
