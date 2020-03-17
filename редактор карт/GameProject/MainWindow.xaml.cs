@@ -86,7 +86,7 @@ namespace GameProject
             {
                 ipan.SetItemBackground(Picture,Brushes.Wheat);
             }
-            ipan.SetItemBackground(element,Brushes.Salmon);
+            ipan.SetItemBackground(element,Brushes.Blue);
             Picture = element;
         }
         // В этой функции проверяем, какая клавиша была нажата
