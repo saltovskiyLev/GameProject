@@ -36,19 +36,19 @@
   <ItemGroup>
     <Reference Include="BaseLogic, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\underground trip\GameProject\BaseLogic.dll</HintPath>
+      <HintPath>..\..\dll\BaseLogic.dll</HintPath>
     </Reference>
     <Reference Include="CanvasVisualisation, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\underground trip\GameProject\CanvasVisualisation.dll</HintPath>
+      <HintPath>..\..\dll\CanvasVisualisation.dll</HintPath>
     </Reference>
     <Reference Include="Interaction, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\underground trip\GameProject\Interaction.dll</HintPath>
+      <HintPath>..\..\dll\Interaction.dll</HintPath>
     </Reference>
     <Reference Include="LabLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\underground trip\GameProject\LabLib.dll</HintPath>
+      <HintPath>..\..\dll\LabLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

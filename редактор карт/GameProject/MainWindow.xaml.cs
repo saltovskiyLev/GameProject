@@ -89,6 +89,25 @@ namespace GameProject
             ipan.SetItemBackground(element,Brushes.Blue);
             Picture = element;
         }
+        void SaveFile()
+        {
+            //0,0,ЗАБОР
+            string mapTXT = "";
+            string[] pics; 
+            for (int y = 0; y < map.YCells; y++)
+            {
+                for(int x = 0; x < map.XCells; x++)
+                {
+                    pics = map.GetImagesInCell(x,y);
+                    for (int i = 0; i < pics.Length; i++)
+                    {
+                        string s = x.ToString() + "," + y.ToString() + "," + pics[i] + "\n";
+                        mapTXT = mapTXT + s;
+                    }
+                }
+            }
+            File.WriteAllText("Карта.TXT",mapTXT);
+        }
         // В этой функции проверяем, какая клавиша была нажата
         void CheckKey(Key k)
         {
@@ -111,6 +130,10 @@ namespace GameProject
             if (k == Key.D5)
             {
                 Picture = "gate_closed";
+            }
+            if(k == Key.S)
+            {
+                SaveFile();
             }
         }
         void MouseHandler(int x, int y, int xCell, int yCell)
