@@ -23,8 +23,9 @@ namespace GameProject
     /// </summary>
     public partial class MainWindow : Window
     {
+        string[] PictureNames;
         string Picture = "";
-        InventoryPanel ipan;
+        InventoryPanel ipan,menu;
         CellMapInfo cellMap = new CellMapInfo(100, 100, 50,0);
         IGameScreenLayout lay;
         UniversalMap_Wpf map;
@@ -35,50 +36,43 @@ namespace GameProject
             lay = LayoutsFactory.GetLayout(LayoutType.Vertical, placeForMap);
             lay.Attach(map, 0);
             ipan = new InventoryPanel(map.Library, 40, 16);
+            menu = new InventoryPanel(map.Library, 40, 16);
             lay.Attach(ipan, 1);
-
-            map.Keyboard.SetSingleKeyEventHandler(CheckKey);
+            lay.Attach(menu, 1);
+            menu.SetBackground(Brushes.GreenYellow);
             map.DrawGrid();
             AddPictures();
             map.Mouse.SetMouseSingleLeftClickHandler(MouseHandler);
             map.Mouse.SetMouseRightClickHandler(RightClick);
-            //map.Library.AddAnimation("fire", a);
-            /*a = new AnimationDefinition();
-            a.AddFrame(50, "fire1");
-            a.AddFrame(50, "fire2");
-            a.AddFrame(50, "fire3");
-            a.AddFrame(50, "fire4");
-            a.AddFrame(50, "fire5");
-            map.Library.AddAnimation("fire", a);*/
         }
         void AddPictures()
         {
+            map.Library.ImagesFolder = new PathInfo { Path = "..\\..\\images", Type = PathType.Relative };
+            map.Library.AddPicture("save", "save.png");
+            map.Library.AddPicture("load", "load.png");
+            menu.AddItem("save","save","сохранить");
+            menu.AddItem("load", "load","загрузить");
             int point;
             string name;
-            string[] Files = File.ReadAllLines("..//..//objects.txt"); 
-            for(int i = 0; i < Files.Length; i++)
+            string[] Files = File.ReadAllLines("..//..//objects.txt");
+            PictureNames = new string[Files.Length]; 
+            for (int i = 0; i < Files.Length; i++)
             {
                 point = Files[i].IndexOf('.');
                 name = Files[i].Substring(0,point);
+                PictureNames[i] = name;
                 map.Library.AddPicture(name,Files[i]);
                 ipan.AddItem(name,name,name);
             }
             ipan.SetMouseClickHandler(CheckInventory);
-            /*map.Library.AddPicture("ЗАБОР", "ЗАБОР.png");
-            map.Library.AddPicture("wall", "wall.png");
-            map.Library.AddPicture("stone", "stone.png");
-            map.Library.AddPicture("gem_blue", "gem_blue.png");
-            map.Library.AddPicture("gate_closed", "gate_closed.png");
-            ipan.AddItem("stone", "stone", "2");
-            ipan.AddItem("wall", "wall", "1");
-            ipan.AddItem("ЗАБОР", "ЗАБОР", "3");
-            ipan.AddItem("gem_blue", "gem_blue", "4");
-            ipan.AddItem("gate_closed", "gate_closed", "5");
-            map.Library.AddPicture("fire1", "fire1.png");
-            map.Library.AddPicture("fire2", "fire2.png");
-            map.Library.AddPicture("fire3", "fire3.png");
-            map.Library.AddPicture("fire4", "fire4.png");
-            map.Library.AddPicture("fire5", "fire5.png");*/
+            menu.SetMouseClickHandler(CheckMenu);
+        }
+        void CheckMenu(string element)
+        {
+            if (element == "save")
+            {
+                SaveFile();
+            }
         }
         void CheckInventory(string element)
         {
@@ -106,36 +100,10 @@ namespace GameProject
                     }
                 }
             }
-            File.WriteAllText("Карта.TXT",mapTXT);
+            File.WriteAllText(string.Format("Карта {0} год - {1} месяц - {2} день - {3} час - {4} минута.TXT",DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute),mapTXT);
+            MessageBox.Show("карта сохранена");
         }
         // В этой функции проверяем, какая клавиша была нажата
-        void CheckKey(Key k)
-        {
-            if (k == Key.D1)
-            {
-                Picture = "wall";
-            }
-            if (k == Key.D2)
-            {
-                Picture = "stone";
-            }
-            if (k == Key.D3)
-            {
-                Picture = "ЗАБОР";
-            }
-            if (k == Key.D4)
-            {
-                Picture = "gem_blue";
-            }
-            if (k == Key.D5)
-            {
-                Picture = "gate_closed";
-            }
-            if(k == Key.S)
-            {
-                SaveFile();
-            }
-        }
         void MouseHandler(int x, int y, int xCell, int yCell)
         {
             if (!string.IsNullOrEmpty(Picture))
@@ -145,12 +113,10 @@ namespace GameProject
         }
         void RightClick (int x, int y, int xCell, int yCell)
         {
-            map.RemoveFromCell("wall", xCell, yCell);
-            map.RemoveFromCell("ЗАБОР", xCell, yCell);
-            map.RemoveFromCell("stone", xCell, yCell);
-            map.RemoveFromCell("gem_blue", xCell, yCell);
-            map.RemoveFromCell("gate_closed", xCell, yCell);
-          // map.RemoveAllImagesInCells(xCell,yCell);
+            for (int i = 0; i < PictureNames.Length; i++)
+            {
+                map.RemoveFromCell(PictureNames[i], xCell, yCell);
+            }         
         }
     }
 }
