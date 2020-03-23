@@ -73,6 +73,10 @@ namespace GameProject
             {
                 SaveFile();
             }
+            if(element == "load")
+            {
+                ReadFile();
+            }
         }
         void CheckInventory(string element)
         {
@@ -87,12 +91,12 @@ namespace GameProject
         {
             //0,0,ЗАБОР
             string mapTXT = "";
-            string[] pics; 
+            string[] pics;
             for (int y = 0; y < map.YCells; y++)
             {
-                for(int x = 0; x < map.XCells; x++)
+                for (int x = 0; x < map.XCells; x++)
                 {
-                    pics = map.GetImagesInCell(x,y);
+                    pics = map.GetImagesInCell(x, y);
                     for (int i = 0; i < pics.Length; i++)
                     {
                         string s = x.ToString() + "," + y.ToString() + "," + pics[i] + "\n";
@@ -100,8 +104,32 @@ namespace GameProject
                     }
                 }
             }
-            File.WriteAllText(string.Format("Карта {0} год - {1} месяц - {2} день - {3} час - {4} минута.TXT",DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute),mapTXT);
+            File.WriteAllText(string.Format("..\\..\\Карта {0} год - {1} месяц - {2} день - {3} час - {4} минута.TXT",
+            DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute), mapTXT);
             MessageBox.Show("карта сохранена");
+        }
+        void ReadFile()
+        {
+            string s;
+            string name;
+            int y;
+            int x;
+            int p1;
+            int p2;
+            string[] Read = File.ReadAllLines("..\\..\\карта.TXT");
+            for(int i = 0; i < Read.Length; i++)
+            {
+                // В этом цыкле мы ищем запятые,
+                // Определяем три блока с данными.
+                p1 = Read[i].IndexOf(',');
+                p2 = Read[i].LastIndexOf(',');
+                s = Read[i].Substring(0,p1);
+                x = int.Parse(s);
+                s = Read[i].Substring(p1 + 1, p2 - p1 - 1);
+                y = int.Parse(s);
+                name = Read[i].Substring(p2 + 1);
+                map.DrawInCell(name,x,y);
+            }
         }
         // В этой функции проверяем, какая клавиша была нажата
         void MouseHandler(int x, int y, int xCell, int yCell)
