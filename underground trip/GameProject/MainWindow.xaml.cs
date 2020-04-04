@@ -10,6 +10,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.IO;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -35,7 +36,7 @@ namespace GameProject
         bool PlayerTurn = true;
         TimerController timer = new TimerController();
         UniversalMap_Wpf map;
-        CellMapInfo cellMap = new CellMapInfo(20, 10, 50, 0);
+        CellMapInfo cellMap = new CellMapInfo(50, 20, 50, 0);
         InventoryPanel ipan;
         InventoryPanel EnergyPanel;
         IGameScreenLayout lay;
@@ -48,6 +49,7 @@ namespace GameProject
         int[] portalY;
         int Player2X, Player2Y;
         int PlayerX, PlayerY;
+        string playerPicture;
         public MainWindow()
         {
             InitializeComponent();
@@ -142,22 +144,26 @@ namespace GameProject
             for (int i = 0; i < map.YCells; i++)
             {
                 map.RemoveFromCell("wall",0,i);
-                map.DrawInCell("fence", 0, i);
+                map.DrawInCell("ЗАБОР", 0, i);
                 map.RemoveFromCell("wall",map.XCells - 1 ,i);
-                map.DrawInCell("fence",map.XCells - 1, i);
+                map.DrawInCell("ЗАБОР",map.XCells - 1, i);
             }
             
             for (int i = 0; i < map.XCells; i++)
             {
-                map.DrawInCell("fence", i,0);
+                map.DrawInCell("ЗАБОР", i,0);
                 map.RemoveFromCell("wall",i,0);
                 map.RemoveFromCell("wall", i, 0);
-                map.DrawInCell("fence", i, map.YCells - 1);
+                map.DrawInCell("ЗАБОР", i, map.YCells - 1);
                 map.RemoveFromCell("wall", i, map.YCells - 1);
                 map.RemoveFromCell("wall", i, map.YCells - 1);
                 map.RemoveFromCell("vorota", i, map.YCells - 1);
             }
-
+            AddFog();
+            map.Mouse.SetMouseSingleLeftClickHandler(LeftClick);
+        }
+        void AddFog()
+        {
             for (int j = 1; j < map.YCells - 1; j++)
             {
                 for (int i = 1; i < map.XCells - 1; i++)
@@ -165,7 +171,6 @@ namespace GameProject
                     map.DrawInCell("unknown", i, j);
                 }
             }
-            map.Mouse.SetMouseSingleLeftClickHandler(LeftClick);
         }
         /// <summary>
         /// удаляет "туман войны"
@@ -193,12 +198,14 @@ namespace GameProject
             map.Library.AddPicture("green1", "green1.png");
             map.Library.AddPicture("green2", "green2.png");
             map.Library.AddPicture("green3", "green3.png");
+            map.Library.AddPicture("stone", "stone.png");
             map.Library.AddPicture("green4", "green4.png");
             map.Library.AddPicture("green5", "green5.png");
             map.Library.AddPicture("green6", "green6.png");
             map.Library.AddPicture("red0", "red0.png");
             map.Library.AddPicture("red1", "red1.png");
             map.Library.AddPicture("red2", "red2.png");
+            map.Library.AddPicture("gem_blue", "gem_blue.png");
             map.Library.AddPicture("red3", "red3.png");
             map.Library.AddPicture("red4", "red4.png");
             map.Library.AddPicture("red5", "red5.png");
@@ -211,6 +218,7 @@ namespace GameProject
             map.Library.AddPicture("clock", "clock.png");
             map.Library.AddPicture("fire1", "fire1.png");
             map.Library.AddPicture("fire2", "fire2.png");
+            map.Library.AddPicture("gate_closed", "gate_closed.png");
             map.Library.AddPicture("hole", "hole.png");
             map.Library.AddPicture("arrow", "untitled.png");
             map.Library.AddPicture("bow", "untitled2.png");
@@ -243,10 +251,10 @@ namespace GameProject
             map.Library.AddPicture("potionGreen", "pt3.png");
             map.Library.AddPicture("potionYellow", "pt4.png");
             map.Library.AddPicture("unknown", "unknown.png");
-            map.Library.AddPicture("fence", "ЗАБОР.png");
+            map.Library.AddPicture("ЗАБОР", "ЗАБОР.png");
             map.Library.AddPicture("smile", "smile1.png");
             map.Library.AddPicture("green", "gem_green.png");
-            map.Library.AddPicture("rip", "rip1.png");
+            map.Library.AddPicture("rip1", "rip1.png");
             map.Library.AddPicture("camen", "stone.png");
             map.Library.AddPicture("sword", "sword.png");
             map.Library.AddPicture("evil", "evil1.png");
@@ -496,7 +504,7 @@ namespace GameProject
                         }
                     }
                 }
-                if (map.HasImageInCell("wall", PlayerX, PlayerY) || map.HasImageInCell("fence", PlayerX, PlayerY))
+                if (map.HasImageInCell("wall", PlayerX, PlayerY) || map.HasImageInCell("ЗАБОР", PlayerX, PlayerY))
                 {
                     if (hasPick)
                     {
@@ -612,7 +620,7 @@ namespace GameProject
                             SetEvilEnergy(EnergyEvil - 1);
                         }
                     }
-                    if (map.HasImageInCell("wall", Player2X, Player2Y) || map.HasImageInCell("fence", Player2X, Player2Y))
+                    if (map.HasImageInCell("wall", Player2X, Player2Y) || map.HasImageInCell("ЗАБОР", Player2X, Player2Y))
                     {
                         Player2X = PlayerLast2X;
                         Player2Y = PlayerLast2Y;
@@ -701,7 +709,7 @@ namespace GameProject
                 // SetPlayerEnergy(6000);
                 isEvilElive = false;
                 map.RemoveFromCell("evil", Player2X, Player2Y);
-                map.DrawInCell("rip", Player2X, Player2Y);
+                map.DrawInCell("rip1", Player2X, Player2Y);
                 map.ContainerSetFrame("fell", "stabbed");
                 map.ContainerSetSize("fell",800,600);
                 map.ContainerSetAngle("fell",30);
@@ -716,16 +724,66 @@ namespace GameProject
                 map.ContainerSetAngle("fell",30);
                 map.ContainerSetCoordinate("fell", map.XAbsolute / 2, map.YAbsolute / 2);
             }
+            if(isPlayerAlive == false)
+            {
+                timer.AddAction(FillMap, 100);
+                playerPicture = "evil";
+            }
+            if (isEvilElive == false)
+            {
+                timer.AddAction(FillMap, 100);
+                playerPicture = "smile";
+            }
         }
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        int FillX = 0;
+        int FillY = 0;
+        void FillMap()
+        {
+            map.DrawInCell("unknown", FillX, FillY);
+            FillY++;
+            if(FillY == map.YCells)
+            {
+                FillX++;
+                FillY = 0;
+                if(FillX == map.XCells)
+                {
+                    timer.RemoveAction(FillMap,100);
+                    LoadLevel(2);
+                }
+            }
+        }
+        void ReadFile(string FileName)
+        {
+            string s;
+            string name;
+            int y;
+            int x;
+            int p1;
+            int p2;
+            if (FileName != "" && File.Exists(("..\\..\\Maps\\" + FileName)))
+            {
+                string[] Read = File.ReadAllLines("..\\..\\Maps\\" + FileName);
+                for (int i = 0; i < Read.Length; i++)
+                {
+                    // В этом цыкле мы ищем запятые,
+                    // Определяем три блока с данными.
+                    p1 = Read[i].IndexOf(',');
+                    p2 = Read[i].LastIndexOf(',');
+                    s = Read[i].Substring(0, p1);
+                    x = int.Parse(s);
+                    s = Read[i].Substring(p1 + 1, p2 - p1 - 1);
+                    y = int.Parse(s);
+                    name = Read[i].Substring(p2 + 1);
+                    map.DrawInCell(name, x, y);
+                }
+            }
+        }
+        void LoadLevel(int levelNumber)
+        {
+            map.RemoveAllImagesInCells();
+            ReadFile(levelNumber.ToString() + ".TXT");
+            AddFog();
+        }
         void LeftClick(int x, int y, int Xcell, int Ycell)
         {
             for (int i = 0; i < portals; i++)
@@ -745,7 +803,7 @@ namespace GameProject
                     if (r.Next(0, 2) == 1)
                     {
                         isEvilElive = false;
-                        map.DrawInCell("rip", Player2X, Player2Y);
+                        map.DrawInCell("rip1", Player2X, Player2Y);
                         map.ContainerSetFrame("fell", "got");
                         map.ContainerSetSize("fell", 800, 600);
                         map.ContainerSetAngle("fell", 30);

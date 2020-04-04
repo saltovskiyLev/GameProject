@@ -23,6 +23,8 @@ namespace GameProject
     /// </summary>
     public partial class MainWindow : Window
     {
+        TextArea_Vertical Help = new TextArea_Vertical();
+        SimpleTextBox FileName = new SimpleTextBox();
         string[] PictureNames;
         string Picture = "";
         InventoryPanel ipan,menu;
@@ -39,11 +41,14 @@ namespace GameProject
             menu = new InventoryPanel(map.Library, 40, 16);
             lay.Attach(ipan, 1);
             lay.Attach(menu, 1);
+            lay.Attach(Help, 1);
+            lay.Attach(FileName, 1);
             menu.SetBackground(Brushes.GreenYellow);
             map.DrawGrid();
             AddPictures();
             map.Mouse.SetMouseSingleLeftClickHandler(MouseHandler);
             map.Mouse.SetMouseRightClickHandler(RightClick);
+            Help.AddTextBlock("FileName","Имя файла:");
         }
         void AddPictures()
         {
@@ -71,10 +76,12 @@ namespace GameProject
         {
             if (element == "save")
             {
+                //MessageBox.Show("введите названия файла для сохранения");
                 SaveFile();
             }
             if(element == "load")
             {
+                //MessageBox.Show("введите названия файла для загрузки");
                 ReadFile();
             }
         }
@@ -104,9 +111,16 @@ namespace GameProject
                     }
                 }
             }
-            File.WriteAllText(string.Format("..\\..\\Карта {0} год - {1} месяц - {2} день - {3} час - {4} минута.TXT",
-            DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute), mapTXT);
-            MessageBox.Show("карта сохранена");
+            if(FileName.TextBox.Text != "")
+            {
+                File.WriteAllText("..\\..\\Maps\\" + FileName.TextBox.Text + ".TXT", mapTXT);
+                MessageBox.Show("карта сохранена");
+            }
+            else
+            {
+                MessageBox.Show("укажите имя файла");
+            }
+            //File.WriteAllText(string.Format("..\\..\\Карта {0} год - {1} месяц - {2} день - {3} час - {4} минута.TXT",DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute), mapTXT);
         }
         void ReadFile()
         {
@@ -116,19 +130,26 @@ namespace GameProject
             int x;
             int p1;
             int p2;
-            string[] Read = File.ReadAllLines("..\\..\\карта.TXT");
-            for(int i = 0; i < Read.Length; i++)
+            if (FileName.TextBox.Text != "" && File.Exists(("..\\..\\Maps\\" + FileName.TextBox.Text + ".TXT")))
             {
-                // В этом цыкле мы ищем запятые,
-                // Определяем три блока с данными.
-                p1 = Read[i].IndexOf(',');
-                p2 = Read[i].LastIndexOf(',');
-                s = Read[i].Substring(0,p1);
-                x = int.Parse(s);
-                s = Read[i].Substring(p1 + 1, p2 - p1 - 1);
-                y = int.Parse(s);
-                name = Read[i].Substring(p2 + 1);
-                map.DrawInCell(name,x,y);
+                string[] Read = File.ReadAllLines("..\\..\\Maps\\" + FileName.TextBox.Text + ".TXT");
+                for (int i = 0; i < Read.Length; i++)
+                {
+                    // В этом цыкле мы ищем запятые,
+                    // Определяем три блока с данными.
+                    p1 = Read[i].IndexOf(',');
+                    p2 = Read[i].LastIndexOf(',');
+                    s = Read[i].Substring(0, p1);
+                    x = int.Parse(s);
+                    s = Read[i].Substring(p1 + 1, p2 - p1 - 1);
+                    y = int.Parse(s);
+                    name = Read[i].Substring(p2 + 1);
+                    map.DrawInCell(name, x, y);
+                }
+            }
+            else
+            {
+                MessageBox.Show("укажите имя файла");
             }
         }
         // В этой функции проверяем, какая клавиша была нажата
