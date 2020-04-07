@@ -8,11 +8,11 @@ namespace ChangeMap
         static void Main(string[] args)
         {
             //Console.WriteLine("Hello World!");
-            for (int i = 0; i < 79; i++)
+            for (int i = 0; i < 20; i++)
             {
-                for (int j = 0; j < 100; j++)
+                for (int j = 0; j < 10; j++)
                 {
-                    Thread.Sleep(100);
+                    Thread.Sleep(200);
                     Console.SetCursorPosition(i, j);
                     Console.Write("*");
                 }

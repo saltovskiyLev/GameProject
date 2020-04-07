@@ -44,6 +44,7 @@ namespace GameProject
         bool hasSword = false;
         bool hasPick = false;
         bool hasBow = false;
+        bool FirstLevelDone = false;
         int arrow = 0;
         int[] portalX;
         int[] portalY;
@@ -678,6 +679,10 @@ namespace GameProject
                                 isPlayerAlive = false;
                             }
                         }
+                        if(isPlayerAlive == false)
+                        {
+                            ShowMessage("undermined");
+                        }
                     }
                 }
                 else
@@ -710,29 +715,26 @@ namespace GameProject
                 isEvilElive = false;
                 map.RemoveFromCell("evil", Player2X, Player2Y);
                 map.DrawInCell("rip1", Player2X, Player2Y);
-                map.ContainerSetFrame("fell", "stabbed");
-                map.ContainerSetSize("fell",800,600);
-                map.ContainerSetAngle("fell",30);
-                map.ContainerSetCoordinate("fell", map.XAbsolute / 2, map.YAbsolute / 2);
+                ShowMessage("stabbed");
             }
             if (map.HasImageInCell("hole", PlayerX, PlayerY))
             {
                 map.RemoveFromCell("smile", PlayerX, PlayerY);
                 map.DrawInCell("rip2", PlayerX, PlayerY);
                 isPlayerAlive = false;
-                map.ContainerSetSize("fell",800,600);
-                map.ContainerSetAngle("fell",30);
-                map.ContainerSetCoordinate("fell", map.XAbsolute / 2, map.YAbsolute / 2);
+                ShowMessage("fell");
             }
-            if(isPlayerAlive == false)
+            if(isPlayerAlive == false && FirstLevelDone == false)
             {
-                timer.AddAction(FillMap, 100);
+                timer.AddAction(FillMap, 30);
                 playerPicture = "evil";
+                FirstLevelDone = true;
             }
-            if (isEvilElive == false)
+            if (isEvilElive == false && FirstLevelDone == false)
             {
-                timer.AddAction(FillMap, 100);
+                timer.AddAction(FillMap, 30);
                 playerPicture = "smile";
+                FirstLevelDone = true;
             }
         }
         int FillX = 0;
@@ -747,7 +749,7 @@ namespace GameProject
                 FillY = 0;
                 if(FillX == map.XCells)
                 {
-                    timer.RemoveAction(FillMap,100);
+                    timer.RemoveAction(FillMap,30);
                     LoadLevel(2);
                 }
             }
@@ -804,17 +806,11 @@ namespace GameProject
                     {
                         isEvilElive = false;
                         map.DrawInCell("rip1", Player2X, Player2Y);
-                        map.ContainerSetFrame("fell", "got");
-                        map.ContainerSetSize("fell", 800, 600);
-                        map.ContainerSetAngle("fell", 30);
-                        map.ContainerSetCoordinate("fell", map.XAbsolute / 2, map.YAbsolute / 2);
+                        ShowMessage("got");
                     }
                     else
                     {
-                        map.ContainerSetFrame("fell", "missed");
-                        map.ContainerSetSize("fell", 800, 600);
-                        map.ContainerSetAngle("fell", 30);
-                        map.ContainerSetCoordinate("fell", map.XAbsolute / 2, map.YAbsolute / 2);
+                        ShowMessage("missed");
                         Delete = false;
                         timer.AddAction(DeletePicture, 2000);
                     }
@@ -826,6 +822,13 @@ namespace GameProject
             map.RemoveFromCell("smile",PlayerX,PlayerY);
             PlayerX = x; PlayerY = y;
             map.DrawInCell("smile",x,y);
+        }
+        void ShowMessage(string Picture)
+        {
+            map.ContainerSetFrame("fell", Picture);
+            map.ContainerSetSize("fell", 800, 600);
+            map.ContainerSetAngle("fell", 30);
+            map.ContainerSetCoordinate("fell", map.XAbsolute / 2, map.YAbsolute / 2);
         }
     }
 }
