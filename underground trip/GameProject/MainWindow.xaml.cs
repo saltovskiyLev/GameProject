@@ -191,6 +191,16 @@ namespace GameProject
                 }
             }
         }
+        void RemoveAllFog()
+        {
+            for(int x = 0; x < map.XCells; x++)
+            {
+                for(int y = 0; y < map.YCells; y++)
+                {
+                    map.RemoveFromCell("unknown", x, y);
+                }
+            }
+        }
         void AddPictures()
         {
             map.Library.ImagesFolder = new PathInfo { Path = "..\\..\\images", Type = PathType.Relative };
@@ -729,18 +739,24 @@ namespace GameProject
                 timer.AddAction(FillMap, 30);
                 playerPicture = "evil";
                 FirstLevelDone = true;
+                RemoveAllFog();
             }
             if (isEvilElive == false && FirstLevelDone == false)
             {
                 timer.AddAction(FillMap, 30);
                 playerPicture = "smile";
                 FirstLevelDone = true;
+                RemoveAllFog();
             }
         }
         int FillX = 0;
         int FillY = 0;
         void FillMap()
         {
+            if (FillX == map.XCells)
+            {
+                return;
+            }
             map.DrawInCell("unknown", FillX, FillY);
             FillY++;
             if(FillY == map.YCells)
