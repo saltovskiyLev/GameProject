@@ -22,6 +22,8 @@ namespace GameProject
     /// </summary>
     public partial class MainWindow : Window
     {
+        int MaxX = 30;
+        int MaxY = 20;
         Random r = new Random();
         int EnergyPlayer = 6;
         int EnergyEvil = 6;
@@ -204,6 +206,7 @@ namespace GameProject
         void AddPictures()
         {
             map.Library.ImagesFolder = new PathInfo { Path = "..\\..\\images", Type = PathType.Relative };
+            map.Library.AddPicture("spawn", "spawn.png");
             map.Library.AddPicture("portal", "portal.png");
             map.Library.AddPicture("green0", "green0.png");
             map.Library.AddPicture("green1", "green1.png");
@@ -354,6 +357,25 @@ namespace GameProject
             map.DrawInCell("wall", 5, 3);
             map.DrawInCell("camen", 9, 4);
             map.DrawInCell("DINAMIT", 2, 3);
+        }
+        void Spawn()
+        {
+            // В этой функиции мы будем задовать случайные координаты X и Y до тех пор пока не попадём в пустую клетку.
+            int X;
+            int Y;
+            while(true)
+            {
+                X = r.Next(0, MaxX);
+                Y = r.Next(0, MaxY);
+                if (map.GetImagesInCell(X, Y).Length == 0)
+                {
+                    map.DrawInCell("spawn", X, Y);
+                    map.DrawInCell(playerPicture, X, Y);
+                    PlayerX = X;
+                    PlayerY = Y;
+                    break;
+                }
+            }
         }
         void DrawPlayerEnergy(int Energy)
         {
@@ -801,6 +823,8 @@ namespace GameProject
             map.RemoveAllImagesInCells();
             ReadFile(levelNumber.ToString() + ".TXT");
             AddFog();
+            RemoveAllFog();
+            Spawn();
         }
         void LeftClick(int x, int y, int Xcell, int Ycell)
         {
@@ -827,8 +851,6 @@ namespace GameProject
                     else
                     {
                         ShowMessage("missed");
-                        Delete = false;
-                        timer.AddAction(DeletePicture, 2000);
                     }
                 }
             }
@@ -845,6 +867,8 @@ namespace GameProject
             map.ContainerSetSize("fell", 800, 600);
             map.ContainerSetAngle("fell", 30);
             map.ContainerSetCoordinate("fell", map.XAbsolute / 2, map.YAbsolute / 2);
+            Delete = false;
+            timer.AddAction(DeletePicture, 2000);
         }
     }
 }
