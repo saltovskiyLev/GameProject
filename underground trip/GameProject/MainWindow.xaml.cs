@@ -38,7 +38,7 @@ namespace GameProject
         bool PlayerTurn = true;
         TimerController timer = new TimerController();
         UniversalMap_Wpf map;
-        CellMapInfo cellMap = new CellMapInfo(50, 20, 50, 0);
+        CellMapInfo cellMap = new CellMapInfo(31, 21, 50, 0);
         InventoryPanel ipan;
         InventoryPanel EnergyPanel;
         IGameScreenLayout lay;
@@ -360,6 +360,17 @@ namespace GameProject
         }
         void Spawn()
         {
+            for(int i = 0; i < map.XCells; i++)
+            {
+                for(int j = 0; j < map.YCells; j++)
+                {
+                    if(map.HasImageInCell("spawn", i, j))
+                    {
+                        map.DrawInCell(playerPicture, i, j);
+                        return;
+                    }
+                }
+            }
             // В этой функиции мы будем задовать случайные координаты X и Y до тех пор пока не попадём в пустую клетку.
             int X;
             int Y;
@@ -762,6 +773,7 @@ namespace GameProject
                 playerPicture = "evil";
                 FirstLevelDone = true;
                 RemoveAllFog();
+                map.Keyboard.DisableSingleKeyEventHandler();
             }
             if (isEvilElive == false && FirstLevelDone == false)
             {
@@ -769,6 +781,7 @@ namespace GameProject
                 playerPicture = "smile";
                 FirstLevelDone = true;
                 RemoveAllFog();
+                map.Keyboard.DisableSingleKeyEventHandler();
             }
         }
         int FillX = 0;

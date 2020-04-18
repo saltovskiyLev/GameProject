@@ -4,3 +4,5 @@ stone.png
 gem_blue.png
 gate_closed.png
 rip1.png
+portal.png
+spawn.png
