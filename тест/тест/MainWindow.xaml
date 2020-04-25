@@ -6,7 +6,39 @@
         xmlns:local="clr-namespace:тест"
         mc:Ignorable="d"
         Title="Im Leo" Height="600" Width="800">
-    <Grid Background ="YellowGreen">
-        <TextBlock Text="Hello World" FontSize="70"></TextBlock>
+    <Grid Background ="Gray">
+        <StackPanel>
+            <StackPanel.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="Black" Offset="0"/>
+                    <GradientStop Color="#FFC1AC4E" Offset="1"/>
+                </LinearGradientBrush>
+            </StackPanel.Background>
+            <TextBlock FontSize="70" HorizontalAlignment ="Center" Foreground="#FF76FF04" x:Name ="Hello" Margin="217,0">
+                <TextBlock.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black" Offset="0"/>
+                        <GradientStop Color="Red" Offset="1"/>
+                    </LinearGradientBrush>
+                </TextBlock.Background><Run Text="Hello World">
+                    <Run.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="Black" Offset="0"/>
+                            <GradientStop Color="#FFF526FF" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Run.Background>
+                </Run></TextBlock>
+            <Button Content="Нажми меня" FontSize="70" Click="Button_Click">
+                <Button.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black" Offset="0"/>
+                        <GradientStop Color="#FF2F38F5" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+            <TextBlock x:Name="Result" FontSize="40" HorizontalAlignment ="Center"/>
+            <Button x:Name="NewGame">
+            </Button>
+        </StackPanel>
     </Grid>
 </Window>

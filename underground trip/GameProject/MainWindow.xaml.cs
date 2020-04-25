@@ -22,11 +22,14 @@ namespace GameProject
     /// </summary>
     public partial class MainWindow : Window
     {
+        int BulletX;
+        int BulletY;
         int MaxX = 30;
         int MaxY = 20;
         Random r = new Random();
         int EnergyPlayer = 6;
         int EnergyEvil = 6;
+        bool HasPistole = true;
         bool Delete;
         bool isEvilElive = true;
         bool isPlayerAlive = true;
@@ -65,6 +68,7 @@ namespace GameProject
             lay.Attach(ipan, 1);
             lay.Attach(EnergyPanel,1);
             map.Keyboard.SetSingleKeyEventHandler(CheckKey);
+            timer.AddAction(MoveBullet, 40);
             //map.DrawGrid();
             portalX = new int[portals];
             portalY = new int[portals];
@@ -83,7 +87,9 @@ namespace GameProject
             EnergyPanel.AddItem("EvilEnergy", "red6", "");
         
             map.Library.AddContainer("fell", "fell");
-        
+            map.Library.AddContainer("Bullet", "nothing");
+            map.ContainerSetSize("Bullet", 12);
+            
             PlayerX = 3;
             PlayerY = 4;
             Player2X = 1; Player2Y = 4;
@@ -209,6 +215,8 @@ namespace GameProject
             map.Library.AddPicture("spawn", "spawn.png");
             map.Library.AddPicture("portal", "portal.png");
             map.Library.AddPicture("green0", "green0.png");
+            map.Library.AddPicture("Pistole", "Pistole.png");
+            map.Library.AddPicture("bullet", "round_bullet.png");
             map.Library.AddPicture("green1", "green1.png");
             map.Library.AddPicture("green2", "green2.png");
             map.Library.AddPicture("green3", "green3.png");
@@ -548,6 +556,42 @@ namespace GameProject
                         }
                     }
                 }
+                if(k == Key.NumPad8)
+                {
+                    BulletX = map.CellSize * PlayerX + map.CellSize / 2;
+                    BulletY = map.CellSize * PlayerY;
+                    BulletVX = 0;
+                    BulletVY = -6;
+                    map.ContainerSetFrame("Bullet", "bullet");
+                    map.ContainerSetCoordinate("Bullet", BulletX, BulletY);
+                }
+                if(k == Key.NumPad2)
+                {
+                    BulletX = map.CellSize * PlayerX + map.CellSize / 2;
+                    BulletY = map.CellSize * PlayerY + map.CellSize;
+                    BulletVX = 0;
+                    BulletVY = 6;
+                    map.ContainerSetFrame("Bullet", "bullet");
+                    map.ContainerSetCoordinate("Bullet", BulletX, BulletY);
+                }
+                if(k == Key.NumPad4)
+                {
+                    BulletX = map.CellSize * PlayerX;
+                    BulletY = map.CellSize * PlayerY + map.CellSize / 2;
+                    BulletVX = -6;
+                    BulletVY = 0;
+                    map.ContainerSetFrame("Bullet", "bullet");
+                    map.ContainerSetCoordinate("Bullet", BulletX, BulletY);
+                }
+                if (k == Key.NumPad6)
+                {
+                    BulletX = map.CellSize * PlayerX + map.CellSize;
+                    BulletY = map.CellSize * PlayerY + map.CellSize / 2;
+                    BulletVX = 6;
+                    BulletVY = 0;
+                    map.ContainerSetFrame("Bullet", "bullet");
+                    map.ContainerSetCoordinate("Bullet", BulletX, BulletY);
+                }
                 if (map.HasImageInCell("wall", PlayerX, PlayerY) || map.HasImageInCell("ЗАБОР", PlayerX, PlayerY))
                 {
                     if (hasPick)
@@ -783,6 +827,14 @@ namespace GameProject
                 RemoveAllFog();
                 map.Keyboard.DisableSingleKeyEventHandler();
             }
+        }
+        int BulletVX;
+        int BulletVY;
+        void MoveBullet()
+        {
+            BulletX = BulletX + BulletVX;
+            BulletY = BulletY + BulletVY;
+            map.ContainerSetCoordinate("Bullet", BulletX, BulletY);
         }
         int FillX = 0;
         int FillY = 0;

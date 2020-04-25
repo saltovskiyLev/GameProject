@@ -73,3 +73,4 @@ C:\repo\GameProject\underground trip\GameProject\obj\Debug\GameProject.Propertie
 C:\repo\GameProject\underground trip\GameProject\obj\Debug\GameProject.csproj.GenerateResource.Cache
 C:\repo\GameProject\underground trip\GameProject\obj\Debug\GameProject.csprojAssemblyReference.cache
 C:\repo\GameProject\underground trip\GameProject\obj\Debug\GameProject.csproj.CopyComplete
+C:\repo\GameProject\underground trip\GameProject\obj\Debug\GameProject.csproj.CoreCompileInputs.cache
