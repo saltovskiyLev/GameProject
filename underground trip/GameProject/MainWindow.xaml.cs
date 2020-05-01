@@ -22,6 +22,7 @@ namespace GameProject
     /// </summary>
     public partial class MainWindow : Window
     {
+        bool CanShoot = true;
         int BulletX;
         int BulletY;
         int MaxX = 30;
@@ -68,7 +69,6 @@ namespace GameProject
             lay.Attach(ipan, 1);
             lay.Attach(EnergyPanel,1);
             map.Keyboard.SetSingleKeyEventHandler(CheckKey);
-            timer.AddAction(MoveBullet, 40);
             //map.DrawGrid();
             portalX = new int[portals];
             portalY = new int[portals];
@@ -556,41 +556,52 @@ namespace GameProject
                         }
                     }
                 }
-                if(k == Key.NumPad8)
+                if (CanShoot)
                 {
-                    BulletX = map.CellSize * PlayerX + map.CellSize / 2;
-                    BulletY = map.CellSize * PlayerY;
-                    BulletVX = 0;
-                    BulletVY = -6;
-                    map.ContainerSetFrame("Bullet", "bullet");
-                    map.ContainerSetCoordinate("Bullet", BulletX, BulletY);
-                }
-                if(k == Key.NumPad2)
-                {
-                    BulletX = map.CellSize * PlayerX + map.CellSize / 2;
-                    BulletY = map.CellSize * PlayerY + map.CellSize;
-                    BulletVX = 0;
-                    BulletVY = 6;
-                    map.ContainerSetFrame("Bullet", "bullet");
-                    map.ContainerSetCoordinate("Bullet", BulletX, BulletY);
-                }
-                if(k == Key.NumPad4)
-                {
-                    BulletX = map.CellSize * PlayerX;
-                    BulletY = map.CellSize * PlayerY + map.CellSize / 2;
-                    BulletVX = -6;
-                    BulletVY = 0;
-                    map.ContainerSetFrame("Bullet", "bullet");
-                    map.ContainerSetCoordinate("Bullet", BulletX, BulletY);
-                }
-                if (k == Key.NumPad6)
-                {
-                    BulletX = map.CellSize * PlayerX + map.CellSize;
-                    BulletY = map.CellSize * PlayerY + map.CellSize / 2;
-                    BulletVX = 6;
-                    BulletVY = 0;
-                    map.ContainerSetFrame("Bullet", "bullet");
-                    map.ContainerSetCoordinate("Bullet", BulletX, BulletY);
+                    if (k == Key.NumPad8)
+                    {
+                        BulletX = map.CellSize * PlayerX + map.CellSize / 2;
+                        BulletY = map.CellSize * PlayerY;
+                        BulletVX = 0;
+                        BulletVY = -6;
+                        map.ContainerSetFrame("Bullet", "bullet");
+                        map.ContainerSetCoordinate("Bullet", BulletX, BulletY);
+                        CanShoot = false;
+                        timer.AddAction(MoveBullet, 40);
+                    }
+                    if (k == Key.NumPad2)
+                    {
+                        BulletX = map.CellSize * PlayerX + map.CellSize / 2;
+                        BulletY = map.CellSize * PlayerY + map.CellSize;
+                        BulletVX = 0;
+                        BulletVY = 6;
+                        map.ContainerSetFrame("Bullet", "bullet");
+                        map.ContainerSetCoordinate("Bullet", BulletX, BulletY);
+                        CanShoot = false;
+                        timer.AddAction(MoveBullet, 40);
+                    }
+                    if (k == Key.NumPad4)
+                    {
+                        BulletX = map.CellSize * PlayerX;
+                        BulletY = map.CellSize * PlayerY + map.CellSize / 2;
+                        BulletVX = -6;
+                        BulletVY = 0;
+                        map.ContainerSetFrame("Bullet", "bullet");
+                        map.ContainerSetCoordinate("Bullet", BulletX, BulletY);
+                        CanShoot = false;
+                        timer.AddAction(MoveBullet, 40);
+                    }
+                    if (k == Key.NumPad6)
+                    {
+                        BulletX = map.CellSize * PlayerX + map.CellSize;
+                        BulletY = map.CellSize * PlayerY + map.CellSize / 2;
+                        BulletVX = 6;
+                        BulletVY = 0;
+                        map.ContainerSetFrame("Bullet", "bullet");
+                        map.ContainerSetCoordinate("Bullet", BulletX, BulletY);
+                        CanShoot = false;
+                        timer.AddAction(MoveBullet, 40);
+                    }
                 }
                 if (map.HasImageInCell("wall", PlayerX, PlayerY) || map.HasImageInCell("ЗАБОР", PlayerX, PlayerY))
                 {
@@ -835,6 +846,40 @@ namespace GameProject
             BulletX = BulletX + BulletVX;
             BulletY = BulletY + BulletVY;
             map.ContainerSetCoordinate("Bullet", BulletX, BulletY);
+            // Обьект разрушает: стена, камень.
+            // Обьект неразрушает: ворота, забор.
+            int BulletCellX = BulletX / map.CellSize;
+            int BulletCellY = BulletY / map.CellSize;
+            if(map.HasImageInCell("wall", BulletCellX, BulletCellY))
+            {
+                map.RemoveFromCell("wall", BulletCellX, BulletCellY);
+                //stone.
+                timer.RemoveAction(MoveBullet, 40);
+                map.ContainerSetFrame("Bullet", "nothing");
+                CanShoot = true;
+            }
+            if (map.HasImageInCell("stone", BulletCellX, BulletCellY))
+            {
+                map.RemoveFromCell("stone", BulletCellX, BulletCellY);
+                //stone.
+                timer.RemoveAction(MoveBullet, 40);
+                map.ContainerSetFrame("Bullet", "nothing");
+                CanShoot = true;
+            }
+            if (map.HasImageInCell("ЗАБОР", BulletCellX, BulletCellY))
+            {
+                //stone.
+                timer.RemoveAction(MoveBullet, 40);
+                map.ContainerSetFrame("Bullet", "nothing");
+                CanShoot = true;
+            }
+            if (map.HasImageInCell("gate_closed", BulletCellX, BulletCellY))
+            {
+                //stone.
+                timer.RemoveAction(MoveBullet, 40);
+                map.ContainerSetFrame("Bullet", "nothing");
+                CanShoot = true;
+            }
         }
         int FillX = 0;
         int FillY = 0;
