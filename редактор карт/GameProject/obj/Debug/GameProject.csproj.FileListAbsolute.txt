@@ -75,3 +75,4 @@ C:\repo\GameProject\редактор карт\GameProject\obj\Debug\GameProject.
 C:\repo\GameProject\редактор карт\GameProject\obj\Debug\GameProject.csproj.CopyComplete
 C:\repo\GameProject\редактор карт\GameProject\obj\Debug\GameProject.exe
 C:\repo\GameProject\редактор карт\GameProject\obj\Debug\GameProject.pdb
+C:\repo\GameProject\редактор карт\GameProject\obj\Debug\GameProject.csproj.CoreCompileInputs.cache

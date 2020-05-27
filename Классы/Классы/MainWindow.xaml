@@ -1,0 +1,17 @@
+﻿<Window x:Class="Классы.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Классы"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <TextBlock x:Name="TB" Foreground="Aqua" FontSize="42">
+        </TextBlock>
+        <Button x:Name="Button1" Content="Товар 1" Background="Snow" Width="200" Height="100" Margin="590,318,0,0" Click="Button1_Click">
+        </Button>
+        <Button x:Name="Button2" Content="Товар 2" Background="Snow" Width="200" Height="100" Margin="0,318,590,0" Click="Button2_Click">
+        </Button>
+    </Grid>
+</Window>

@@ -28,7 +28,7 @@
                         </LinearGradientBrush>
                     </Run.Background>
                 </Run></TextBlock>
-            <Button Content="Нажми меня" FontSize="70" Click="Button_Click">
+            <Button x:Name="AddClick" Content="Нажми меня" FontSize="70" Click="Button_Click">
                 <Button.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <GradientStop Color="Black" Offset="0"/>
@@ -37,7 +37,13 @@
                 </Button.Background>
             </Button>
             <TextBlock x:Name="Result" FontSize="40" HorizontalAlignment ="Center"/>
-            <Button x:Name="NewGame">
+            <Button x:Name="NewGame" Visibility="Collapsed" Content="NewGame" Click="NewGame_Click" Margin="2" Width="420" Height="67" FontSize="40">
+                <Button.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black" Offset="0"/>
+                        <GradientStop Color="#FFF12828" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.Background>
             </Button>
         </StackPanel>
     </Grid>

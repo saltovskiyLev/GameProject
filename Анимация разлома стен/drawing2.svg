@@ -34,7 +34,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
-     inkscape:cx="374.00783"
+     inkscape:cx="266.50783"
      inkscape:cy="509.57769"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
@@ -52,7 +52,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -64,12 +64,16 @@
        style="fill:none;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 55.184523,115.19345 v 87.69048 l 75.217267,-0.37798 0,-86.55655"
        id="path69"
-       inkscape:connector-curvature="0" />
+       inkscape:connector-curvature="0"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="M 130.40179,115.9494 55.184523,115.19345"
        id="path71"
-       inkscape:connector-curvature="0" />
+       inkscape:connector-curvature="0"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        sodipodi:type="star"
        style="fill:#000080;stroke-width:0.26458332"
@@ -86,7 +90,9 @@
        inkscape:randomized="0"
        d="m 61.988096,131.06846 -1.840175,-2.31073 -2.946745,0.20591 1.628987,-2.46417 -1.106422,-2.73889 2.846945,0.78779 2.262938,-1.89863 0.130521,2.95104 2.504995,1.56547 -2.766277,1.03606 z"
        inkscape:transform-center-x="-0.29200189"
-       inkscape:transform-center-y="0.13736278" />
+       inkscape:transform-center-y="0.13736278"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        sodipodi:type="star"
        style="fill:#000080;stroke-width:0.26458332"
@@ -102,6 +108,8 @@
        inkscape:rounded="0"
        inkscape:randomized="0"
        d="m 72.382446,135.41517 -0.833133,-1.68811 -1.862942,-0.2707 1.348038,-1.31401 -0.318229,-1.85542 1.666266,0.87601 1.666266,-0.87601 -0.318228,1.85542 1.348038,1.31401 -1.862943,0.2707 z"
-       inkscape:transform-center-y="0.27069968" />
+       inkscape:transform-center-y="0.27069968"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
   </g>
 </svg>
