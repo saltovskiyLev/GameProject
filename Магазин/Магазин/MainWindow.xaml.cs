@@ -36,6 +36,8 @@ namespace Магазин
             }
             ComputerParts = ReadProducts(path, "Комплектующие для ПК.txt");
             PartsList.ItemsSource = ComputerParts;
+            AllFood = ReadProducts(path, "Еда и доставка.txt");
+            FoodList.ItemsSource = AllFood;
             //Product p1 = new Product();
             //p1.SetFields(goods[0]);
         }
@@ -91,8 +93,27 @@ namespace Магазин
                 Shop.Visibility = Visibility.Visible;
             }
         }
+        private void PartsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Product p = (Product)(PartsList.SelectedItem);
+            ShowProduct(p);
+        }
+        void ShowProduct(Product item)
+        {
+            Price.Text = "Цена: " + item.Price.ToString();
+            Number.Text = "Количество: " + item.Number.ToString();
+            var uri = new Uri(Directory.GetCurrentDirectory() + "\\" + item.Picture);
+            var img = new BitmapImage(uri);
+            Picture.Source = img;
+        }
+
+        private void FoodList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Product p = (Product)(FoodList.SelectedItem);
+            ShowProduct(p);
+        }
     }
-     public class Product
+    public class Product
     {
         public int Price { get; set; }
         public int Number { get; set; }

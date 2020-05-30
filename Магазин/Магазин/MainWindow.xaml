@@ -33,46 +33,75 @@
                 </Button.Background>
             </Button>
         </StackPanel>
-        <TabControl x:Name="Shop" Visibility="Collapsed">
-            <TabItem Header="Комплектующие для ПК" Foreground="WhiteSmoke" FontSize="20">
-                <TabItem.Content>
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock Text="Комплектующие для ПК">
-                        </TextBlock>
-                        <ListBox Name="PartsList" DisplayMemberPath="Name">
-                            <ListBox.ItemContainerStyle>
-                                <Style TargetType="{x:Type ListBoxItem}">
-                                    <Setter Property="ListBoxItem.Background" Value="LightSteelBlue"/>
-                                    <Setter Property="ListBoxItem.Margin" Value="5"/>
-                                    <Setter Property="ListBoxItem.Padding" Value="5"/>
-                                    <Setter Property="ListBoxItem.FontSize" Value="32"/>
-                                    <Style.Triggers>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="Foreground" Value="White"/>
-                                            <Setter Property="BorderThickness" Value="1"/>
-                                            <Setter Property="BorderBrush" Value="Black"/>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </ListBox.ItemContainerStyle>
-                        </ListBox>
-                    </StackPanel>
-                </TabItem.Content>
-                <TabItem.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                <GradientStop Color="Black" Offset="0"/>
-                <GradientStop Color="#FF1D49DC" Offset="1"/>
-                </LinearGradientBrush>
-                </TabItem.Background>
-            </TabItem>
-            <TabItem Header="Еда" Foreground="WhiteSmoke" FontSize="20">
-                <TabItem.Background>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="Black" Offset="0"/>
-                        <GradientStop Color="#FF1D49DC" Offset="1"/>
-                    </LinearGradientBrush>
-                </TabItem.Background>
-            </TabItem>
-        </TabControl>
+        <StackPanel Orientation="Horizontal" Visibility="Collapsed" x:Name="Shop">
+            <TabControl>
+                <TabItem Header="Комплектующие для ПК" Foreground="WhiteSmoke" FontSize="20">
+                    <TabItem.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <ListBox Name="PartsList" DisplayMemberPath="Name" SelectionChanged="PartsList_SelectionChanged">
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="{x:Type ListBoxItem}">
+                                        <Setter Property="ListBoxItem.Background" Value="LightSteelBlue"/>
+                                        <Setter Property="ListBoxItem.Margin" Value="5"/>
+                                        <Setter Property="ListBoxItem.Padding" Value="5"/>
+                                        <Setter Property="ListBoxItem.FontSize" Value="32"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="Foreground" Value="White"/>
+                                                <Setter Property="BorderThickness" Value="1"/>
+                                                <Setter Property="BorderBrush" Value="Black"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+                            </ListBox>
+                        </StackPanel>
+                    </TabItem.Content>
+                    <TabItem.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="Black" Offset="0"/>
+                            <GradientStop Color="#FF1D49DC" Offset="1"/>
+                        </LinearGradientBrush>
+                    </TabItem.Background>
+                </TabItem>
+                <TabItem Header="Еда" Foreground="WhiteSmoke" FontSize="20">
+                    <TabItem.Content>
+                        <StackPanel Orientation="Vertical">
+                            <ListBox Name="FoodList" DisplayMemberPath="Name" SelectionChanged="FoodList_SelectionChanged">
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="{x:Type ListBoxItem}">
+                                        <Setter Property="ListBoxItem.Background" Value="LightSteelBlue"/>
+                                        <Setter Property="ListBoxItem.Margin" Value="5"/>
+                                        <Setter Property="ListBoxItem.Padding" Value="5"/>
+                                        <Setter Property="ListBoxItem.FontSize" Value="32"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="Foreground" Value="White"/>
+                                                <Setter Property="BorderThickness" Value="1"/>
+                                                <Setter Property="BorderBrush" Value="Black"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+                            </ListBox>
+                        </StackPanel>
+                    </TabItem.Content>
+                    <TabItem.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="Black" Offset="0"/>
+                            <GradientStop Color="#FF1D49DC" Offset="1"/>
+                        </LinearGradientBrush>
+                    </TabItem.Background>
+                </TabItem>
+            </TabControl>
+            <StackPanel Orientation="Vertical">
+                <TextBlock x:Name="Price" FontSize="70" Foreground="BurlyWood" Margin="32,0,0,0">
+                </TextBlock>
+                <TextBlock x:Name="Number" FontSize="70" Foreground="BurlyWood" Margin="32,0,0,0">
+                </TextBlock>
+                <Image x:Name="Picture" Width="300">
+                </Image>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Window>
