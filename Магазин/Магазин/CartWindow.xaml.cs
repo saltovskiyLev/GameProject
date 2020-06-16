@@ -19,9 +19,12 @@ namespace Магазин
     /// </summary>
     public partial class CartWindow : Window
     {
-        public CartWindow()
+        public List<CartElement> UserCart;
+        public CartWindow(List <CartElement> cart)
         {
             InitializeComponent();
+            UserCart = cart;
+            lbCart.ItemsSource = UserCart;
         }
     }
 }

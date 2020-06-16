@@ -7,6 +7,23 @@
         mc:Ignorable="d"
         Title="CartWindow" Height="450" Width="800">
     <Grid>
-        
+        <StackPanel Orientation="Horizontal">
+            <ListBox x:Name="lbCart">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Path=Name}" Foreground="Cyan" FontSize="42">
+                            </TextBlock>
+                            <TextBlock Text="{Binding Path=Price}" Foreground="Cyan" FontSize="42">
+                            </TextBlock>
+                            <TextBlock Text="{Binding Path=Quantity}" Foreground="Cyan" FontSize="42">
+                            </TextBlock>
+                            <Border Background="#FF6EBFDE" BorderThickness="12" Visibility="Collapsed">
+                            </Border>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
     </Grid>
 </Window>

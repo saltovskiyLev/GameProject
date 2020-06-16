@@ -181,18 +181,33 @@ namespace Магазин
             }
             purchase.Quantity = 1;
             Cart.Add(purchase);
+            MessageBox.Show("Товар успешно добавлен в корзину.");
         }
 
         private void ShowCart_Click(object sender, RoutedEventArgs e)
         {
-            Window w = new CartWindow();
+            CartWindow w = new CartWindow(Cart);
             w.ShowDialog();
         }
     }
     public class CartElement
     {
         public Product Product;
-        public int Quantity;
+        public int Quantity { get; set; }
+        public string Price
+        {
+            get
+            {
+                return Product.Price.ToString();
+            }
+        }
+        public string Name
+        {
+            get
+            {
+                return Product.Name;
+            }
+        }
         public int Sum
         {
             get
