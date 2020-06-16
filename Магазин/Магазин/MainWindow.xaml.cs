@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Diagnostics;                                               
 
 namespace Магазин
 {
@@ -21,12 +22,18 @@ namespace Магазин
     /// </summary>
     public partial class MainWindow : Window
     {
+        List<CartElement> Cart = new List<CartElement>();
+        int[] SelectetProduct = new int[2];
+        int SelectetTab = 0;
+        bool fullSize = false;
         Product[] AllFood;
         Product[] ComputerParts;
         string path = "";
         public MainWindow()
         {
             InitializeComponent();
+            SelectetProduct[0] = -1;
+            SelectetProduct[1] = -1;
             string[] goods;
             path = Environment.CurrentDirectory;
             int p = Environment.CurrentDirectory.LastIndexOf('\\');
@@ -97,6 +104,7 @@ namespace Магазин
         {
             Product p = (Product)(PartsList.SelectedItem);
             ShowProduct(p);
+            SelectetProduct[0] = PartsList.SelectedIndex;
         }
         void ShowProduct(Product item)
         {
@@ -105,12 +113,92 @@ namespace Магазин
             var uri = new Uri(Directory.GetCurrentDirectory() + "\\" + item.Picture);
             var img = new BitmapImage(uri);
             Picture.Source = img;
+            BorderImage.Visibility = Visibility.Visible;
         }
 
         private void FoodList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Product p = (Product)(FoodList.SelectedItem);
             ShowProduct(p);
+            SelectetProduct[1] = FoodList.SelectedIndex;
+        }
+
+        private void Catalog_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //Debug.WriteLine(e.Source);
+            if (e.Source is TabControl t)
+            {
+                SelectetTab = t.SelectedIndex;
+                if(SelectetProduct[SelectetTab] == -1)
+                {
+                    Price.Text = "";
+                    Number.Text = "";
+                    Picture.Source = null;
+                    BorderImage.Visibility = Visibility.Hidden;
+                    return;
+                }
+                if (SelectetTab == 0)
+                {
+                    ShowProduct(ComputerParts[SelectetProduct[SelectetTab]]);
+                }
+                if(SelectetTab == 1)
+                {
+                    ShowProduct(AllFood[SelectetProduct[SelectetTab]]);
+                }
+            }
+        }
+
+        private void Picture_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if(!fullSize)
+            {
+                fullSize = true;
+                Picture.Width = 720;
+            }
+            else
+            {
+                fullSize = false;
+                Picture.Width = 320;
+            }
+        }
+
+        private void AddToCart_Click(object sender, RoutedEventArgs e)
+        {
+            CartElement purchase = new CartElement();
+            if (Catalog.SelectedIndex == 0)
+            {
+                if (PartsList.SelectedIndex != -1)
+                {
+                    purchase.Product = ComputerParts[PartsList.SelectedIndex];
+                }
+            }
+            else if(Catalog.SelectedIndex == 1)
+            {
+                if (FoodList.SelectedIndex != -1)
+                {
+                    purchase.Product = AllFood[FoodList.SelectedIndex];
+                }
+            }
+            purchase.Quantity = 1;
+            Cart.Add(purchase);
+        }
+
+        private void ShowCart_Click(object sender, RoutedEventArgs e)
+        {
+            Window w = new CartWindow();
+            w.ShowDialog();
+        }
+    }
+    public class CartElement
+    {
+        public Product Product;
+        public int Quantity;
+        public int Sum
+        {
+            get
+            {
+                return Quantity * Product.Price;
+            }
         }
     }
     public class Product

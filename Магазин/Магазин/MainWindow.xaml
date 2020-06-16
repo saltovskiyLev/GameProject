@@ -34,7 +34,7 @@
             </Button>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Visibility="Collapsed" x:Name="Shop">
-            <TabControl>
+            <TabControl Name="Catalog" SelectionChanged="Catalog_SelectionChanged">
                 <TabItem Header="Комплектующие для ПК" Foreground="WhiteSmoke" FontSize="20">
                     <TabItem.Content>
                         <StackPanel Orientation="Horizontal">
@@ -99,8 +99,13 @@
                 </TextBlock>
                 <TextBlock x:Name="Number" FontSize="70" Foreground="BurlyWood" Margin="32,0,0,0">
                 </TextBlock>
-                <Image x:Name="Picture" Width="300">
-                </Image>
+                <Border BorderBrush="#FF1AA673" BorderThickness="7" Background="Black" Visibility="Collapsed" Name="BorderImage">
+                    <Image x:Name="Picture" Width="300" MouseDown="Picture_MouseDown"/>
+                </Border>
+                <Button x:Name="AddToCart" Content="Добавить в корзину" Click="AddToCart_Click" Foreground="Wheat" Width="620" FontSize="42">
+                </Button>
+                <Button x:Name="ShowCart" Content="Показать корзину" Click="ShowCart_Click" Foreground="Wheat" Width="620" FontSize="42">
+                </Button>
             </StackPanel>
         </StackPanel>
     </Grid>
