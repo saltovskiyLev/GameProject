@@ -26,5 +26,17 @@ namespace Магазин
             UserCart = cart;
             lbCart.ItemsSource = UserCart;
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            //MessageBox.Show("Функция вызвана -");
+            CartElement Item = lbCart.SelectedItem as CartElement;
+            MessageBox.Show(Item.Name);
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            //MessageBox.Show("Функция вызвана +");
+        }
     }
 }

@@ -147,7 +147,6 @@ namespace Магазин
                 }
             }
         }
-
         private void Picture_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if(!fullSize)
@@ -179,8 +178,24 @@ namespace Магазин
                     purchase.Product = AllFood[FoodList.SelectedIndex];
                 }
             }
+            if(purchase.Product == null)
+            {                                                                                                       
+                return;
+            }
             purchase.Quantity = 1;
-            Cart.Add(purchase);
+            bool IsFound = false;
+            for (int i = 0; i < Cart.Count; i++)
+            {
+                if (purchase.Name == Cart[i].Name)
+                {
+                    IsFound = true;
+                    Cart[i].Quantity ++;
+                }
+            }
+            if (IsFound == false)
+            {
+                Cart.Add(purchase);
+            }
             MessageBox.Show("Товар успешно добавлен в корзину.");
         }
 
