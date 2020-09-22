@@ -31,6 +31,7 @@ namespace Медиа_Файлы
             string FileName = Directory.GetCurrentDirectory() + "\\Jingle_Lose_00.mp3";
             Audio.Open(new Uri(FileName));
             Audio.Play();
+            var data = File.ReadAllBytes(FileName);
         }
     }
 }
