@@ -7,13 +7,33 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <StackPanel Orientation="Horizontal">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="611*"/>
+            <ColumnDefinition Width="181*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2">
             <StackPanel Orientation="Vertical">
                 <StackPanel.Background>
-                    <ImageBrush ImageSource="Pushka.jpg">
-                    </ImageBrush> 
+                    <ImageBrush x:Name="PanelBackground">
+                    </ImageBrush>
                 </StackPanel.Background>
-                <Button Content="Играть" FontSize="72" Foreground="Red" Width="420" Margin="0,0,0,12">
+                <Button Content="Новая игра" FontSize="72" Foreground="Red" Width="420" Margin="0,0,0,12" Opacity="0.7">
+                    <Button.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="Black" Offset="0"/>
+                            <GradientStop Color="#FF053291" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Button.Background>
+                </Button>
+                <Button Content="Загрузить" FontSize="72" Foreground="Red" Width="420" Margin="0,0,0,12" Opacity="0.7">
+                    <Button.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="Black" Offset="0"/>
+                            <GradientStop Color="#FF053291" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Button.Background>
+                </Button>
+                <Button Content="Настройки" FontSize="72" Foreground="Red" Width="420" Margin="0,0,0,12" Opacity="0.7">
                     <Button.Background>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                             <GradientStop Color="Black" Offset="0"/>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,6 +24,19 @@ namespace LeoJourney
         public MainWindow()
         {
             InitializeComponent();
+            PanelBackground.ImageSource = new BitmapImage(new Uri("C:\\Users\\Admin\\Documents\\GitHub\\GameProject\\LeoJourney\\Pushka.jpg"));
         }
+    }
+    public class Variant
+    {
+        public int SceneId;
+        public string Description;
+    }
+    public class Scene
+    {
+        public int Id;
+        public string Picture;
+        public string Description;
+        public Variant[] Variants;
     }
 }
