@@ -12,12 +12,12 @@
             <ColumnDefinition Width="181*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2">
-            <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Vertical" Name="MainMenu">
                 <StackPanel.Background>
                     <ImageBrush x:Name="PanelBackground">
                     </ImageBrush>
                 </StackPanel.Background>
-                <Button Content="Новая игра" FontSize="72" Foreground="Red" Width="420" Margin="0,0,0,12" Opacity="0.7">
+                <Button Content="Новая игра" FontSize="72" Foreground="Red" Width="420" Margin="0,0,0,12" Opacity="0.7" Click="Button_Click_NewGame">
                     <Button.Background>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                             <GradientStop Color="Black" Offset="0"/>
@@ -41,6 +41,23 @@
                         </LinearGradientBrush>
                     </Button.Background>
                 </Button>
+            </StackPanel>
+            <StackPanel Visibility="Collapsed">
+                <TextBlock x:Name="tbScene">
+                    
+                </TextBlock>
+                <TextBlock x:Name="tbVariant1" MouseDown="tbVariant1_MouseDown">
+
+                </TextBlock>
+                <TextBlock x:Name="tbVariant2" MouseDown="tbVariant2_MouseDown">
+
+                </TextBlock>
+                <TextBlock x:Name="tbVariant3" MouseDown="tbVariant3_MouseDown">
+
+                </TextBlock>
+                <TextBlock x:Name="tbVariant4" MouseDown="tbVariant4_MouseDown">
+
+                </TextBlock>
             </StackPanel>
         </StackPanel>
     </Grid>

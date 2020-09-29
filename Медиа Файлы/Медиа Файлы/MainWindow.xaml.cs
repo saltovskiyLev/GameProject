@@ -24,6 +24,7 @@ namespace Медиа_Файлы
         public MainWindow()
         {
             InitializeComponent();
+            video.Source = new Uri("C:\\Users\\Admin\\Documents\\GitHub\\GameProject\\LeoJourney\\Баг _ чекбокс в фасетах и значения фильтров.wmv");
         }
         MediaPlayer Audio = new MediaPlayer();
         private void Button_Click(object sender, RoutedEventArgs e)

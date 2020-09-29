@@ -7,7 +7,10 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Button Content="Звук N1" Click="Button_Click">
-        </Button>
+        <StackPanel>
+            <MediaElement Name="video" LoadedBehavior="Manual"></MediaElement>
+            <Button Content="Звук N1" Click="Button_Click">
+            </Button>
+        </StackPanel>
     </Grid>
 </Window>
