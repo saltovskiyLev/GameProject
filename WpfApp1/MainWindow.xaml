@@ -8,10 +8,10 @@
         Title="MainWindow" Height="550" Width="800">
     <Grid>
         <StackPanel>
-            <Button Content="Play next sound" Click="Button_Click"></Button>
-            <MediaElement Source="D:\\VID_20200512_155549.mp4" Name="video" LoadedBehavior="Manual"></MediaElement>
-            <Button Content="start video" Click="Button_Click_1"></Button>
-            <Button Content="stop video" Click="Button_Click_2"></Button>
+            <Button Content="Open audio" Click="Button_Click"></Button>
+            <MediaElement Name="video" LoadedBehavior="Manual"></MediaElement>
+            <Button Content="Open video" Click="Button_Click_1"></Button>
+            <Button Content="Stop video" Click="Button_Click_2"></Button>
         </StackPanel>
     </Grid>
 </Window>

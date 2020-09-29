@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
 
 namespace WpfApp1
 {
@@ -35,18 +36,41 @@ namespace WpfApp1
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            mediaPlayer.Open(new Uri(files[fileNum]));
-            mediaPlayer.Play();
-            fileNum++;
-            mediaPlayer2.Open(new Uri(files[fileNum]));
-            mediaPlayer2.Play();
-            if (fileNum < files.Length - 1) fileNum++;
-            else fileNum = 0;
+            var ofd = new OpenFileDialog();
+            ofd.ShowDialog();
+            try
+            {
+                mediaPlayer.Open(new Uri(ofd.FileName));
+                mediaPlayer.Play();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+
+            //mediaPlayer.Open(new Uri(files[fileNum]));
+            //mediaPlayer.Play();
+            //fileNum++;
+            //mediaPlayer2.Open(new Uri(files[fileNum]));
+            //mediaPlayer2.Play();
+            //if (fileNum < files.Length - 1) fileNum++;
+            //else fileNum = 0;
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            video.Play();
+            var ofd = new OpenFileDialog();
+            ofd.ShowDialog();
+            video.Source = new Uri(ofd.FileName);
+            try
+            {
+                video.Play();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
