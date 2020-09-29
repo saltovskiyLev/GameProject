@@ -42,8 +42,8 @@
                     </Button.Background>
                 </Button>
             </StackPanel>
-            <StackPanel Visibility="Collapsed">
-                <TextBlock x:Name="tbScene">
+            <StackPanel Visibility="Collapsed" Name="GamePanel">
+                <TextBlock x:Name="tbScene" FontSize="24" TextWrapping="Wrap">
                     
                 </TextBlock>
                 <TextBlock x:Name="tbVariant1" MouseDown="tbVariant1_MouseDown">

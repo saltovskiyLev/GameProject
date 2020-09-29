@@ -33,13 +33,26 @@ namespace LeoJourney
             string SceneText = File.ReadAllText(path + "Сцена_" + Id + ".txt");
             Scene scene = new Scene();
             string[] sceneParams = SceneText.Split(new char[] {'#'});
+            scene.Id = sceneParams[0];
+            scene.Picture = sceneParams[1];
+            scene.Description = sceneParams[2];
+            scene.Variants = new Variant[4];
+            for(int i = 3; i < sceneParams.Length; i++)
+            {
+                string[] Variants = SceneText.Split(new char[] { '$' });
+                scene.Variants[i - 3] = new Variant();
+                //scene.Variants[i - 3].Description = Variants[];
+            }
             return scene;
         }
 
         private void Button_Click_NewGame(object sender, RoutedEventArgs e)
         {
+            Scene scene;
             MainMenu.Visibility = Visibility.Collapsed;
-            ReadScene("1");
+            scene = ReadScene("1");
+            DisplayScene(scene);
+            GamePanel.Visibility = Visibility.Visible;
         }
 
         private void tbVariant1_MouseDown(object sender, MouseButtonEventArgs e)
@@ -61,6 +74,11 @@ namespace LeoJourney
         {
 
         }
+        private void DisplayScene(Scene scene)
+        {
+            tbScene.Text = scene.Description;
+        }
+
     }
     public class Variant
     {
