@@ -42,23 +42,25 @@
                     </Button.Background>
                 </Button>
             </StackPanel>
-            <StackPanel Visibility="Collapsed" Name="GamePanel">
+            <StackPanel Visibility="Collapsed" Name="GamePanel" Width="620" Background="LightGray" Margin="4,0,4,0">
                 <TextBlock x:Name="tbScene" FontSize="24" TextWrapping="Wrap">
                     
                 </TextBlock>
-                <TextBlock x:Name="tbVariant1" MouseDown="tbVariant1_MouseDown">
+                <TextBlock x:Name="tbVariant1" MouseDown="tbVariant1_MouseDown" FontSize="24" Background="Plum" Margin="4,24,4,12">
 
                 </TextBlock>
-                <TextBlock x:Name="tbVariant2" MouseDown="tbVariant2_MouseDown">
+                <TextBlock x:Name="tbVariant2" MouseDown="tbVariant2_MouseDown" FontSize="24" Background="Plum" Margin="4,0,4,12">
 
                 </TextBlock>
-                <TextBlock x:Name="tbVariant3" MouseDown="tbVariant3_MouseDown">
+                <TextBlock x:Name="tbVariant3" MouseDown="tbVariant3_MouseDown" FontSize="24" Background="Plum" Margin="4,0,4,12">
 
                 </TextBlock>
-                <TextBlock x:Name="tbVariant4" MouseDown="tbVariant4_MouseDown">
+                <TextBlock x:Name="tbVariant4" MouseDown="tbVariant4_MouseDown" FontSize="24" Background="Plum" Margin="4,0,4,12">
 
                 </TextBlock>
             </StackPanel>
+            <Image x:Name="Picture">
+            </Image>
         </StackPanel>
     </Grid>
 </Window>

@@ -1,0 +1,33 @@
+﻿<Window x:Class="Редактор_Урованей.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Редактор_Урованей"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <ListBox x:Name="lbScenes" Grid.Column="0" DisplayMemberPath="Id" SelectionChanged="lbScenes_SelectionChanged">
+
+        </ListBox>
+        <StackPanel Orientation="Vertical" Grid.Column="1">
+            <TextBlock> Текст сцены</TextBlock>
+            <TextBox x:Name="tbSceneText" Margin="0,0,0,7" AcceptsReturn="true" Height="42" ScrollViewer.VerticalScrollBarVisibility="Auto"></TextBox>
+            <TextBlock> Имя файла с картинкой</TextBlock>
+            <TextBox x:Name="tbScenePicture" Margin="0,0,0,7"></TextBox>
+            <TextBlock> Описание первого варианта</TextBlock>
+            <TextBox x:Name="tbVariant_1" Margin="0,0,0,7" AcceptsReturn="true"></TextBox>
+            <TextBlock> Описание второго варианта</TextBlock>
+            <TextBox x:Name="tbVariant_2" Margin="0,0,0,7" AcceptsReturn="true"></TextBox>
+            <TextBlock> Описание третьего варианта</TextBlock>
+            <TextBox x:Name="tbVariant_3" Margin="0,0,0,7" AcceptsReturn="true"></TextBox>
+            <TextBlock> Описание четвёртого варианта</TextBlock>
+            <TextBox x:Name="tbVariant_4" Margin="0,0,0,7" AcceptsReturn="true"></TextBox>
+            <Button x:Name="BtnSave" Content="Сохранить" Margin="115,7,136,0" Height="58" Background="Green" FontSize="24" FontWeight="Bold" Foreground="Aqua" Click="BtnSave_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

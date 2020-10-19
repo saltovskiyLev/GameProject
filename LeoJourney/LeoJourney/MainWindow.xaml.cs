@@ -22,10 +22,16 @@ namespace LeoJourney
     /// </summary>
     public partial class MainWindow : Window
     {
+        Scene CurrentScene;
+        TextBlock[] Variants = new TextBlock[4];
         string path = @"C:\Users\Admin\Documents\GitHub\GameProject\LeoJourney\LeoJourney\Levels\";
         public MainWindow()
         {
             InitializeComponent();
+            Variants[0] = tbVariant1;
+            Variants[1] = tbVariant2;
+            Variants[2] = tbVariant3;
+            Variants[3] = tbVariant4; 
             PanelBackground.ImageSource = new BitmapImage(new Uri("C:\\Users\\Admin\\Documents\\GitHub\\GameProject\\LeoJourney\\Pushka.jpg"));
         }
         Scene ReadScene(string Id)
@@ -39,57 +45,77 @@ namespace LeoJourney
             scene.Variants = new Variant[4];
             for(int i = 3; i < sceneParams.Length; i++)
             {
-                string[] Variants = SceneText.Split(new char[] { '$' });
+                string[] Variants = sceneParams[i].Split(new char[] { '$' });
                 scene.Variants[i - 3] = new Variant();
-                //scene.Variants[i - 3].Description = Variants[];
+                scene.Variants[i - 3].Description = Variants[0];
+                scene.Variants[i - 3].SceneId = Variants[1];
             }
             return scene;
         }
 
         private void Button_Click_NewGame(object sender, RoutedEventArgs e)
         {
-            Scene scene;
             MainMenu.Visibility = Visibility.Collapsed;
-            scene = ReadScene("1");
-            DisplayScene(scene);
+            CurrentScene = ReadScene("1");
+            ChangeScene("1");
             GamePanel.Visibility = Visibility.Visible;
         }
 
         private void tbVariant1_MouseDown(object sender, MouseButtonEventArgs e)
         {
-
+            ChangeScene(CurrentScene.Variants[0].SceneId);
         }
 
         private void tbVariant2_MouseDown(object sender, MouseButtonEventArgs e)
         {
-
+            ChangeScene(CurrentScene.Variants[1].SceneId);
         }
 
         private void tbVariant3_MouseDown(object sender, MouseButtonEventArgs e)
         {
-
+            ChangeScene(CurrentScene.Variants[2].SceneId);
         }
 
         private void tbVariant4_MouseDown(object sender, MouseButtonEventArgs e)
         {
-
+            ChangeScene(CurrentScene.Variants[3].SceneId);
+        }
+        void ChangeScene(string sceneId)
+        {
+            Scene scene = ReadScene(sceneId);
+            DisplayScene(scene);
+            CurrentScene = scene;
+            BitmapImage img = new BitmapImage(new Uri("C:\\Users\\Admin\\Documents\\GitHub\\GameProject\\LeoJourney\\" + scene.Picture));
+            Picture.Source = img;
         }
         private void DisplayScene(Scene scene)
         {
             tbScene.Text = scene.Description;
+            for (int i = 0; i < scene.Variants.Length; i++)
+            {
+                if(scene.Variants[i] != null)
+                {
+                    Variants[i].Text = scene.Variants[i].Description;
+                    Variants[i].Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    Variants[i].Visibility = Visibility.Collapsed;
+                }
+            }
         }
-
+     
     }
     public class Variant
     {
-        public int SceneId;
+        public string SceneId;
         public string Description;
     }
     public class Scene
     {
-        public string Id;
-        public string Picture;
+        public string Id;         
+        public string Picture;    
         public string Description;
-        public Variant[] Variants;
+        public Variant[] Variants; 
     }
 }
