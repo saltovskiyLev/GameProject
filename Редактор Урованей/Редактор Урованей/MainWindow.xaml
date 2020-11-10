@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Редактор_Урованей"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="700" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="72"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <ListBox x:Name="lbScenes" Grid.Column="0" DisplayMemberPath="Id" SelectionChanged="lbScenes_SelectionChanged">
@@ -21,13 +21,22 @@
             <TextBox x:Name="tbScenePicture" Margin="0,0,0,7"></TextBox>
             <TextBlock> Описание первого варианта</TextBlock>
             <TextBox x:Name="tbVariant_1" Margin="0,0,0,7" AcceptsReturn="true"></TextBox>
+            <TextBlock Text="Этот вариант ведёт на сцену с ID"></TextBlock>
+            <TextBox x:Name="tbVariantId_1"></TextBox>
             <TextBlock> Описание второго варианта</TextBlock>
             <TextBox x:Name="tbVariant_2" Margin="0,0,0,7" AcceptsReturn="true"></TextBox>
+            <TextBlock Text="Этот вариант ведёт на сцену с ID"></TextBlock>
+            <TextBox x:Name="tbVariantId_2"></TextBox>
             <TextBlock> Описание третьего варианта</TextBlock>
             <TextBox x:Name="tbVariant_3" Margin="0,0,0,7" AcceptsReturn="true"></TextBox>
+            <TextBlock Text="Этот вариант ведёт на сцену с ID"></TextBlock>
+            <TextBox x:Name="tbVariantId_3"></TextBox>
             <TextBlock> Описание четвёртого варианта</TextBlock>
             <TextBox x:Name="tbVariant_4" Margin="0,0,0,7" AcceptsReturn="true"></TextBox>
+            <TextBlock Text="Этот вариант ведёт на сцену с ID"></TextBlock>
+            <TextBox x:Name="tbVariantId_4"></TextBox>
             <Button x:Name="BtnSave" Content="Сохранить" Margin="115,7,136,0" Height="58" Background="Green" FontSize="24" FontWeight="Bold" Foreground="Aqua" Click="BtnSave_Click"/>
+            <Button x:Name="BtnCreate" Content="Создать сцену" Foreground="Aqua" FontSize="24" FontWeight="Bold" Margin="115,12,136,4" Background="Green" Click="BtnCreate_Click" Height="56"></Button>
         </StackPanel>
     </Grid>
 </Window>
