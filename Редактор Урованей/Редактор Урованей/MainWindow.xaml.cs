@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.Collections.ObjectModel;
 
 namespace Редактор_Урованей
 {
@@ -26,7 +27,7 @@ namespace Редактор_Урованей
         bool editMode = true;
         TextBox[] Variants = new TextBox[4];
         TextBox[] VariantsId = new TextBox[4];
-        List<Scene> scenes = new List<Scene>();
+        ObservableCollection<Scene> scenes = new ObservableCollection<Scene>();
         string path = "C:\\Users\\Admin\\Documents\\GitHub\\GameProject\\LeoJourney\\LeoJourney\\Levels";
         public MainWindow()
         {
@@ -40,10 +41,11 @@ namespace Редактор_Урованей
             VariantsId[1] = tbVariantId_2;
             VariantsId[2] = tbVariantId_3;
             VariantsId[3] = tbVariantId_4;
-            ReadScene();
+            ReadScenes();
         }
-        void ReadScene()
+        void ReadScenes()
         {
+            scenes.Clear();
             string[] Files;
             Files = Directory.GetFiles(path);
             for (int i = 0; i < Files.Length; i++)
@@ -122,7 +124,7 @@ namespace Редактор_Урованей
             {
                 editMode = true;
                 Clear();
-                ReadScene();
+                ReadScenes();
                 lbScenes.IsEnabled = true;
             }
         }

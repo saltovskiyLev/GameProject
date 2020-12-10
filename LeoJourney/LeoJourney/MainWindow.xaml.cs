@@ -38,7 +38,7 @@ namespace LeoJourney
         {
             string SceneText = File.ReadAllText(path + "Сцена_" + Id + ".txt");
             Scene scene = new Scene();
-            string[] sceneParams = SceneText.Split(new char[] {'#'});
+            string[] sceneParams = SceneText.Split(new char[] {'#'}, StringSplitOptions.RemoveEmptyEntries);
             scene.Id = sceneParams[0];
             scene.Picture = sceneParams[1];
             scene.Description = sceneParams[2];
