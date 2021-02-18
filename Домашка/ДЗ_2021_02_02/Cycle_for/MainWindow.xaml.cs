@@ -71,7 +71,9 @@ namespace GameProject
             // Задания делаем в отдельной функции
             // Здесь вызываем функции Hometask1, Hometask2, Hometask3, чтобы посмотреть результат
 
-            Hometask1();
+            // А это писа Лев
+            Map.StartDelayedDrawing(120);
+            Hometask4();
             //Hometask2();
             //Hometask3();
         }
@@ -89,13 +91,47 @@ namespace GameProject
         void Hometask2()
         {
             // Здесь пишем код для домашнего задания:
-
+            for (int j = 2; j <= 6; j = j + 2)
+            {
+                for (int i = 2; i <= 6; i = i + 2)
+                {
+                    Map.DrawInCell("red", i, j);
+                }
+            }
         }
 
         void Hometask3()
         {
             // Здесь пишем код для домашнего задания:
+            for (int j = 0; j <= 8; j = j + 2)
+            {
 
+                for (int i = 0; i <= 8; i = i + 2)
+                {
+                    Map.DrawInCell("red", j, i);
+                    Map.DrawInCell("stone", j + 1, i + 1);
+                }
+            }
+            /*for (int j = 1; j < 10; j = j + 2)
+            {
+                for (int i = 1; i <= 9; i = i + 2)
+                {
+                    Map.DrawInCell("stone", j, i);
+                    //Map.DrawInCell("stone", 3, i);
+                }
+
+            }*/
+        }
+        void Hometask4()
+        {
+            // Здесь пишем код для домашнего задания:
+            for (int j = 0; j < 10; j++)
+            {
+                for (int i = j; i < 10; i++)
+                {
+                    Map.DrawInCell("stone", j, i);
+                }
+            }
         }
     }
 }
