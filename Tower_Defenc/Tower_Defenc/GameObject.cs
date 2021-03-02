@@ -32,10 +32,12 @@ namespace Tower_Defenc
             ContainerName = Container;
             map.ContainerSetLeftClickHandler(ContainerName, ClickType.Left, LeftClick);
             map.Library.AddContainer(ContainerName + "mark", "AllyScope", ContainerType.AutosizedSingleImage);
+            map.Library.AddContainer(ContainerName + "Anime", "nothing", ContainerType.AutosizedSingleImage);
             Type = type;
-            HPLINE.Height = 0;
+            HPLINE.Height = 10;
             HPLINE.Fill = Brushes.Green;
             map.Canvas.Children.Add(HPLINE);
+            map.ContainerSetZIndex(ContainerName + "Anime",86);
             //map.DrawRectangle((int)X - 35, (int)Y + 25, hp, 10, Brushes.Green, Brushes.Green);
         }
         public GameObject(string PICTURE, string Container, string type, int x, int y, int size): this(PICTURE, Container, type)
@@ -44,20 +46,30 @@ namespace Tower_Defenc
             SetCoordinate(x, y);
             map.ContainerSetAngle(ContainerName, 180);
             map.ContainerSetZIndex(ContainerName, 87);
-
         }
 
         public void SetCoordinate(double x, double y)
         {
+            map.ContainerMovePreview(ContainerName, x, y, Angle);
+            for (int i = 0; i < MainWindow.Allies.Count; i++) 
+            {
+                if (map.CollisionContainers(ContainerName, MainWindow.Allies[i].ContainerName, true));
+                {
+                    MainWindow.Allies[i].SetHp(MainWindow.Allies[i].HP - 10);
+                    SetHp(HP - 10);
+                    return;
+                }
+            }
             X = x;
             Y = y;
             Canvas.SetTop(HPLINE, Y + 35);
             Canvas.SetLeft(HPLINE, X - 35);
             map.ContainerSetCoordinate(ContainerName, x, y);
-            if(IsMarked)
+            if (IsMarked)
             {
                 map.ContainerSetCoordinate(ContainerName + "mark", X, Y);
             }
+            map.ContainerSetCoordinate(ContainerName + "Anime", X, Y);
         }
 
         public void LeftClick()
@@ -67,12 +79,11 @@ namespace Tower_Defenc
             {
                 MainWindow.SelectedUnit.IsMarked = false;
                 map.ContainerSetCoordinate(MainWindow.SelectedUnit.ContainerName + "mark", -1000, -1000);
-                MainWindow.SelectedUnit.HPLINE.Height = 0;
+                //MainWindow.SelectedUnit.HPLINE.Height = 0;
             }
             MainWindow.SelectedUnit = this;
             IsMarked = true;
             map.ContainerSetMaxSide(ContainerName + "mark", 62);
-            HPLINE.Height = 10;
         }
 
         public void Move()
@@ -100,13 +111,18 @@ namespace Tower_Defenc
             Angle = angle;
             map.ContainerSetAngle(ContainerName, angle);
             SpeedX = Speed * Math.Cos(GameMath.DegreesToRad(angle));
-            SpeedY = Speed * Math.Sin(GameMath.DegreesToRad(angle)); 
+            SpeedY = Speed * Math.Sin(GameMath.DegreesToRad(angle));
+            map.ContainerSetAngle(ContainerName + "Anime", angle + 180);
         }
 
         public void SetHp(int hp)
         {
             HP = hp;
-            HPLINE.Width = HP / 2; 
+            if (HP < 0)
+            {
+                HP = 0;
+            }
+            HPLINE.Width = HP / 2;
         }
     }
 }

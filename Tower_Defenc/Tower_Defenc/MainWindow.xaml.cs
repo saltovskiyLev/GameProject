@@ -29,7 +29,7 @@ namespace Tower_Defenc
         InventoryPanel ipan;
         GameObject basa;
         bool CanSpawn = true;
-        List<GameObject> Allies = new List<GameObject>();
+        static public List<GameObject> Allies = new List<GameObject>();
         List<GameObject> CreatedAnimation = new List<GameObject>();
         InventoryPanel UnitsPanel;
         int counter = 0;
@@ -63,14 +63,32 @@ namespace Tower_Defenc
             map.Library.ImagesFolder = new PathInfo { Path = "..\\..\\images", Type = PathType.Relative };
             map.Library.AddPicture("background", "Сзади.png");
             map.Library.AddPicture("money", "money.png");
+            map.Library.AddPicture("nothing", "nothing.png");
             map.Library.AddPicture("Tank_Low_AllY", "Танк с башней без поворота(ДОБРЫЙ средний).png");
             map.Library.AddPicture("basa", "base.png");
             map.Library.AddPicture("AllyScope", "Выбрал нашего.png");
-            for (int i = 1; i < 7; i++)
-            {
-                map.Library.AddPicture("Fire Bolt" + i,  "Fire Bolt" + i + ".png");
-            }
             map.SetMapBackground("background");
+            AddSetPictures("Fire Bolt", 6);
+            AddSetPictures("ДЫМ", 4);
+            CreateAnimation("Fire Bolt", 6, "Fire1");
+        }
+        void CreateAnimation(string PictureName, int FrameCount, string AnimationName)
+        {
+            string[] Frames = new string[FrameCount];
+            AnimationDefinition F = new AnimationDefinition();
+            for (int i = 1; i <= Frames.Length; i++)
+            {
+                Frames[i - 1] = PictureName + i;
+            }
+            F.AddEqualFrames(100, Frames);
+            map.Library.AddAnimation(AnimationName, F);
+        }
+        void AddSetPictures(string BaseName, int FramesCount)
+        {
+            for (int i = 1; i <= FramesCount; i++)
+            {
+                map.Library.AddPicture(BaseName + i, BaseName + i + ".png");
+            }
         }
 
         void MapClick(int x, int y, int Cx, int Cy)
@@ -98,6 +116,8 @@ namespace Tower_Defenc
                     CreatedAnimation.Add(Tank);
                     Allies.Add(Tank);
                     Tank.SetHp(100);
+                    map.AnimationStart(Tank.ContainerName + "Anime", "Fire1", -1);
+                    map.ContainerSetMaxSide(Tank.ContainerName + "Anime", 100);
                 }
             }
             // ДЗ. Сделать вторую проверку на второй юнит
