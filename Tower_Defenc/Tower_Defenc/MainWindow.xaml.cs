@@ -116,8 +116,9 @@ namespace Tower_Defenc
                     CreatedAnimation.Add(Tank);
                     Allies.Add(Tank);
                     Tank.SetHp(100);
-                    map.AnimationStart(Tank.ContainerName + "Anime", "Fire1", -1);
+                    /*map.ContainerSetFrame(Tank.ContainerName + "Anime", "Fire Bolt1");
                     map.ContainerSetMaxSide(Tank.ContainerName + "Anime", 100);
+                    map.AnimationStart(Tank.ContainerName + "Anime", "Fire1", -1);*/
                 }
             }
             // ДЗ. Сделать вторую проверку на второй юнит

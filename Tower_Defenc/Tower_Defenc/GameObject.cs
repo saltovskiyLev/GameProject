@@ -3,12 +3,19 @@ using System;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
-
+using System.Diagnostics;
 namespace Tower_Defenc
 {
     public class GameObject
     {
         static public UniversalMap_Wpf map;
+        // ПОДСКАЗАКА ПОДСКАЗАКА ПОДСКАЗАКА ПОДСКАЗАКА ПОДСКАЗАКА ПОДСКАЗАКА ПОДСКАЗАКА
+        // если state = 0, то с танком все ОК.
+        // если state = 1, то танк ДЫМИТСЯ.
+        // если state = 2, то танк ГОРИТ.
+        // есди state = 3, то танк УНИЧТОЖЕН.
+        // Ну можно ещё что то дописать.
+        int state = 0;
         public double X;
         public double Y;
         public int HP;
@@ -53,13 +60,15 @@ namespace Tower_Defenc
             map.ContainerMovePreview(ContainerName, x, y, Angle);
             for (int i = 0; i < MainWindow.Allies.Count; i++) 
             {
-                if (map.CollisionContainers(ContainerName, MainWindow.Allies[i].ContainerName, true));
+                if (map.CollisionContainers(ContainerName, MainWindow.Allies[i].ContainerName, true) &&
+                   ContainerName != MainWindow.Allies[i].ContainerName)
                 {
-                    MainWindow.Allies[i].SetHp(MainWindow.Allies[i].HP - 10);
-                    SetHp(HP - 10);
+                    MainWindow.Allies[i].SetHp(MainWindow.Allies[i].HP - 1);
+                    SetHp(HP - 1);
                     return;
                 }
             }
+            Debug.WriteLine("Name = {0}, x = {1}, y = {2}", ContainerName, x, y);
             X = x;
             Y = y;
             Canvas.SetTop(HPLINE, Y + 35);
@@ -112,15 +121,30 @@ namespace Tower_Defenc
             map.ContainerSetAngle(ContainerName, angle);
             SpeedX = Speed * Math.Cos(GameMath.DegreesToRad(angle));
             SpeedY = Speed * Math.Sin(GameMath.DegreesToRad(angle));
-            map.ContainerSetAngle(ContainerName + "Anime", angle + 180);
+            map.ContainerSetAngle(ContainerName + "Anime", angle);
         }
 
         public void SetHp(int hp)
         {
             HP = hp;
-            if (HP < 0)
+            if(HP < 0)
             {
                 HP = 0;
+            }
+            if (state == 0 && HP >= 20 && HP < 50)
+            {
+                
+            }
+            else if (state != 2 && HP < 20 && HP > 0)
+            {
+                map.ContainerSetFrame(ContainerName + "Anime", "Fire Bolt1");
+                map.ContainerSetMaxSide(ContainerName + "Anime", 100);
+                map.AnimationStart(ContainerName + "Anime", "Fire1", -1);
+                state = 2;
+            }
+            else if (state != 3 && HP == 0)
+            {
+
             }
             HPLINE.Width = HP / 2;
         }
