@@ -16,6 +16,7 @@ namespace Tower_Defenc
         // есди state = 3, то танк УНИЧТОЖЕН.
         // Ну можно ещё что то дописать.
         int state = 0;
+        int DamageCounter = 2000;
         public double X;
         public double Y;
         public int HP;
@@ -38,6 +39,7 @@ namespace Tower_Defenc
             map.Library.AddContainer(Container, PICTURE, ContainerType.AutosizedSingleImage);
             ContainerName = Container;
             map.ContainerSetLeftClickHandler(ContainerName, ClickType.Left, LeftClick);
+            map.Library.AddContainer(ContainerName + "top", "nothing", ContainerType.AutosizedSingleImage);
             map.Library.AddContainer(ContainerName + "mark", "AllyScope", ContainerType.AutosizedSingleImage);
             map.Library.AddContainer(ContainerName + "Anime", "nothing", ContainerType.AutosizedSingleImage);
             Type = type;
@@ -63,11 +65,20 @@ namespace Tower_Defenc
                 if (map.CollisionContainers(ContainerName, MainWindow.Allies[i].ContainerName, true) &&
                    ContainerName != MainWindow.Allies[i].ContainerName)
                 {
-                    MainWindow.Allies[i].SetHp(MainWindow.Allies[i].HP - 1);
-                    SetHp(HP - 1);
+                    if (DamageCounter >= 2000)
+                    {
+                        //MainWindow.Allies[i].SetHp(MainWindow.Allies[i].HP - 1);
+                        map.ContainerSetFrame(ContainerName + "top", "exp1");
+                        map.ContainerSetMaxSide(ContainerName + "top", 27);
+                        map.ContainerSetCoordinate(ContainerName + "top", x, y);
+                        map.AnimationStart(ContainerName + "Anime", "Explosion_Collision", 1);
+                        SetHp(HP - 20);
+                        DamageCounter = 0;
+                    }
                     return;
                 }
             }
+            DamageCounter = DamageCounter + 20;
             Debug.WriteLine("Name = {0}, x = {1}, y = {2}", ContainerName, x, y);
             X = x;
             Y = y;
@@ -83,6 +94,7 @@ namespace Tower_Defenc
 
         public void LeftClick()
         {
+            if (HP == 0) return;
             if (Type == "basa") return;
             if(MainWindow.SelectedUnit != null)
             {
@@ -144,7 +156,11 @@ namespace Tower_Defenc
             }
             else if (state != 3 && HP == 0)
             {
-
+                map.ContainerSetFrame(ContainerName, "Destroyed_Tank_Low_ALLY");
+                map.ContainerSetFrame(ContainerName + "mark", "nothing");
+                NeedToMove = false;
+                map.AnimationStop(ContainerName + "Anime", "Fire1");
+                map.ContainerSetFrame(ContainerName + "Anime", "nothing");
             }
             HPLINE.Width = HP / 2;
         }

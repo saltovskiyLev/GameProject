@@ -24,6 +24,7 @@ namespace Tower_Defenc
     {
         TimerController timer = new TimerController();
         UniversalMap_Wpf map;
+        SimpleTextBox TextTimer = new SimpleTextBox();
         static public GameObject SelectedUnit;
         CellMapInfo cellMap = new CellMapInfo(31, 21, 50, 0);
         InventoryPanel ipan;
@@ -32,6 +33,7 @@ namespace Tower_Defenc
         static public List<GameObject> Allies = new List<GameObject>();
         List<GameObject> CreatedAnimation = new List<GameObject>();
         InventoryPanel UnitsPanel;
+        int countdown = 30;
         int counter = 0;
         int money = 150;
         IGameScreenLayout lay;
@@ -46,6 +48,7 @@ namespace Tower_Defenc
             lay.Attach(map, 0);
             lay.Attach(ipan, 1);
             lay.Attach(UnitsPanel, 1);
+            lay.Attach(TextTimer, 1);
             AddPictures();
             ipan.AddItem("money", "money", money.ToString());
             UnitsPanel.AddItem("ЧИСТОТАНК", "Tank_Low_AllY", "Средний танк без поворота башни: 50");
@@ -55,6 +58,8 @@ namespace Tower_Defenc
             map.ContainerSetSize(basa.ContainerName, 100, 100);
             basa.SetCoordinate(map.XAbsolute / 2, map.YAbsolute / 2);
             timer.AddAction(GameCycle, 20);
+            timer.AddAction(Countdown, 1000);
+            TextTimer.TextBox.IsEnabled = false;
             map.Mouse.SetMouseSingleLeftClickHandler(MapClick);
             //map.Keyboard.SetSingleKeyEventHandler(CheckKey);
         }
@@ -67,12 +72,27 @@ namespace Tower_Defenc
             map.Library.AddPicture("Tank_Low_AllY", "Танк с башней без поворота(ДОБРЫЙ средний).png");
             map.Library.AddPicture("basa", "base.png");
             map.Library.AddPicture("AllyScope", "Выбрал нашего.png");
+            map.Library.AddPicture("EnemyLOW", "Враг(самаходка).png");
+            map.Library.AddPicture("Destroyed_Tank_Low_ALLY", "Танк подорвали(первый).png");
             map.SetMapBackground("background");
             AddSetPictures("Fire Bolt", 6);
             AddSetPictures("ДЫМ", 4);
+            AddSetPictures("exp", 10);
             CreateAnimation("Fire Bolt", 6, "Fire1");
+            CreateAnimation("exp", 10, "Explosion_Collision");
         }
-        void CreateAnimation(string PictureName, int FrameCount, string AnimationName)
+        void Countdown()
+        {
+            countdown--;
+            if (countdown == 0)
+            {
+                timer.RemoveAction(Countdown, 1000);
+            }
+            TextTimer.TextBox.Text = "АТАКА ГОРГОВ НАЧНЁТСЯ ЧЕРЕЗ: " + countdown.ToString();
+            TextTimer.TextBox.FontSize = 20;
+            TextTimer.TextBox.Background = Brushes.DarkRed;
+        }
+        void CreateAnimation(string PictureName, int FrameCount, string AnimationName, string LastFrame = "nothing")
         {
             string[] Frames = new string[FrameCount];
             AnimationDefinition F = new AnimationDefinition();
@@ -81,6 +101,8 @@ namespace Tower_Defenc
                 Frames[i - 1] = PictureName + i;
             }
             F.AddEqualFrames(100, Frames);
+            F.AddFrame(1, LastFrame);
+            F.LastFrame = LastFrame;
             map.Library.AddAnimation(AnimationName, F);
         }
         void AddSetPictures(string BaseName, int FramesCount)
@@ -94,6 +116,7 @@ namespace Tower_Defenc
         void MapClick(int x, int y, int Cx, int Cy)
         {
             if (SelectedUnit == null) return;
+            if (SelectedUnit.HP == 0) return;
             SelectedUnit.TargetX = x;
             SelectedUnit.TargetY = y;
             SelectedUnit.NeedToMove = true;
