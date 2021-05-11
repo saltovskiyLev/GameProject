@@ -22,20 +22,25 @@ namespace Tower_Defenc
     /// </summary>
     public partial class MainWindow : Window
     {
+        Random r = new Random();
         TimerController timer = new TimerController();
         UniversalMap_Wpf map;
+        static public List<GameObject> obstacle = new List<GameObject>();
         SimpleTextBox TextTimer = new SimpleTextBox();
-        static public GameObject SelectedUnit;
+        static public GameObject SelectedUnit; // Переменная для хранения выбранного юнита.
         CellMapInfo cellMap = new CellMapInfo(31, 21, 50, 0);
         InventoryPanel ipan;
         GameObject basa;
         bool CanSpawn = true;
+        List<GameObject> Enemis = new List<GameObject>();
         static public List<GameObject> Allies = new List<GameObject>();
         List<GameObject> CreatedAnimation = new List<GameObject>();
+        Wave[] waves = new Wave[1]; 
         InventoryPanel UnitsPanel;
         int countdown = 30;
         int counter = 0;
         int money = 150;
+        int WaveNumber = 0;
         IGameScreenLayout lay;
         public MainWindow()
         {
@@ -61,8 +66,41 @@ namespace Tower_Defenc
             timer.AddAction(Countdown, 1000);
             TextTimer.TextBox.IsEnabled = false;
             map.Mouse.SetMouseSingleLeftClickHandler(MapClick);
+            CreateWaves();
+            timer.AddAction(CheckScroll, 12);
             //map.Keyboard.SetSingleKeyEventHandler(CheckKey);
         }
+
+        int scrollX = 0;
+        int scrollY = 0;
+
+        void CheckScroll()
+        {
+            if (map.Keyboard.IsKeyPressed(Key.Up))
+            {
+                scrollY = scrollY - 5;
+                map.Canvas.Margin = new Thickness(scrollX,scrollY, 0, 0);
+            }
+
+            if (map.Keyboard.IsKeyPressed(Key.Down))
+            {
+                scrollY = scrollY + 5;
+                map.Canvas.Margin = new Thickness(scrollX, scrollY, 0, 0);
+            }
+
+            if (map.Keyboard.IsKeyPressed(Key.Right))
+            {
+                scrollX = scrollX + 5;
+                map.Canvas.Margin = new Thickness(scrollX, scrollY, 0, 0);
+            }
+
+            if (map.Keyboard.IsKeyPressed(Key.Left))
+            {
+                scrollX = scrollX - 5;
+                map.Canvas.Margin = new Thickness(scrollX, scrollY, 0, 0);
+            }
+        }
+
         void AddPictures()
         {
             map.Library.ImagesFolder = new PathInfo { Path = "..\\..\\images", Type = PathType.Relative };
@@ -71,27 +109,106 @@ namespace Tower_Defenc
             map.Library.AddPicture("nothing", "nothing.png");
             map.Library.AddPicture("Tank_Low_AllY", "Танк с башней без поворота(ДОБРЫЙ средний).png");
             map.Library.AddPicture("basa", "base.png");
+            map.Library.AddPicture("snow", "SONOW.png");
             map.Library.AddPicture("AllyScope", "Выбрал нашего.png");
             map.Library.AddPicture("EnemyLOW", "Враг(самаходка).png");
             map.Library.AddPicture("Destroyed_Tank_Low_ALLY", "Танк подорвали(первый).png");
-            map.SetMapBackground("background");
+            //map.SetMapBackground("background");
             AddSetPictures("Fire Bolt", 6);
             AddSetPictures("ДЫМ", 4);
             AddSetPictures("exp", 10);
             CreateAnimation("Fire Bolt", 6, "Fire1");
             CreateAnimation("exp", 10, "Explosion_Collision");
+            /////////////////////////////////////////////////////// т
+            /////////////////////////////////////////////////////// е
+            /////////////////////////////////////////////////////// к
+            /////////////////////////////////////////////////////// с
+            /////////////////////////////////////////////////////// т
+            /////////////////////////////////////////////////////// у
+            /////////////////////////////////////////////////////// р
+            /////////////////////////////////////////////////////// а
+            map.Library.AddContainer("TextureUp", "snow", ContainerType.SingleImage);
+            map.ContainerSetSize("TextureUp", 872, 598);
+            map.ContainerSetCoordinate("TextureUp", 0, 0);
+
+            map.Library.AddContainer("MainTexture", "background", ContainerType.SingleImage);
+            map.ContainerSetSize("MainTexture", 400, 400);
+            map.ContainerSetCoordinate("MainTexture", 0, 0);
         }
+
+        void CreateWaves()
+        {
+            waves[0] = new Wave();
+            waves[0].Units = new List<WaveUnit>();
+            WaveUnit unit = new WaveUnit();
+            unit.UnitName = "EnemyLOW";
+            unit.UnitCount = 4;
+            waves[0].Units.Add(unit);
+        }
+
+        void StartWave(int number)
+        {
+            for(int i = 0; i < waves[number].Units.Count; i++)
+            {
+                switch (waves[number].Units[i].UnitName)
+                {
+                    case "EnemyLOW":
+                        SpaunEnemyLow(waves[number].Units[i].UnitCount);
+                        break;
+                }
+                // wawes[number] - Это обьект типа Wawe который хранит информацию о волне.
+            }
+        }
+
+        void SpaunEnemyLow(int UnitNumber)
+        {
+            for (int i = 0; i < UnitNumber; i++)
+            {
+                counter++;
+                GameObject Enemy = new GameObject("EnemyLOW", "Enemy1" + counter.ToString(), "EnemyLOW");
+                int x = 1, y = 1;
+                Enemy.TargetX = map.XAbsolute / 2;
+                Enemy.TargetY = map.YAbsolute / 2;
+                while (!(x < 0 || y < 0 || x > map.XAbsolute || y > map.YAbsolute))
+                {
+                    x = r.Next(-500, map.XAbsolute + 500);
+                    y = r.Next(-500, map.YAbsolute + 500);
+                }
+                Enemy.SetCoordinate(x, y);
+                Enemy.SetAngle((int)GameMath.GetAngleOfVector(map.XAbsolute / 2 - x, map.YAbsolute / 2 - y));
+                map.ContainerSetMaxSide(Enemy.ContainerName, 72);
+                Enemy.Speed = 1;
+                obstacle.Add(Enemy);
+                Enemy.SetHp(72);
+                Enemy.Range = 150;
+                Enemis.Add(Enemy);
+                Enemy.NeedToMove = true;
+                Enemy.SubdivisionNumber = 1;
+                /*
+                  Баг "ХАКЕР"
+                    1 - Подождите 30 секунд(после запуска игры);
+                    2 - Наведите на врага мышь и нажмите леву кнопку мыши; 
+                    3 - ВЫ МОЖЕТЕ УПРАВЛЯТЬ ВРАГОМ!!!!!!!!!!;
+               -------------------------------------------------------------------------------------------------------------
+                   Решение бага "ХАКЕР"
+                */
+            }
+        }
+
         void Countdown()
         {
             countdown--;
             if (countdown == 0)
             {
                 timer.RemoveAction(Countdown, 1000);
+                StartWave(WaveNumber);
+                WaveNumber++;
             }
             TextTimer.TextBox.Text = "АТАКА ГОРГОВ НАЧНЁТСЯ ЧЕРЕЗ: " + countdown.ToString();
             TextTimer.TextBox.FontSize = 20;
             TextTimer.TextBox.Background = Brushes.DarkRed;
         }
+
         void CreateAnimation(string PictureName, int FrameCount, string AnimationName, string LastFrame = "nothing")
         {
             string[] Frames = new string[FrameCount];
@@ -105,6 +222,7 @@ namespace Tower_Defenc
             F.LastFrame = LastFrame;
             map.Library.AddAnimation(AnimationName, F);
         }
+
         void AddSetPictures(string BaseName, int FramesCount)
         {
             for (int i = 1; i <= FramesCount; i++)
@@ -139,9 +257,11 @@ namespace Tower_Defenc
                     CreatedAnimation.Add(Tank);
                     Allies.Add(Tank);
                     Tank.SetHp(100);
+                    Tank.SubdivisionNumber = 0;
                     /*map.ContainerSetFrame(Tank.ContainerName + "Anime", "Fire Bolt1");
                     map.ContainerSetMaxSide(Tank.ContainerName + "Anime", 100);
                     map.AnimationStart(Tank.ContainerName + "Anime", "Fire1", -1);*/
+                    obstacle.Add(Tank);
                 }
             }
             // ДЗ. Сделать вторую проверку на второй юнит
@@ -193,6 +313,10 @@ namespace Tower_Defenc
             for(int i = 0; i < Allies.Count; i++)
             {
                 Allies[i].Move();
+            }
+            for(int i = 0; i < Enemis.Count; i++)
+            {
+                Enemis[i].Move();
             }
         }
     }

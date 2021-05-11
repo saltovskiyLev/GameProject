@@ -15,7 +15,14 @@ namespace Tower_Defenc
         // если state = 2, то танк ГОРИТ.
         // есди state = 3, то танк УНИЧТОЖЕН.
         // Ну можно ещё что то дописать.
+
+
+        // если SubdivisionNumber = 0, НАШ.
+        // если SubdivisionNumber = 1, ВРАГ самаходка LOW.
         int state = 0;
+        public int SubdivisionNumber; 
+        public int TargetRadiusEnemy = 700;
+        public int Range = 5;
         int DamageCounter = 2000;
         public double X;
         public double Y;
@@ -24,12 +31,12 @@ namespace Tower_Defenc
         double SpeedX;
         double SpeedY;
         Rectangle HPLINE = new Rectangle();
-        public string Type;
         public bool NeedToMove = false;
         public int TargetX;
         public int TargetY;
         public int Angle;
         public double Speed;
+        public string Type;
         public string ContainerName;
         /// <summary>
         /// Пошли функции
@@ -60,26 +67,17 @@ namespace Tower_Defenc
         public void SetCoordinate(double x, double y)
         {
             map.ContainerMovePreview(ContainerName, x, y, Angle);
-            for (int i = 0; i < MainWindow.Allies.Count; i++) 
+            for (int i = 0; i < MainWindow.obstacle.Count; i++) 
             {
-                if (map.CollisionContainers(ContainerName, MainWindow.Allies[i].ContainerName, true) &&
-                   ContainerName != MainWindow.Allies[i].ContainerName)
+                if (map.CollisionContainers(ContainerName, MainWindow.obstacle[i].ContainerName, true) &&
+                   ContainerName != MainWindow.obstacle[i].ContainerName)
                 {
-                    if (DamageCounter >= 2000)
-                    {
-                        //MainWindow.Allies[i].SetHp(MainWindow.Allies[i].HP - 1);
-                        map.ContainerSetFrame(ContainerName + "top", "exp1");
-                        map.ContainerSetMaxSide(ContainerName + "top", 27);
-                        map.ContainerSetCoordinate(ContainerName + "top", x, y);
-                        map.AnimationStart(ContainerName + "Anime", "Explosion_Collision", 1);
-                        SetHp(HP - 20);
-                        DamageCounter = 0;
-                    }
+                    CheckDamageCounter();
+                    MainWindow.obstacle[i].CheckDamageCounter();
                     return;
                 }
             }
-            DamageCounter = DamageCounter + 20;
-            Debug.WriteLine("Name = {0}, x = {1}, y = {2}", ContainerName, x, y);
+            //Debug.WriteLine("Name = {0}, x = {1}, y = {2}", ContainerName, x, y);
             X = x;
             Y = y;
             Canvas.SetTop(HPLINE, Y + 35);
@@ -92,19 +90,45 @@ namespace Tower_Defenc
             map.ContainerSetCoordinate(ContainerName + "Anime", X, Y);
         }
 
+        public void CheckDamageCounter()
+        {
+            if (DamageCounter >= 2000)
+            {
+                //MainWindow.Allies[i].SetHp(MainWindow.Allies[i].HP - 1);
+                map.ContainerSetFrame(ContainerName + "top", "exp1");
+                map.ContainerSetMaxSide(ContainerName + "top", 42);
+                map.ContainerSetCoordinate(ContainerName + "top", X, Y);
+                map.AnimationStart(ContainerName + "top", "Explosion_Collision", 1, StopAnimation);
+                SetHp(HP - 20);
+                DamageCounter = 0;
+            }
+            else
+            {
+                DamageCounter = DamageCounter + 20;
+            }
+        }
+
+        void StopAnimation()
+        {
+            map.ContainerSetFrame(ContainerName + "top", "nothing");
+        }
+
         public void LeftClick()
         {
-            if (HP == 0) return;
-            if (Type == "basa") return;
-            if(MainWindow.SelectedUnit != null)
+            if (SubdivisionNumber == 0)
             {
-                MainWindow.SelectedUnit.IsMarked = false;
-                map.ContainerSetCoordinate(MainWindow.SelectedUnit.ContainerName + "mark", -1000, -1000);
-                //MainWindow.SelectedUnit.HPLINE.Height = 0;
+                if (HP == 0) return;
+                if (Type == "basa") return;
+                if (MainWindow.SelectedUnit != null)
+                {
+                    MainWindow.SelectedUnit.IsMarked = false;
+                    map.ContainerSetCoordinate(MainWindow.SelectedUnit.ContainerName + "mark", -1000, -1000);
+                    //MainWindow.SelectedUnit.HPLINE.Height = 0;
+                }
+                MainWindow.SelectedUnit = this;
+                IsMarked = true;
+                map.ContainerSetMaxSide(ContainerName + "mark", 62);
             }
-            MainWindow.SelectedUnit = this;
-            IsMarked = true;
-            map.ContainerSetMaxSide(ContainerName + "mark", 62);
         }
 
         public void Move()
@@ -121,7 +145,7 @@ namespace Tower_Defenc
                 {
                     SetAngle(Angle - 2);
                 }
-                if(Math.Abs(X - TargetX) < 5 && Math.Abs(Y - TargetY) < 5)
+                if(Math.Abs(X - TargetX) < Range && Math.Abs(Y - TargetY) < Range)
                 {
                     NeedToMove = false;
                 }
