@@ -97,11 +97,15 @@ namespace Tower_Defenc
             map.ContainerMovePreview(ContainerName, x, y, Angle);
             // Этот цикл должен быть в отдельной функции проверки столкновения обьектов.
             // /та функция вызывается в GameCycle.
-            for (int i = 0; i < MainWindow.obstacle.Count; i++) 
+            for (int i = 0; i < MainWindow.obstacle.Count; i++)
             {
                 if (map.CollisionContainers(ContainerName, MainWindow.obstacle[i].ContainerName, true) &&
                    ContainerName != MainWindow.obstacle[i].ContainerName)
                 {
+ /*                   if(Type == "Shell")
+                    {
+
+                    }*/
                     CheckDamageCounter();
                     MainWindow.obstacle[i].CheckDamageCounter();
                     return;
@@ -212,6 +216,8 @@ namespace Tower_Defenc
                 /*Shell.X = X;
                 Shell.Y = Y;
                 Shell.Angle = Angle;*/
+                Shell.Type = "Shell";
+                Shell.SubdivisionNumber = SubdivisionNumber;
                 Shell.SetCoordinate(X, Y);
                 Shell.SetAngle(Angle);
                 // задаём размер контейнера.
