@@ -41,6 +41,7 @@ namespace Tower_Defenc
         static public List<GameObject> Allies = new List<GameObject>();
         static public List<GameObject> AlliesShots = new List<GameObject>();
         static public List<GameObject> EnemisShots = new List<GameObject>();
+        GameObject BaseEnemy;
         List<GameObject> CreatedAnimation = new List<GameObject>();
         Wave[] waves = new Wave[1]; 
         InventoryPanel UnitsPanel;
@@ -78,6 +79,9 @@ namespace Tower_Defenc
             timer.AddAction(GameCycle, 20);
             timer.AddAction(Countdown, 1000);
             TextTimer.TextBox.IsEnabled = false;
+            BaseEnemy = new GameObject("EnemyBase", "BaseEnemy", "EnemyBase");
+            map.ContainerSetMaxSide("BaseEnemy", 320);
+            BaseEnemy.SetCoordinate(240, 300);
             map.Mouse.SetMouseSingleLeftClickHandler(MapClick);
             CreateWaves();
             timer.AddAction(CheckScroll, 12);
@@ -125,6 +129,7 @@ namespace Tower_Defenc
             map.Library.AddPicture("MarkEnemy", "EnemyDetected.png");
             map.Library.AddPicture("TankMashingan_Medium_ALLY_destroid", "Танк подорвали(второй).png");
             map.Library.AddPicture("AllyScope", "Выбрал нашего.png");
+            map.Library.AddPicture("EnemyBase", "scr_2.png");
             map.Library.AddPicture("EnemyLOW", "Враг(самаходка).png");
             map.Library.AddPicture("Destroyed_Tank_Low_ALLY", "Танк подорвали(первый).png");
             map.SetMapBackground("background");
