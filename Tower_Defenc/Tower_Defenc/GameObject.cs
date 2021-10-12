@@ -4,6 +4,8 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Diagnostics;
+using System.Collections.Generic;
+
 namespace Tower_Defenc
 {
     public class GameObject
@@ -21,6 +23,10 @@ namespace Tower_Defenc
         // если SubdivisionNumber = 1, ВРАГ самаходка LOW.
         Int64 state = 0;
         int MaxCounter;
+        //int ChargeRate = 5000000;
+        //public int ChargeReady;
+        //public int ChargeSpeed;
+        public IRecharger Recharger;
         static int counter = 0;
         public bool NeedToRotate = false;
         public int SubdivisionNumber;
@@ -29,14 +35,17 @@ namespace Tower_Defenc
         int DamageCounter = 2000;
         public double X;
         public double Y;
+        public List<GameObject> targets = new List<GameObject>(); // список целей для атаки
         public int HP;
         public bool IsMarked = false;
         double SpeedX;
+        Dictionary<string, int> characts = new Dictionary<string, int>();
         double SpeedY;
         public int mode; // 0 - Обьект стоит на месте   // 1 - Обьект движется в точку на карте // 2 - Обьект движется к другому игровому обьекту;
         public GameObject TargetObject;
         Rectangle HPLINE = new Rectangle();
         public bool NeedToMove = false;
+        bool CanSetCharacts = true;
         //public int TargetX;
         //public int TargetY;
         public int Angle;
@@ -66,6 +75,53 @@ namespace Tower_Defenc
         {
             ////
         }
+
+        public int GetCharact(string key)
+        {
+            int result = 0;
+            if(characts.ContainsKey(key))
+            {
+                result = characts[key];
+            }
+            return result;
+        }
+
+        void GetTarget()
+        {
+            double DistansToTarget; // хранит расстояние до выбранной цели.
+            if (TargetObject != null) // если цель уже есть то вычесляем расстояние до цели
+            {
+                DistansToTarget = (TargetObject.X - X) * (TargetObject.X - X) + (TargetObject.Y - Y) * (TargetObject.Y - Y);
+            }
+            else
+            {
+                DistansToTarget = 100000000; // если цели ещё нет
+            }
+            for (int i = 0; i < targets.Count; i++) // перебераем возмодные цели цели 
+            {
+                double NewDistans = (targets[i].X - X) * (targets[i].X - X) + (targets[i].Y - Y) * (targets[i].Y - Y); 
+                // вычисляем расстояние с еомером i елси оно меньше чем расстояние до выбранной цели то запоминаем новое расстояние и новую цель
+                if (NewDistans < DistansToTarget) 
+                {
+                    DistansToTarget = NewDistans;
+                    TargetObject = targets[i];
+                }
+            }
+        }
+
+        public void SetCharacts(string key, int Val)
+        {
+            if(CanSetCharacts)
+            {
+                characts.Add(key, Val);
+            }
+        }
+
+        public void Block()
+        {
+            CanSetCharacts = false;
+        }
+
         public GameObject(string PICTURE, string Container, string type, int x, int y, int size): this(PICTURE, Container, type)
         {
             map.ContainerSetMaxSide(ContainerName, size);
@@ -92,23 +148,28 @@ namespace Tower_Defenc
             }
         }
 
+        public void removeContainer()
+        {
+            map.ContainerErase(ContainerName);
+            // Реализация удалениЯ контейнера после анимации взрыва.
+        }
+
         public void SetCoordinate(double x, double y)
         {
             map.ContainerMovePreview(ContainerName, x, y, Angle);
             // Этот цикл должен быть в отдельной функции проверки столкновения обьектов.
-            // /та функция вызывается в GameCycle.
-            for (int i = 0; i < MainWindow.obstacle.Count; i++)
+            // Та функция вызывается в GameCycle.
+            if (Type != "Shell")
             {
-                if (map.CollisionContainers(ContainerName, MainWindow.obstacle[i].ContainerName, true) &&
-                   ContainerName != MainWindow.obstacle[i].ContainerName)
+                for (int i = 0; i < MainWindow.obstacle.Count; i++)
                 {
- /*                   if(Type == "Shell")
+                    if (map.CollisionContainers(ContainerName, MainWindow.obstacle[i].ContainerName, true) &&
+                       ContainerName != MainWindow.obstacle[i].ContainerName)
                     {
-
-                    }*/
-                    CheckDamageCounter();
-                    MainWindow.obstacle[i].CheckDamageCounter();
-                    return;
+                        CheckDamageCounter();
+                        MainWindow.obstacle[i].CheckDamageCounter();
+                        return;
+                    }
                 }
             }
             //Debug.WriteLine("Name = {0}, x = {1}, y = {2}", ContainerName, x, y);
@@ -133,7 +194,7 @@ namespace Tower_Defenc
                 map.ContainerSetMaxSide(ContainerName + "top", 42);
                 map.ContainerSetCoordinate(ContainerName + "top", X, Y);
                 map.AnimationStart(ContainerName + "top", "Explosion_Collision", 1, StopAnimation);
-                SetHp(HP - 20);
+                SetHp(-20);
                 DamageCounter = 0;
             }
             else
@@ -180,7 +241,7 @@ namespace Tower_Defenc
             if(NeedToMove)
             {
                 SetCoordinate(X + SpeedX, Y + SpeedY);
-                if (Math.Abs(X - TargetObject.X) < Range && Math.Abs(Y - TargetObject.Y) < Range)
+                if (TargetObject != null && Math.Abs(X - TargetObject.X) < Range && Math.Abs(Y - TargetObject.Y) < Range)
                 {
                     NeedToMove = false;
                     NeedToRotate = false;
@@ -202,8 +263,8 @@ namespace Tower_Defenc
         }
 
         public void PerformAction()
-        {
-            if(mode == 2 && CheckAim())
+         {
+            if (mode == 2 && CheckAim() && Recharger.CheckCharge() && HP > 0)
             {
                 // выполнение выстрела.                                 
                 // Мы дожны созать переменную типа GameObject.           
@@ -212,18 +273,32 @@ namespace Tower_Defenc
                 // Добавить переменную к списку снарядов.                 
                 GameObject Shell = new GameObject("BulletAllies", "Bullet" + counter.ToString(), "BulletAllies");
                 counter++;
-                // задать координаты, угол поворота и установить скорость движение снаряда.
-                /*Shell.X = X;
-                Shell.Y = Y;
-                Shell.Angle = Angle;*/
+                if (SubdivisionNumber == 0)
+                {
+                    MainWindow.AlliesShots.Add(Shell);
+                }
+                else
+                {
+                    MainWindow.EnemisShots.Add(Shell);
+                    GetTarget();
+                }
                 Shell.Type = "Shell";
+                Shell.Speed = 10;
                 Shell.SubdivisionNumber = SubdivisionNumber;
                 Shell.SetCoordinate(X, Y);
+                Shell.NeedToMove = true;
                 Shell.SetAngle(Angle);
+                Shell.SetCharacts("damage", 30);
                 // задаём размер контейнера.
                 map.ContainerSetSize(Shell.ContainerName, 12);
-                // отрисовываем контейнер с нужным углом;
+                Recharger.Reset();
             }
+        }
+
+        public void ReCharge()
+        {
+            //ChargeRate += ChargeSpeed;
+            Recharger.ReCharge();
         }
 
         public void Rotate()
@@ -250,16 +325,16 @@ namespace Tower_Defenc
             map.ContainerSetAngle(ContainerName + "Anime", angle);
         }
 
-        public void SetHp(int hp)
+
+        void CheckHp()
         {
-            HP = hp;
-            if(HP < 0)
+            if (HP < 0)
             {
                 HP = 0;
             }
             if (state == 0 && HP >= 20 && HP < 50)
             {
-                
+
             }
             else if (state != 2 && HP < 20 && HP > 0)
             {
@@ -278,6 +353,18 @@ namespace Tower_Defenc
                 map.ContainerSetFrame(ContainerName + "Anime", "nothing");
             }
             HPLINE.Width = HP / 2;
+        }
+
+        public void SetHp(int hp)
+        {
+            HP = hp;
+            CheckHp();
+        }
+
+        public void AddHp(int HpChange)
+        {
+            HP += HpChange;
+            CheckHp();
         }
     }
 }

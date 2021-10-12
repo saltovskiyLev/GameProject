@@ -39,12 +39,12 @@ namespace Tower_Defenc
         bool CanSpawn = true;
         List<GameObject> Enemis = new List<GameObject>();
         static public List<GameObject> Allies = new List<GameObject>();
-        List<GameObject> AlliesShots = new List<GameObject>();
-        List<GameObject> EnemisShots = new List<GameObject>();
+        static public List<GameObject> AlliesShots = new List<GameObject>();
+        static public List<GameObject> EnemisShots = new List<GameObject>();
         List<GameObject> CreatedAnimation = new List<GameObject>();
         Wave[] waves = new Wave[1]; 
         InventoryPanel UnitsPanel;
-        int countdown = 30;
+        int countdown = 12;
         int counter = 0;
         int money = 150;
         int WaveNumber = 0;
@@ -156,7 +156,7 @@ namespace Tower_Defenc
             waves[0].Units = new List<WaveUnit>();
             WaveUnit unit = new WaveUnit();
             unit.UnitName = "EnemyLOW";
-            unit.UnitCount = 4;
+            unit.UnitCount = 1;
             waves[0].Units.Add(unit);
         }
 
@@ -176,11 +176,13 @@ namespace Tower_Defenc
 
         void SpaunEnemyLow(int UnitNumber)
         {
+            
             for (int i = 0; i < UnitNumber; i++)
             {
                 counter++;
                 GameObject Enemy = new GameObject("EnemyLOW", "Enemy1" + counter.ToString(), "EnemyLOW");
                 int x = CenterX, y = CenterY;
+                Enemy.mode = 2;
                 Enemy.TargetObject = new GameObject();
                 Enemy.TargetObject.X = CenterX;
                 Enemy.TargetObject.Y = CenterY;
@@ -193,8 +195,12 @@ namespace Tower_Defenc
                 Enemy.SetAngle((int)GameMath.GetAngleOfVector(CenterX - x, CenterY - y));
                 map.ContainerSetMaxSide(Enemy.ContainerName, 72);
                 Enemy.Speed = 1;
+                Enemy.Recharger = new SimpleRechargen();
+                Enemy.Recharger.ChargeSpeed = 1;
+                Enemy.Recharger.ChargeReady = 300;
                 obstacle.Add(Enemy);
                 Enemy.SetHp(72);
+                Enemy.targets = Allies;
                 Enemy.Range = 150;
                 Enemis.Add(Enemy);
                 Enemy.NeedToMove = true;
@@ -288,6 +294,9 @@ namespace Tower_Defenc
                         GameObject Tank = new GameObject("Tank_Low_AllY", "Tank_Low_ally" + counter.ToString(), "Tank_Low_ally", CenterX, CenterY, 70);
                         CreatedAnimation.Add(Tank);
                         Allies.Add(Tank);
+                        Tank.Recharger = new SimpleRechargen();
+                        Tank.Recharger.ChargeReady = 5000;
+                        Tank.Recharger.ChargeSpeed = 10;
                         Tank.SetHp(100);
                         Tank.SubdivisionNumber = 0;
                         /*map.ContainerSetFrame(Tank.ContainerName + "Anime", "Fire Bolt1");
@@ -303,6 +312,9 @@ namespace Tower_Defenc
                         GameObject Tank = new GameObject("TankMashingan_Medium_ALLY", "TankMashingan_Medium_ALLY" + counter.ToString(), "TankMashingan_Medium_ALLY", CenterX, CenterY, 55);
                         CreatedAnimation.Add(Tank);
                         Tank.SetHp(120);
+                        Tank.Recharger = new BurstRecharger(30);
+                        Tank.Recharger.ChargeReady = 2000;
+                        Tank.Recharger.ChargeSpeed = 10;
                         Allies.Add(Tank);
                         Tank.SubdivisionNumber = 0;
                         obstacle.Add(Tank);
@@ -340,6 +352,10 @@ namespace Tower_Defenc
             }
         }
 
+        /*void CheckCollision()
+        {
+
+        }*/
         void ChekSpawn()
         {
             for(int i = 0; i < Allies.Count; i++)
@@ -348,7 +364,6 @@ namespace Tower_Defenc
                    Allies[i].X > CenterX - 150 &&
                    Allies[i].Y < CenterX + 50 &&
                    Allies[i].Y > CenterY - 50)
-                   
                 {
                     CanSpawn = false;
                     return;
@@ -357,22 +372,74 @@ namespace Tower_Defenc
             CanSpawn = true;
         }
 
-        void GameCycle()
+        void AlliesActions()
         {
-            AnimatCreation();
-            ChekSpawn();
             for (int i = 0; i < Allies.Count; i++)
             {
                 Allies[i].Rotate();
                 Allies[i].Move();
                 Allies[i].PerformAction();
+                Allies[i].ReCharge();
             }
-            for(int i = 0; i < Enemis.Count; i++)
+        }
+
+        void EnemisActions()
+        {
+            for (int i = 0; i < Enemis.Count; i++)
             {
                 Enemis[i].Move();
                 Enemis[i].Rotate();
                 Enemis[i].CheckMaxCounter();
+                Enemis[i].PerformAction();
+                Enemis[i].ReCharge();
             }
+        }
+
+        void AlliesCheckShots()
+        {
+            for (int i = 0; i < AlliesShots.Count; i++)
+            {
+                AlliesShots[i].Move();
+                for (int j = 0; j < Enemis.Count; j++)
+                {
+                    if (map.CollisionContainers(AlliesShots[i].ContainerName, Enemis[j].ContainerName))
+                    {
+                        Enemis[j].AddHp(-AlliesShots[i].GetCharact("damage"));
+                        map.AnimationStart(AlliesShots[i].ContainerName, "Explosion_Collision", 1, AlliesShots[i].removeContainer);
+                        AlliesShots.RemoveAt(i);
+                        break;
+                    }
+                }
+            }
+        }
+
+        void EnemisCheckShots()
+        {
+            for (int i = 0; i < EnemisShots.Count; i++)
+            {
+                EnemisShots[i].Move();
+                for (int j = 0; j < Allies.Count; j++)
+                {
+
+                    if (map.CollisionContainers(EnemisShots[i].ContainerName, Allies[j].ContainerName))
+                    {
+                        Allies[j].AddHp(-EnemisShots[i].GetCharact("damage"));
+                        map.AnimationStart(EnemisShots[i].ContainerName, "Explosion_Collision", 1, EnemisShots[i].removeContainer);
+                        EnemisShots.RemoveAt(i);
+                        break;
+                    }
+                }
+
+            }
+        }
+        void GameCycle()
+        {
+            AnimatCreation();
+            ChekSpawn();
+            AlliesActions();
+            EnemisActions();
+            AlliesCheckShots();
+            EnemisCheckShots();
             ClickCount--;
         }
     }
