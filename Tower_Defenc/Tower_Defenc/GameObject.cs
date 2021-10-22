@@ -31,6 +31,7 @@ namespace Tower_Defenc
         public bool NeedToRotate = false;
         public int SubdivisionNumber;
         public int TargetRadiusEnemy = 700;
+        public string TowerContainerName = "";
         public int Range = 5;
         int DamageCounter = 2000;
         public double X;
@@ -38,6 +39,8 @@ namespace Tower_Defenc
         public List<GameObject> targets = new List<GameObject>(); // список целей для атаки
         public int HP;
         public bool IsMarked = false;
+        public string destroyedImage;
+        public string destroyedAmimathion = "";
         double SpeedX;
         Dictionary<string, int> characts = new Dictionary<string, int>();
         double SpeedY;
@@ -70,6 +73,12 @@ namespace Tower_Defenc
             map.ContainerSetZIndex(ContainerName + "Anime", 86);
             //map.DrawRectangle((int)X - 35, (int)Y + 25, hp, 10, Brushes.Green, Brushes.Green);
         }
+
+        public GameObject(string PICTURE, string TowerPicture, string Container, string type): this(PICTURE, Container, type)
+        {
+
+        }
+
 
         public GameObject()
         {
@@ -232,7 +241,10 @@ namespace Tower_Defenc
                 MaxCounter = 0;
                 MainWindow.SelectedEnemyUnit = this;
                 MainWindow.ClickCount = 5;
-                MainWindow.SelectedUnit.mode = 2;
+                if(MainWindow.SelectedUnit != null)
+                {
+                    MainWindow.SelectedUnit.mode = 2;
+                }
             }
         }
 
@@ -298,7 +310,10 @@ namespace Tower_Defenc
         public void ReCharge()
         {
             //ChargeRate += ChargeSpeed;
-            Recharger.ReCharge();
+            if(Recharger != null)
+            {
+                Recharger.ReCharge();
+            }
         }
 
         public void Rotate()
@@ -343,9 +358,18 @@ namespace Tower_Defenc
                 map.AnimationStart(ContainerName + "Anime", "Fire1", -1);
                 state = 2;
             }
-            else if (state != 3 && HP == 0)
+            else if (state != 3 && HP <= 0)
             {
-                map.ContainerSetFrame(ContainerName, "Destroyed_Tank_Low_ALLY");
+                // Если есть анимация уничтожение то воспроизводим её иначе вызываем SetDestroyedImage
+                //map.ContainerSetFrame(ContainerName, "Destroyed_Tank_Low_ALLY");
+                if(destroyedAmimathion!= "")
+                {
+                    map.AnimationStart(ContainerName, destroyedAmimathion, 1, SetDestroyedImage);
+                }    
+                else
+                {
+                    SetDestroyedImage();
+                }
                 map.ContainerSetFrame(ContainerName + "mark", "nothing");
                 NeedToMove = false;
                 NeedToRotate = false;
@@ -353,6 +377,11 @@ namespace Tower_Defenc
                 map.ContainerSetFrame(ContainerName + "Anime", "nothing");
             }
             HPLINE.Width = HP / 2;
+        }
+
+        void SetDestroyedImage()
+        {
+            map.ContainerSetFrame(ContainerName, destroyedImage);
         }
 
         public void SetHp(int hp)

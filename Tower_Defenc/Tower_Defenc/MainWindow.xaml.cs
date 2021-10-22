@@ -37,6 +37,7 @@ namespace Tower_Defenc
         int scrollY;
         GameObject basa;
         bool CanSpawn = true;
+        public
         List<GameObject> Enemis = new List<GameObject>();
         static public List<GameObject> Allies = new List<GameObject>();
         static public List<GameObject> AlliesShots = new List<GameObject>();
@@ -79,11 +80,21 @@ namespace Tower_Defenc
             timer.AddAction(GameCycle, 20);
             timer.AddAction(Countdown, 1000);
             TextTimer.TextBox.IsEnabled = false;
+            
             BaseEnemy = new GameObject("EnemyBase", "BaseEnemy", "EnemyBase");
             map.ContainerSetMaxSide("BaseEnemy", 320);
             BaseEnemy.SetCoordinate(240, 300);
+            BaseEnemy.SetHp(700);
+            Enemis.Add(BaseEnemy);
+            BaseEnemy.destroyedImage = "Destroyed_Tank_Low_ALLY";
+            BaseEnemy.destroyedAmimathion = "Explosion_Collision";
+            BaseEnemy.NeedToMove = false;
+            BaseEnemy.NeedToRotate = false;
+            BaseEnemy.SubdivisionNumber = 1;
+
             map.Mouse.SetMouseSingleLeftClickHandler(MapClick);
             CreateWaves();
+            GameObject BossEnemy = new GameObject();
             timer.AddAction(CheckScroll, 12);
             //map.Keyboard.SetSingleKeyEventHandler(CheckKey);
         }
@@ -124,6 +135,8 @@ namespace Tower_Defenc
             map.Library.AddPicture("Tank_Low_AllY", "Танк с башней без поворота(ДОБРЫЙ средний).png");
             map.Library.AddPicture("BulletAllies", "СнарядДобрый.png");
             map.Library.AddPicture("basa", "base.png");
+            map.Library.AddPicture("towerRed", "towerRed1.png");
+            map.Library.AddPicture("platformRed4", "platformRed4.png");
             map.Library.AddPicture("snow", "SONOW.png");
             map.Library.AddPicture("TankMashingan_Medium_ALLY", "Танк с башней без поворота(ДОБРЫЙ СЛАБЫЙПУЛЕМЁТНЫЙ).png");
             map.Library.AddPicture("MarkEnemy", "EnemyDetected.png");
@@ -211,6 +224,7 @@ namespace Tower_Defenc
                 Enemy.NeedToMove = true;
                 Enemy.NeedToRotate = true;
                 Enemy.SubdivisionNumber = 1;
+                Enemy.destroyedImage = "Destroyed_Tank_Low_ALLY";
                 /*
                   Баг "ХАКЕР"
                     1 - Подождите 30 секунд(после запуска игры);
@@ -308,6 +322,7 @@ namespace Tower_Defenc
                         map.ContainerSetMaxSide(Tank.ContainerName + "Anime", 100);
                         map.AnimationStart(Tank.ContainerName + "Anime", "Fire1", -1);*/
                         obstacle.Add(Tank);
+                        Tank.destroyedImage = "Destroyed_Tank_Low_ALLY";
                     }
                     break;
                 case "ПУЛЕМЁТНИК":
@@ -323,6 +338,7 @@ namespace Tower_Defenc
                         Allies.Add(Tank);
                         Tank.SubdivisionNumber = 0;
                         obstacle.Add(Tank);
+                        Tank.destroyedImage = "Destroyed_Tank_Low_ALLY";
                     }
                     break;
 
