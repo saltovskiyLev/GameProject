@@ -80,19 +80,21 @@ namespace Tower_Defenc
             timer.AddAction(GameCycle, 20);
             timer.AddAction(Countdown, 1000);
             TextTimer.TextBox.IsEnabled = false;
-            
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             BaseEnemy = new GameObject("EnemyBase", "BaseEnemy", "EnemyBase");
-            map.ContainerSetMaxSide("BaseEnemy", 320);
+            map.ContainerSetMaxSide("BaseEnemy", 100);
             BaseEnemy.SetCoordinate(240, 300);
             BaseEnemy.SetHp(700);
             Enemis.Add(BaseEnemy);
-            BaseEnemy.destroyedImage = "Destroyed_Tank_Low_ALLY";
+            BaseEnemy.destroyedImage = "EnemyBase(D)";
             BaseEnemy.destroyedAmimathion = "Explosion_Collision";
             BaseEnemy.NeedToMove = false;
             BaseEnemy.NeedToRotate = false;
             BaseEnemy.SubdivisionNumber = 1;
-
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             map.Mouse.SetMouseSingleLeftClickHandler(MapClick);
+
             CreateWaves();
             GameObject BossEnemy = new GameObject();
             timer.AddAction(CheckScroll, 12);
@@ -142,7 +144,8 @@ namespace Tower_Defenc
             map.Library.AddPicture("MarkEnemy", "EnemyDetected.png");
             map.Library.AddPicture("TankMashingan_Medium_ALLY_destroid", "Танк подорвали(второй).png");
             map.Library.AddPicture("AllyScope", "Выбрал нашего.png");
-            map.Library.AddPicture("EnemyBase", "scr_2.png");
+            map.Library.AddPicture("EnemyBase", "scr_2.jpg");
+            map.Library.AddPicture("EnemyBase(D)", "scr_2(B).png");
             map.Library.AddPicture("EnemyLOW", "Враг(самаходка).png");
             map.Library.AddPicture("Destroyed_Tank_Low_ALLY", "Танк подорвали(первый).png");
             map.SetMapBackground("background");
