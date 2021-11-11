@@ -28,6 +28,7 @@ namespace Tower_Defenc
         //public int ChargeSpeed;
         public IRecharger Recharger;
         static int counter = 0;
+        public int TowerAngle;
         public bool NeedToRotate = false;
         public int SubdivisionNumber;
         public int TargetRadiusEnemy = 700;
@@ -66,7 +67,7 @@ namespace Tower_Defenc
             map.Library.AddContainer(ContainerName + "top", "nothing", ContainerType.AutosizedSingleImage);
             map.Library.AddContainer(ContainerName + "mark", "AllyScope", ContainerType.AutosizedSingleImage);
             map.Library.AddContainer(ContainerName + "Anime", "nothing", ContainerType.AutosizedSingleImage);
-            Type = type; 
+            Type = type;
             HPLINE.Height = 10;
             HPLINE.Fill = Brushes.Green;
             map.Canvas.Children.Add(HPLINE);
@@ -76,8 +77,11 @@ namespace Tower_Defenc
 
         public GameObject(string PICTURE, string TowerPicture, string Container, string type): this(PICTURE, Container, type)
         {
-
-        }
+            //map.ContainerSetMaxSide(ContainerName + "_2", )
+            TowerContainerName = ContainerName + "_2";
+            map.Library.AddContainer(TowerContainerName, TowerPicture, ContainerType.AutosizedSingleImage);
+            map.ContainerSetZIndex(TowerContainerName, 120);
+        } 
 
 
         public GameObject()
@@ -184,9 +188,14 @@ namespace Tower_Defenc
             //Debug.WriteLine("Name = {0}, x = {1}, y = {2}", ContainerName, x, y);
             X = x;
             Y = y;
+
             Canvas.SetTop(HPLINE, Y + 35);
             Canvas.SetLeft(HPLINE, X - 35);
             map.ContainerSetCoordinate(ContainerName, x, y);
+            if(TowerContainerName != "")
+            {
+                map.ContainerSetCoordinate(TowerContainerName , x, y);
+            }
             if (IsMarked)
             {
                 map.ContainerSetCoordinate(ContainerName + "mark", X, Y);
@@ -323,21 +332,35 @@ namespace Tower_Defenc
                 double TargetAngle = GameMath.GetAngleOfVector(TargetObject.X - X, TargetObject.Y - Y);
                 if (TargetAngle > Angle)
                 {
-                    SetAngle(Angle + 2);
+                    SetAngle(2, false);
                 }
                 else
                 {
-                    SetAngle(Angle - 2);
+                    SetAngle(-2, false);
                 }
             }
         }
 
-        public void SetAngle(int angle) {
-            Angle = angle;
-            map.ContainerSetAngle(ContainerName, angle);
-            SpeedX = Speed * Math.Cos(GameMath.DegreesToRad(angle));
-            SpeedY = Speed * Math.Sin(GameMath.DegreesToRad(angle));
-            map.ContainerSetAngle(ContainerName + "Anime", angle);
+        public void SetAngle(int angle, bool IsAbsolute = true) {
+            if(IsAbsolute)
+            {
+                Angle = angle;
+                TowerAngle = angle;
+            }
+
+            else
+            {
+                Angle += angle;
+                TowerAngle += angle;
+            }
+            if(TowerContainerName != "")
+            {
+                map.ContainerSetAngle(TowerContainerName, TowerAngle);
+            }
+            map.ContainerSetAngle(ContainerName, Angle);
+            SpeedX = Speed * Math.Cos(GameMath.DegreesToRad(Angle));
+            SpeedY = Speed * Math.Sin(GameMath.DegreesToRad(Angle));
+            map.ContainerSetAngle(ContainerName + "Anime", Angle);
         }
 
 

@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using GameMaps;
 using GameMaps.Layouts;
 using System.Windows.Shapes;
-
+ 
 namespace Tower_Defenc
 {
     /// <summary>b
@@ -171,6 +171,49 @@ namespace Tower_Defenc
             //map.ContainerSetCoordinate("MainTexture", 0, 0);
         }
 
+        void RandomEnemy()
+        {
+            if(r.Next(0, 100) < 100)
+            {
+                
+                SpaunEnemy("EnemyBoss", 1);
+            }
+        }
+
+        GameObject GetEnemy(string UnitType, string picture1, string picture2 = "")
+        {
+            counter++;
+            GameObject Enemy;
+            if (picture2 == "")
+            {
+                Enemy = new GameObject(picture1, "Enemy1" + counter.ToString(), UnitType);
+            }
+            else
+            {               
+                Enemy = new GameObject(picture1, picture2, "Enemy1" + counter.ToString(), UnitType);
+            }
+            int x = CenterX, y = CenterY;
+            Enemy.mode = 2;
+            Enemy.TargetObject = new GameObject();
+            Enemy.TargetObject.X = CenterX;
+            Enemy.TargetObject.Y = CenterY;
+            while (x > CenterX - 900 && x < CenterX + 900 && y > CenterY - 600 && y < CenterY + 600)
+            {
+                x = r.Next(0, CenterX * 2);
+                y = r.Next(0, CenterY * 2);
+            }
+            Enemy.SetCoordinate(x, y);
+            Enemy.SetAngle((int)GameMath.GetAngleOfVector(CenterX - x, CenterY - y));
+            obstacle.Add(Enemy);
+            Enemy.targets = Allies;
+            Enemis.Add(Enemy);
+            Enemy.NeedToMove = true;
+            Enemy.NeedToRotate = true;
+            Enemy.SubdivisionNumber = 1;
+            Enemy.destroyedImage = "Destroyed_Tank_Low_ALLY";
+            return Enemy;
+        }
+
         void CreateWaves()
         {
             waves[0] = new Wave();
@@ -183,51 +226,49 @@ namespace Tower_Defenc
 
         void StartWave(int number)
         {
-            for(int i = 0; i < waves[number].Units.Count; i++)
+            RandomEnemy();
+            for (int i = 0; i < waves[number].Units.Count; i++)
                 {
                 switch (waves[number].Units[i].UnitName)
                 {
                     case "EnemyLOW":
-                        SpaunEnemyLow(waves[number].Units[i].UnitCount);
+                        SpaunEnemy("EnemyLOW", waves[number].Units[i].UnitCount);
                         break;
                 }
                 // wawes[number] - Это обьект типа Wawe который хранит информацию о волне.
             }
         }
 
-        void SpaunEnemyLow(int UnitNumber)
+        void SpaunEnemy(string UnitName , int UnitNumber)
         {
-            
             for (int i = 0; i < UnitNumber; i++)
             {
-                counter++;
-                GameObject Enemy = new GameObject("EnemyLOW", "Enemy1" + counter.ToString(), "EnemyLOW");
-                int x = CenterX, y = CenterY;
-                Enemy.mode = 2;
-                Enemy.TargetObject = new GameObject();
-                Enemy.TargetObject.X = CenterX;
-                Enemy.TargetObject.Y = CenterY;
-                while (x > CenterX - 900 && x < CenterX + 900 && y > CenterY - 600 && y < CenterY + 600)
+                GameObject Enemy;
+                switch (UnitName) 
                 {
-                    x = r.Next(0, CenterX * 2);
-                    y = r.Next(0, CenterY * 2);
+                    case "EnemyLOW":
+                        Enemy = GetEnemy(UnitName, "EnemyLOW");
+                        map.ContainerSetMaxSide(Enemy.ContainerName, 72);//
+                        Enemy.Speed = 1;//
+                        Enemy.Recharger = new SimpleRechargen();//
+                        Enemy.Recharger.ChargeSpeed = 1;//
+                        Enemy.Recharger.ChargeReady = 300;//
+                        Enemy.SetHp(72);//
+                        Enemy.Range = 150;//
+                        break;
+
+                    case "EnemyBoss":
+                        Enemy = GetEnemy(UnitName, "platformRed4", "towerRed");
+                        map.ContainerSetMaxSide(Enemy.ContainerName, 120);//
+                        map.ContainerSetMaxSide(Enemy.TowerContainerName, 100);
+                        Enemy.Speed = 0.3;//
+                        Enemy.Recharger = new SimpleRechargen();//
+                        Enemy.Recharger.ChargeSpeed = 1;//
+                        Enemy.Recharger.ChargeReady = 700;//
+                        Enemy.SetHp(3200);//
+                        Enemy.Range = 150;//
+                        break;
                 }
-                Enemy.SetCoordinate(x, y);
-                Enemy.SetAngle((int)GameMath.GetAngleOfVector(CenterX - x, CenterY - y));
-                map.ContainerSetMaxSide(Enemy.ContainerName, 72);
-                Enemy.Speed = 1;
-                Enemy.Recharger = new SimpleRechargen();
-                Enemy.Recharger.ChargeSpeed = 1;
-                Enemy.Recharger.ChargeReady = 300;
-                obstacle.Add(Enemy);
-                Enemy.SetHp(72);
-                Enemy.targets = Allies;
-                Enemy.Range = 150;
-                Enemis.Add(Enemy);
-                Enemy.NeedToMove = true;
-                Enemy.NeedToRotate = true;
-                Enemy.SubdivisionNumber = 1;
-                Enemy.destroyedImage = "Destroyed_Tank_Low_ALLY";
                 /*
                   Баг "ХАКЕР"
                     1 - Подождите 30 секунд(после запуска игры);
