@@ -195,8 +195,7 @@ namespace Tower_Defenc
             int x = CenterX, y = CenterY;
             Enemy.mode = 2;
             Enemy.TargetObject = new GameObject();
-            Enemy.TargetObject.X = CenterX;
-            Enemy.TargetObject.Y = CenterY;
+            Enemy.TargetObject.SetCoordinate(CenterX, CenterY);
             while (x > CenterX - 900 && x < CenterX + 900 && y > CenterY - 600 && y < CenterY + 600)
             {
                 x = r.Next(0, CenterX * 2);
@@ -325,7 +324,9 @@ namespace Tower_Defenc
                 SelectedUnit.NeedToRotate = true;
                 if(map.Keyboard.IsKeyPressed(Key.Space))
                 {
-                    SelectedUnit.NeedToMove = true;
+                    //SelectedUnit.NeedToMove = true;
+                    MoveToTarget move = new MoveToTarget("move", SelectedUnit, SelectedEnemyUnit);
+                    SelectedUnit.Actions.Add(move);
                 }
                 SelectedUnit.TargetObject = SelectedEnemyUnit;
             }
@@ -333,8 +334,7 @@ namespace Tower_Defenc
             else 
             {
                 SelectedUnit.TargetObject = new GameObject();
-                SelectedUnit.TargetObject.X = x;
-                SelectedUnit.TargetObject.Y = y;
+                SelectedUnit.TargetObject.SetCoordinate(x, y);
                 SelectedUnit.NeedToMove = true;
                 SelectedUnit.NeedToRotate = true;
                 SelectedUnit.Speed = 1;
@@ -442,7 +442,10 @@ namespace Tower_Defenc
             for (int i = 0; i < Allies.Count; i++)
             {
                 Allies[i].Rotate();
-                Allies[i].Move();
+                for(int j = 0; j < Allies[i].Actions.Count; j++)
+                {
+                    Allies[i].Actions[j].Act();
+                }
                 Allies[i].PerformAction();
                 Allies[i].ReCharge();
             }

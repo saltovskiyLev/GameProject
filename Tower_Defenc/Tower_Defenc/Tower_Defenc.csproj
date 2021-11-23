@@ -68,7 +68,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BurstRecharger.cs" />
+    <Compile Include="IAction.cs" />
     <Compile Include="IBurstRecharger.cs" />
+    <Compile Include="MoveToTarget.cs" />
     <Compile Include="SimpleRechargen.cs" />
     <Compile Include="Wave.cs" />
     <Compile Include="WaveUnit.cs" />

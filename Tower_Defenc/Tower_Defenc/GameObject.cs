@@ -35,16 +35,17 @@ namespace Tower_Defenc
         public string TowerContainerName = "";
         public int Range = 5;
         int DamageCounter = 2000;
-        public double X;
-        public double Y;
+        public double X { get; private set; }
+        public double Y { get; private set; }
         public List<GameObject> targets = new List<GameObject>(); // список целей для атаки
         public int HP;
+        public List<IAction> Actions = new List<IAction>();
         public bool IsMarked = false;
         public string destroyedImage;
         public string destroyedAmimathion = "";
-        double SpeedX;
+        public double SpeedX { get; private set; }
+        public double SpeedY { get; private set; }
         Dictionary<string, int> characts = new Dictionary<string, int>();
-        double SpeedY;
         public int mode; // 0 - Обьект стоит на месте   // 1 - Обьект движется в точку на карте // 2 - Обьект движется к другому игровому обьекту;
         public GameObject TargetObject;
         Rectangle HPLINE = new Rectangle();
@@ -169,38 +170,46 @@ namespace Tower_Defenc
 
         public void SetCoordinate(double x, double y)
         {
-            map.ContainerMovePreview(ContainerName, x, y, Angle);
-            // Этот цикл должен быть в отдельной функции проверки столкновения обьектов.
-            // Та функция вызывается в GameCycle.
-            if (Type != "Shell")
+            if (ContainerName == "")
             {
-                for (int i = 0; i < MainWindow.obstacle.Count; i++)
+                X = x;
+                Y = y;
+            }
+            else
+            {
+                map.ContainerMovePreview(ContainerName, x, y, Angle);
+                // Этот цикл должен быть в отдельной функции проверки столкновения обьектов.
+                // Та функция вызывается в GameCycle.
+                if (Type != "Shell")
                 {
-                    if (map.CollisionContainers(ContainerName, MainWindow.obstacle[i].ContainerName, true) &&
-                       ContainerName != MainWindow.obstacle[i].ContainerName)
+                    for (int i = 0; i < MainWindow.obstacle.Count; i++)
                     {
-                        CheckDamageCounter();
-                        MainWindow.obstacle[i].CheckDamageCounter();
-                        return;
+                        if (map.CollisionContainers(ContainerName, MainWindow.obstacle[i].ContainerName, true) &&
+                           ContainerName != MainWindow.obstacle[i].ContainerName)
+                        {
+                            CheckDamageCounter();
+                            MainWindow.obstacle[i].CheckDamageCounter();
+                            return;
+                        }
                     }
                 }
-            }
-            //Debug.WriteLine("Name = {0}, x = {1}, y = {2}", ContainerName, x, y);
-            X = x;
-            Y = y;
+                //Debug.WriteLine("Name = {0}, x = {1}, y = {2}", ContainerName, x, y);
+                X = x;
+                Y = y;
 
-            Canvas.SetTop(HPLINE, Y + 35);
-            Canvas.SetLeft(HPLINE, X - 35);
-            map.ContainerSetCoordinate(ContainerName, x, y);
-            if(TowerContainerName != "")
-            {
-                map.ContainerSetCoordinate(TowerContainerName , x, y);
+                Canvas.SetTop(HPLINE, Y + 35);
+                Canvas.SetLeft(HPLINE, X - 35);
+                map.ContainerSetCoordinate(ContainerName, x, y);
+                if (TowerContainerName != "")
+                {
+                    map.ContainerSetCoordinate(TowerContainerName, x, y);
+                }
+                if (IsMarked)
+                {
+                    map.ContainerSetCoordinate(ContainerName + "mark", X, Y);
+                }
+                map.ContainerSetCoordinate(ContainerName + "Anime", X, Y);
             }
-            if (IsMarked)
-            {
-                map.ContainerSetCoordinate(ContainerName + "mark", X, Y);
-            }
-            map.ContainerSetCoordinate(ContainerName + "Anime", X, Y);
         }
 
         public void CheckDamageCounter()
@@ -259,7 +268,7 @@ namespace Tower_Defenc
 
         public void Move()
         {
-            if(NeedToMove)
+            if (NeedToMove)
             {
                 SetCoordinate(X + SpeedX, Y + SpeedY);
                 if (TargetObject != null && Math.Abs(X - TargetObject.X) < Range && Math.Abs(Y - TargetObject.Y) < Range)
@@ -268,7 +277,7 @@ namespace Tower_Defenc
                     NeedToRotate = false;
                 }
             }
-            // Debug.WriteLine("{0}, {1}", X, Y);
+            // debug.writeline("{0}, {1}", x, y);
         }
 
         bool CheckAim()
