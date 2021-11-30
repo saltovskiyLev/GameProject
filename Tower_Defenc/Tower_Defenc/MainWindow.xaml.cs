@@ -335,9 +335,11 @@ namespace Tower_Defenc
             {
                 SelectedUnit.TargetObject = new GameObject();
                 SelectedUnit.TargetObject.SetCoordinate(x, y);
-                SelectedUnit.NeedToMove = true;
+                //SelectedUnit.NeedToMove = true;
                 SelectedUnit.NeedToRotate = true;
                 SelectedUnit.Speed = 1;
+                MoveToTarget move = new MoveToTarget("move", SelectedUnit, SelectedUnit.TargetObject);
+                SelectedUnit.Actions.Add(move);
             }
         }
 

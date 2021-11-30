@@ -170,7 +170,7 @@ namespace Tower_Defenc
 
         public void SetCoordinate(double x, double y)
         {
-            if (ContainerName == "")
+            if (string.IsNullOrEmpty(ContainerName))
             {
                 X = x;
                 Y = y;
