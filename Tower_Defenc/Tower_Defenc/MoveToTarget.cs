@@ -21,6 +21,7 @@ namespace Tower_Defenc
                 Unit.SetCoordinate(Unit.X + Unit.SpeedX, Unit.Y + Unit.SpeedY);
                 if (Target != null && Math.Abs(Unit.X - Target.X) < 5 && Math.Abs(Unit.Y - Target.Y) < 5)
                 {
+                    Unit.RemoveAction("move");
                     NeedToMove = false;
                 }
             }

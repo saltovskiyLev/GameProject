@@ -403,8 +403,9 @@ namespace Tower_Defenc
                     SetDestroyedImage();
                 }
                 map.ContainerSetFrame(ContainerName + "mark", "nothing");
-                NeedToMove = false;
+                //NeedToMove = false;
                 NeedToRotate = false;
+                Actions.Clear();
                 map.AnimationStop(ContainerName + "Anime", "Fire1");
                 map.ContainerSetFrame(ContainerName + "Anime", "nothing");
             }
@@ -426,6 +427,18 @@ namespace Tower_Defenc
         {
             HP += HpChange;
             CheckHp();
+        }
+
+        public void RemoveAction(string Name)
+        {
+            for(int i = 0; i < Actions.Count; i++)
+            {
+                if(Name == Actions[i].Name)
+                {
+                    Actions.RemoveAt(i);
+                    return;
+                }
+            } 
         }
     }
 }

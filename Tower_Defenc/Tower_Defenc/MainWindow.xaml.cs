@@ -325,8 +325,12 @@ namespace Tower_Defenc
                 if(map.Keyboard.IsKeyPressed(Key.Space))
                 {
                     //SelectedUnit.NeedToMove = true;
+                    SelectedUnit.RemoveAction("move");
                     MoveToTarget move = new MoveToTarget("move", SelectedUnit, SelectedEnemyUnit);
                     SelectedUnit.Actions.Add(move);
+                    Rotate rotate = new Rotate("rotate", SelectedUnit, SelectedEnemyUnit);
+                    SelectedUnit.RemoveAction("rotate");
+                    SelectedUnit.Actions.Add(rotate);
                 }
                 SelectedUnit.TargetObject = SelectedEnemyUnit;
             }
@@ -338,8 +342,12 @@ namespace Tower_Defenc
                 //SelectedUnit.NeedToMove = true;
                 SelectedUnit.NeedToRotate = true;
                 SelectedUnit.Speed = 1;
+                SelectedUnit.RemoveAction("move");
                 MoveToTarget move = new MoveToTarget("move", SelectedUnit, SelectedUnit.TargetObject);
                 SelectedUnit.Actions.Add(move);
+                Rotate rotate = new Rotate("rotate", SelectedUnit, SelectedUnit.TargetObject);
+                SelectedUnit.RemoveAction("rotate");
+                SelectedUnit.Actions.Add(rotate);
             }
         }
 
@@ -443,7 +451,7 @@ namespace Tower_Defenc
         {
             for (int i = 0; i < Allies.Count; i++)
             {
-                Allies[i].Rotate();
+                //Allies[i].Rotate();
                 for(int j = 0; j < Allies[i].Actions.Count; j++)
                 {
                     Allies[i].Actions[j].Act();
