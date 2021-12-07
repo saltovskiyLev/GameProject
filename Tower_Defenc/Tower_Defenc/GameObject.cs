@@ -119,6 +119,13 @@ namespace Tower_Defenc
                 {
                     DistansToTarget = NewDistans;
                     TargetObject = targets[i];
+
+                    RemoveAction("move");
+                    MoveToTarget move = new MoveToTarget("move", this, targets[i]);
+                    Actions.Add(move);
+                    RemoveAction("rotate");
+                    Tower_Defenc.Rotate rotate = new Rotate("rotate", this, targets[i]);
+                    Actions.Add(rotate);
                 }
             }
         }

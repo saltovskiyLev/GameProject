@@ -194,8 +194,12 @@ namespace Tower_Defenc
             }
             int x = CenterX, y = CenterY;
             Enemy.mode = 2;
+          
             Enemy.TargetObject = new GameObject();
             Enemy.TargetObject.SetCoordinate(CenterX, CenterY);
+
+            MoveToTarget move = new MoveToTarget("move", Enemy, Enemy.TargetObject);
+            Enemy.Actions.Add(move);
             while (x > CenterX - 900 && x < CenterX + 900 && y > CenterY - 600 && y < CenterY + 600)
             {
                 x = r.Next(0, CenterX * 2);
@@ -219,7 +223,7 @@ namespace Tower_Defenc
             waves[0].Units = new List<WaveUnit>();
             WaveUnit unit = new WaveUnit();
             unit.UnitName = "EnemyLOW";
-            unit.UnitCount = 1;
+            unit.UnitCount = 12;
             waves[0].Units.Add(unit);
         }
 
@@ -465,8 +469,12 @@ namespace Tower_Defenc
         {
             for (int i = 0; i < Enemis.Count; i++)
             {
-                Enemis[i].Move();
-                Enemis[i].Rotate();
+                //Enemis[i].Move();
+                for(int j = 0; j < Enemis[i].Actions.Count; j++)
+                {
+                    Enemis[i].Actions[j].Act();
+                }
+                //Enemis[i].Rotate();
                 Enemis[i].CheckMaxCounter();
                 Enemis[i].PerformAction();
                 Enemis[i].ReCharge();
