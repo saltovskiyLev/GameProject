@@ -28,11 +28,12 @@ namespace Tower_Defenc
         //public int ChargeSpeed;
         public IRecharger Recharger;
         static int counter = 0;
-        public int TowerAngle;
+        //public int TowerAngle;
         public bool NeedToRotate = false;
         public int SubdivisionNumber;
+        public List<GameObject> Children = new List<GameObject>(); 
         public int TargetRadiusEnemy = 700;
-        public string TowerContainerName = "";
+        //public string TowerContainerName = "";
         public int Range = 5;
         int DamageCounter = 2000;
         public double X { get; private set; }
@@ -79,10 +80,11 @@ namespace Tower_Defenc
         public GameObject(string PICTURE, string TowerPicture, string Container, string type): this(PICTURE, Container, type)
         {
             //map.ContainerSetMaxSide(ContainerName + "_2", )
-            TowerContainerName = ContainerName + "_2";
-            map.Library.AddContainer(TowerContainerName, TowerPicture, ContainerType.AutosizedSingleImage);
-            map.ContainerSetZIndex(TowerContainerName, 120);
-        } 
+            GameObject Tower = new GameObject(TowerPicture, ContainerName + "_2", "TOWER");
+            map.ContainerSetZIndex(Tower.ContainerName, 120);
+            Children.Add(Tower);
+
+        }
 
 
         public GameObject()
@@ -207,9 +209,11 @@ namespace Tower_Defenc
                 Canvas.SetTop(HPLINE, Y + 35);
                 Canvas.SetLeft(HPLINE, X - 35);
                 map.ContainerSetCoordinate(ContainerName, x, y);
-                if (TowerContainerName != "")
+
+                for (int i = 0; i < Children.Count; i++)
                 {
-                    map.ContainerSetCoordinate(TowerContainerName, x, y);
+                    map.ContainerSetCoordinate(Children[i].ContainerName, x, y);
+
                 }
                 if (IsMarked)
                 {
@@ -361,17 +365,19 @@ namespace Tower_Defenc
             if(IsAbsolute)
             {
                 Angle = angle;
-                TowerAngle = angle;
+                for(int i = 0; i < Children.Count; i++)
+                {
+                    Children[i].SetAngle(angle);
+                }
             }
 
             else
             {
                 Angle += angle;
-                TowerAngle += angle;
-            }
-            if(TowerContainerName != "")
-            {
-                map.ContainerSetAngle(TowerContainerName, TowerAngle);
+                for (int i = 0; i < Children.Count; i++)
+                {
+                    Children[i].SetAngle(angle, false);
+                }
             }
             map.ContainerSetAngle(ContainerName, Angle);
             SpeedX = Speed * Math.Cos(GameMath.DegreesToRad(Angle));

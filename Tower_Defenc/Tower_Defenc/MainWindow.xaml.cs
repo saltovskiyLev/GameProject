@@ -101,6 +101,24 @@ namespace Tower_Defenc
             //map.Keyboard.SetSingleKeyEventHandler(CheckKey);
         }
 
+        void CheckEnemyBase()
+        {
+            for(int i = 0; i < Allies.Count; i++)
+            {
+                if(map.CollisionContainers(Allies[i].ContainerName, BaseEnemy.ContainerName))
+                {
+                    Allies[i].RemoveAction("move");
+                    GameObject Point = new GameObject();
+                    Point.SetCoordinate(
+                    Allies[i].X + 500 * Math.Cos(GameMath.DegreesToRad(Allies[i].Angle + 180)),
+                    Allies[i].Y + 500 * Math.Sin(GameMath.DegreesToRad(Allies[i].Angle + 180)));
+                    MoveToTarget move = new MoveToTarget("move", Allies[i], Point);
+                    Allies[i].Actions.Add(move);
+
+                }
+            }
+        }
+
         void CheckScroll()
         {
             if (map.Keyboard.IsKeyPressed(Key.Up))
@@ -223,7 +241,7 @@ namespace Tower_Defenc
             waves[0].Units = new List<WaveUnit>();
             WaveUnit unit = new WaveUnit();
             unit.UnitName = "EnemyLOW";
-            unit.UnitCount = 12;
+            unit.UnitCount = 3;
             waves[0].Units.Add(unit);
         }
 
@@ -263,7 +281,7 @@ namespace Tower_Defenc
                     case "EnemyBoss":
                         Enemy = GetEnemy(UnitName, "platformRed4", "towerRed");
                         map.ContainerSetMaxSide(Enemy.ContainerName, 120);//
-                        map.ContainerSetMaxSide(Enemy.TowerContainerName, 100);
+                        map.ContainerSetMaxSide(Enemy.Children[0].ContainerName, 100);
                         Enemy.Speed = 0.3;//
                         Enemy.Recharger = new SimpleRechargen();//
                         Enemy.Recharger.ChargeSpeed = 1;//
@@ -470,11 +488,11 @@ namespace Tower_Defenc
             for (int i = 0; i < Enemis.Count; i++)
             {
                 //Enemis[i].Move();
-                for(int j = 0; j < Enemis[i].Actions.Count; j++)
+                //Enemis[i].Rotate();
+                for (int j = 0; j < Enemis[i].Actions.Count; j++)
                 {
                     Enemis[i].Actions[j].Act();
                 }
-                //Enemis[i].Rotate();
                 Enemis[i].CheckMaxCounter();
                 Enemis[i].PerformAction();
                 Enemis[i].ReCharge();
@@ -524,6 +542,7 @@ namespace Tower_Defenc
             ChekSpawn();
             AlliesActions();
             EnemisActions();
+            CheckEnemyBase();
             AlliesCheckShots();
             EnemisCheckShots();
             ClickCount--;
