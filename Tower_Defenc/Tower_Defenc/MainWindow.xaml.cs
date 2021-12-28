@@ -282,10 +282,12 @@ namespace Tower_Defenc
                         Enemy = GetEnemy(UnitName, "platformRed4", "towerRed");
                         map.ContainerSetMaxSide(Enemy.ContainerName, 120);//
                         map.ContainerSetMaxSide(Enemy.Children[0].ContainerName, 100);
-                        Enemy.Speed = 0.3;//
+                        Enemy.Speed = 7;//
                         Enemy.Recharger = new SimpleRechargen();//
                         Enemy.Recharger.ChargeSpeed = 1;//
                         Enemy.Recharger.ChargeReady = 700;//
+                        DefensBase defensBase = new DefensBase("DefBase", Enemy, BaseEnemy);
+                        Enemy.Actions.Add(defensBase);
                         Enemy.SetHp(3200);//
                         Enemy.Range = 150;//
                         break;
