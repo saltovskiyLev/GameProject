@@ -33,29 +33,5 @@ namespace Tower_Defenc
             Target = target;
         }
     }
-    class DefensBase : IAction
-    {
-        public string Name { get; }
-        GameObject Target;
-        GameObject Unit;
-
-        public void Act()
-        {
-            //throw new NotImplementedException();
-        }
-
-        public DefensBase(string name, GameObject unit, GameObject target)
-        {
-            Name = name;
-            Unit = unit;
-            Target = target;
-            unit.RemoveAction("move");
-            MoveToTarget move = new MoveToTarget("move", unit, target);
-            unit.Actions.Add(move);
-        }
-        // 23451                               
-        // 42587                               
-        // 12455                                
-    }
 }
 

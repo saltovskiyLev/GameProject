@@ -49,6 +49,7 @@ namespace Tower_Defenc
         Dictionary<string, int> characts = new Dictionary<string, int>();
         public int mode; // 0 - Обьект стоит на месте   // 1 - Обьект движется в точку на карте // 2 - Обьект движется к другому игровому обьекту;
         public GameObject TargetObject;
+        public GameObject SelectedObject;
         Rectangle HPLINE = new Rectangle();
         public bool NeedToMove = false;
         bool CanSetCharacts = true;

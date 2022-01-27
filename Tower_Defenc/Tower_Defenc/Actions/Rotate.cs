@@ -15,17 +15,21 @@ namespace Tower_Defenc
         }
         public void Act()
         {
-            double TargetAngle = GameMath.GetAngleOfVector(Target.X - Unit.X, Target.Y - Unit.Y);
-            if (TargetAngle > Unit.Angle)
-            {
-                Unit.SetAngle(2, false);
-            }
-            else
-            {
-                Unit.SetAngle(-2, false);
+            if(Target != null)
+            { 
+                double TargetAngle = GameMath.GetAngleOfVector(Target.X - Unit.X, Target.Y - Unit.Y);
+                 
+                if (TargetAngle > Unit.Angle)
+                {
+                    Unit.SetAngle(2, false);
+                }
+                else
+                {
+                    Unit.SetAngle(-2, false);
+                }
             }
         }
     }
-        
-    }
+
+}
 

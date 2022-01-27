@@ -114,7 +114,6 @@ namespace Tower_Defenc
                     Allies[i].Y + 500 * Math.Sin(GameMath.DegreesToRad(Allies[i].Angle + 180)));
                     MoveToTarget move = new MoveToTarget("move", Allies[i], Point);
                     Allies[i].Actions.Add(move);
-
                 }
             }
         }
@@ -157,6 +156,7 @@ namespace Tower_Defenc
             map.Library.AddPicture("basa", "base.png");
             map.Library.AddPicture("towerRed", "towerRed1.png");
             map.Library.AddPicture("platformRed4", "platformRed4.png");
+            map.Library.AddPicture("RAKETA", "MissileRed1_.png");
             map.Library.AddPicture("snow", "SONOW.png");
             map.Library.AddPicture("TankMashingan_Medium_ALLY", "Танк с башней без поворота(ДОБРЫЙ СЛАБЫЙПУЛЕМЁТНЫЙ).png");
             map.Library.AddPicture("MarkEnemy", "EnemyDetected.png");
@@ -228,6 +228,10 @@ namespace Tower_Defenc
             obstacle.Add(Enemy);
             Enemy.targets = Allies;
             Enemis.Add(Enemy);
+
+            Rotate rotate = new Rotate("rotate", Enemy, Enemy.TargetObject);
+            Enemy.Actions.Add(rotate);
+
             Enemy.NeedToMove = true;
             Enemy.NeedToRotate = true;
             Enemy.SubdivisionNumber = 1;
@@ -286,7 +290,7 @@ namespace Tower_Defenc
                         Enemy.Recharger = new SimpleRechargen();//
                         Enemy.Recharger.ChargeSpeed = 1;//
                         Enemy.Recharger.ChargeReady = 700;//
-                        DefensBase defensBase = new DefensBase("DefBase", Enemy, BaseEnemy);
+                        DefendBase defensBase = new DefendBase("DefBase", Enemy, BaseEnemy);
                         Enemy.Actions.Add(defensBase);
                         Enemy.SetHp(3200);//
                         Enemy.Range = 150;//
@@ -480,8 +484,16 @@ namespace Tower_Defenc
                 {
                     Allies[i].Actions[j].Act();
                 }
+
                 Allies[i].PerformAction();
                 Allies[i].ReCharge();
+                for(int j = 0; j < Allies[i].Children.Count; j++)
+                {
+                    for(int k = 0; k < Allies[i].Children[j].Actions.Count; k++)
+                    {
+                        Allies[i].Children[j].Actions[k].Act();
+                    }
+                }
             }
         }
 
@@ -498,8 +510,15 @@ namespace Tower_Defenc
                 Enemis[i].CheckMaxCounter();
                 Enemis[i].PerformAction();
                 Enemis[i].ReCharge();
+                for (int j = 0; j < Enemis[i].Children.Count; j++)
+                {
+                    for (int k = 0; k < Enemis[i].Children[j].Actions.Count; k++)
+                    {
+                        Enemis[i].Children[j].Actions[k].Act();
+                    }
+                }
             }
-        }
+        } 
 
         void AlliesCheckShots()
         {
