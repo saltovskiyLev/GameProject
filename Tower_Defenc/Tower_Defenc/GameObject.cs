@@ -36,6 +36,7 @@ namespace Tower_Defenc
         //public string TowerContainerName = "";
         public int Range = 5;
         int DamageCounter = 2000;
+        public bool CanClash = false;  
         public double X { get; private set; }
         public double Y { get; private set; }
         public List<GameObject> targets = new List<GameObject>(); // список целей для атаки
@@ -180,6 +181,7 @@ namespace Tower_Defenc
 
         public void SetCoordinate(double x, double y)
         {
+
             if (string.IsNullOrEmpty(ContainerName))
             {
                 X = x;
@@ -190,7 +192,7 @@ namespace Tower_Defenc
                 map.ContainerMovePreview(ContainerName, x, y, Angle);
                 // Этот цикл должен быть в отдельной функции проверки столкновения обьектов.
                 // Та функция вызывается в GameCycle.
-                if (Type != "Shell")
+                if (Type != "Shell" && CanClash)
                 {
                     for (int i = 0; i < MainWindow.obstacle.Count; i++)
                     {
@@ -213,8 +215,8 @@ namespace Tower_Defenc
 
                 for (int i = 0; i < Children.Count; i++)
                 {
-                    map.ContainerSetCoordinate(Children[i].ContainerName, x, y);
-
+                    Children[i].SetCoordinate(x, y);
+                    //map.ContainerSetCoordinate(Children[i].ContainerName, x, y);
                 }
                 if (IsMarked)
                 {
