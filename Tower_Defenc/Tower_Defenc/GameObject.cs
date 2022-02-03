@@ -44,6 +44,7 @@ namespace Tower_Defenc
         public List<IAction> Actions = new List<IAction>();
         public bool IsMarked = false;
         public string destroyedImage;
+        public bool IsDeleted = false;
         public string destroyedAmimathion = "";
         public double SpeedX { get; private set; }
         public double SpeedY { get; private set; }

@@ -25,7 +25,7 @@ namespace Tower_Defenc
         int CenterX, CenterY;
         Random r = new Random();
         TimerController timer = new TimerController();
-        UniversalMap_Wpf map;
+        static public UniversalMap_Wpf map;
         static public GameObject SelectedEnemyUnit;
         static public List<GameObject> obstacle = new List<GameObject>();
         SimpleTextBox TextTimer = new SimpleTextBox();
@@ -37,8 +37,7 @@ namespace Tower_Defenc
         int scrollY;
         GameObject basa;
         bool CanSpawn = true;
-        public
-        List<GameObject> Enemis = new List<GameObject>();
+        static public List<GameObject> Enemis = new List<GameObject>();
         static public List<GameObject> Allies = new List<GameObject>();
         static public List<GameObject> AlliesShots = new List<GameObject>();
         static public List<GameObject> EnemisShots = new List<GameObject>();
@@ -483,6 +482,12 @@ namespace Tower_Defenc
                 for(int j = 0; j < Allies[i].Actions.Count; j++)
                 {
                     Allies[i].Actions[j].Act();
+                }
+                if(Allies[i].IsDeleted)
+                {
+                    Allies.RemoveAt(i);
+                    i--;
+                    continue;
                 }
 
                 Allies[i].PerformAction();

@@ -68,6 +68,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Actions\BasicRotate.cs" />
+    <Compile Include="Actions\CheckHit.cs" />
     <Compile Include="Actions\GetTarget.cs" />
     <Compile Include="Actions\LaunchMissile.cs" />
     <Compile Include="Actions\MoveForward.cs" />

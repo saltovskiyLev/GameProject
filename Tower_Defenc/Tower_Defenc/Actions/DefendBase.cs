@@ -39,7 +39,7 @@ namespace Tower_Defenc
                     GetTarget target = new GetTarget("target", Unit.Children[0], MainWindow.Allies, false);
                     Unit.Children[0].Actions.Add(target);
                     Unit.Speed = 3;
-                    LaunchMissile Raketa = new LaunchMissile("raketa", Unit.Children[0]);
+                    LaunchMissile Raketa = new LaunchMissile("raketa", Unit.Children[0], MainWindow.Allies);
                     Unit.Children[0].Actions.Add(Raketa);
                 }
             }
