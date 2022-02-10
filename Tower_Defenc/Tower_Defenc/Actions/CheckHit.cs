@@ -20,6 +20,8 @@ namespace Tower_Defenc
                 if (MainWindow.map.CollisionContainers(Unit.ContainerName, Targets[j].ContainerName))
                 {
                     Targets[j].AddHp(-Unit.GetCharact("damage"));
+                    MainWindow.map.ContainerSetFrame(Unit.ContainerName, "exp10");
+                    MainWindow.map.ContainerSetMaxSide(Unit.ContainerName, 20);
                     MainWindow.map.AnimationStart(Unit.ContainerName, "Explosion_Collision", 1, Unit.removeContainer);
                     Unit.IsDeleted = true;
                     break;

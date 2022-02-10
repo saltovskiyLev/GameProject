@@ -28,12 +28,16 @@ namespace Tower_Defenc
                 RAKETA.Speed = 7;
 
                 MoveToTarget move = new MoveToTarget("move", RAKETA, Unit.SelectedObject);
-                Unit.Actions.Add(move);
+                RAKETA.Actions.Add(move);
 
                 Tower_Defenc.Rotate rotate = new Rotate("rotate", RAKETA, Unit.SelectedObject);
-                Unit.Actions.Add(rotate);
+                RAKETA.Actions.Add(rotate);
 
                 CheckHit CheckHit = new CheckHit("CheckHit", RAKETA, Targets);
+                RAKETA.Actions.Add(CheckHit);
+
+                MainWindow.Enemis.Add(RAKETA);
+                RAKETA.SetCharacts("damage", 35);
             }
         }
     }

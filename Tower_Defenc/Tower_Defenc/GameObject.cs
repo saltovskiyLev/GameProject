@@ -40,7 +40,7 @@ namespace Tower_Defenc
         public double X { get; private set; }
         public double Y { get; private set; }
         public List<GameObject> targets = new List<GameObject>(); // список целей для атаки
-        public int HP;
+        public int HP { get; private set; }
         public List<IAction> Actions = new List<IAction>();
         public bool IsMarked = false;
         public string destroyedImage;

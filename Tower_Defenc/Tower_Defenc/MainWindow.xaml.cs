@@ -37,6 +37,7 @@ namespace Tower_Defenc
         int scrollY;
         GameObject basa;
         bool CanSpawn = true;
+        List<GameObject> Crystals = new List<GameObject>();
         static public List<GameObject> Enemis = new List<GameObject>();
         static public List<GameObject> Allies = new List<GameObject>();
         static public List<GameObject> AlliesShots = new List<GameObject>();
@@ -69,6 +70,7 @@ namespace Tower_Defenc
             lay.Attach(TextTimer, 1);
             AddPictures();
             ipan.AddItem("money", "money", money.ToString());
+            UnitsPanel.AddItem("Cборщик ресурсов", "scavenger", "Он будет делать ваши деньги: 25. Имя: РООБ");
             UnitsPanel.AddItem("ЧИСТОТАНК", "Tank_Low_AllY", "Средний танк без поворота башни: 50. ИМЯ: ЖАР");
             UnitsPanel.SetMouseClickHandler(BuildUnit);
             UnitsPanel.AddItem("ПУЛЕМЁТНИК", "TankMashingan_Medium_ALLY", "Малый танк без поворота башни: 100. ИМЯ: БАХ");
@@ -97,7 +99,7 @@ namespace Tower_Defenc
             CreateWaves();
             GameObject BossEnemy = new GameObject();
             timer.AddAction(CheckScroll, 12);
-            //map.Keyboard.SetSingleKeyEventHandler(CheckKey);
+            //map.Keyboard.SetSingleKeyEventHandler(CheckKey);А
         }
 
         void CheckEnemyBase()
@@ -153,14 +155,16 @@ namespace Tower_Defenc
             map.Library.AddPicture("Tank_Low_AllY", "Танк с башней без поворота(ДОБРЫЙ средний).png");
             map.Library.AddPicture("BulletAllies", "СнарядДобрый.png");
             map.Library.AddPicture("basa", "base.png");
+            map.Library.AddPicture("scavenger", "flyerSand4.png");
             map.Library.AddPicture("towerRed", "towerRed1.png");
             map.Library.AddPicture("platformRed4", "platformRed4.png");
             map.Library.AddPicture("RAKETA", "MissileRed1_.png");
             map.Library.AddPicture("snow", "SONOW.png");
-            map.Library.AddPicture("TankMashingan_Medium_ALLY", "Танк с башней без поворота(ДОБРЫЙ СЛАБЫЙПУЛЕМЁТНЫЙ).png");
+            map.Library.AddPicture("crystal", "сristal.png");
             map.Library.AddPicture("MarkEnemy", "EnemyDetected.png");
             map.Library.AddPicture("TankMashingan_Medium_ALLY_destroid", "Танк подорвали(второй).png");
             map.Library.AddPicture("AllyScope", "Выбрал нашего.png");
+            map.Library.AddPicture("ПУЛЕМЁТНИК", "Танк с башней без поворота(ДОБРЫЙ СЛАБЫЙПУЛЕМЁТНЫЙ).png");
             map.Library.AddPicture("EnemyBase", "scr_2.jpg");
             map.Library.AddPicture("EnemyBase(D)", "scr_2(B).png");
             map.Library.AddPicture("EnemyLOW", "Враг(самаходка).png");
@@ -237,6 +241,18 @@ namespace Tower_Defenc
             Enemy.destroyedImage = "Destroyed_Tank_Low_ALLY";
             return Enemy;
         }
+        
+        void CrystalSpawn()
+        {
+            int x = CenterX, y = CenterY;
+            while (x > CenterX - 900 && x < CenterX + 900 && y > CenterY - 600 && y < CenterY + 600)
+            {
+                x = r.Next(0, CenterX * 2);
+                y = r.Next(0, CenterY * 2);
+            }
+            GameObject crystal = new GameObject("crystal", "crystal" + counter, "crystal", x, y, 65);
+            Crystals.Add(crystal); 
+        }
 
         void CreateWaves()
         {
@@ -294,6 +310,7 @@ namespace Tower_Defenc
                         Enemy.SetHp(3200);//
                         Enemy.Range = 150;//
                         break;
+
                 }
                 /*
                   Баг "ХАКЕР"
@@ -368,7 +385,7 @@ namespace Tower_Defenc
                 SelectedUnit.TargetObject.SetCoordinate(x, y);
                 //SelectedUnit.NeedToMove = true;
                 SelectedUnit.NeedToRotate = true;
-                SelectedUnit.Speed = 1;
+                //SelectedUnit.Speed = 1;
                 SelectedUnit.RemoveAction("move");
                 MoveToTarget move = new MoveToTarget("move", SelectedUnit, SelectedUnit.TargetObject);
                 SelectedUnit.Actions.Add(move);
@@ -398,6 +415,7 @@ namespace Tower_Defenc
                         Tank.Recharger.ChargeReady = 5000;
                         Tank.Recharger.ChargeSpeed = 10;
                         Tank.SetHp(100);
+                        Tank.Speed = 1;
                         Tank.SubdivisionNumber = 0;
                         /*map.ContainerSetFrame(Tank.ContainerName + "Anime", "Fire Bolt1");
                         map.ContainerSetMaxSide(Tank.ContainerName + "Anime", 100);
@@ -417,18 +435,39 @@ namespace Tower_Defenc
                         Tank.Recharger.ChargeReady = 2000;
                         Tank.Recharger.ChargeSpeed = 10;
                         Allies.Add(Tank);
+                        Tank.Speed = 2;
                         Tank.SubdivisionNumber = 0;
                         obstacle.Add(Tank);
                         Tank.destroyedImage = "Destroyed_Tank_Low_ALLY";
                     }
                     break;
 
-                /*case ""
-                    if (money >= 100)
+                case "Cборщик ресурсов":
+                    if (money >= 25)
                     {
-
+                        AddMoney(-25);
+                        GameObject Tank = new GameObject("scavenger", "scavenger" + counter.ToString(), "scavenger", CenterX, CenterY, 70);
+                        CreatedAnimation.Add(Tank);
+                        Allies.Add(Tank);
+                        //Tank.Recharger = new SimpleRechargen();
+                        //Tank.Recharger.ChargeSpeed = 32;
+                        Tank.SetHp(30);
+                        Tank.Speed = 3;
+                        Tank.SubdivisionNumber = 0;
+                        /*map.ContainerSetFrame(Tank.ContainerName + "Anime", "Fire Bolt1");
+                        map.ContainerSetMaxSide(Tank.ContainerName + "Anime", 100);
+                        map.AnimationStart(Tank.ContainerName + "Anime", "Fire1", -1);*/
+                        obstacle.Add(Tank);
+                        Tank.destroyedImage = "Destroyed_Tank_Low_ALLY";
                     }
-                    break;*/
+                    break;
+
+                    /*case ""
+                        if (money >= 100)
+                        {
+
+                        }
+                        break;*/
             }
         }
 
@@ -511,6 +550,12 @@ namespace Tower_Defenc
                 for (int j = 0; j < Enemis[i].Actions.Count; j++)
                 {
                     Enemis[i].Actions[j].Act();
+                }
+                if (Enemis[i].IsDeleted)
+                {
+                    Enemis.RemoveAt(i);
+                    i--;
+                    continue;
                 }
                 Enemis[i].CheckMaxCounter();
                 Enemis[i].PerformAction();
