@@ -37,7 +37,10 @@ namespace Tower_Defenc
                 RAKETA.Actions.Add(CheckHit);
 
                 MainWindow.Enemis.Add(RAKETA);
-                RAKETA.SetCharacts("damage", 35);
+                RAKETA.SetCharacts("damage", 25);
+
+                CheckFuel fuel = new CheckFuel("fuel", RAKETA, 120);
+                RAKETA.Actions.Add(fuel);
             }
         }
     }

@@ -105,7 +105,7 @@ namespace Tower_Defenc
             return result;
         }
 
-        void GetTarget()
+        public void GetTarget()
         {
             double DistansToTarget; // хранит расстояние до выбранной цели.
             if (TargetObject != null) // если цель уже есть то вычесляем расстояние до цели
@@ -236,7 +236,7 @@ namespace Tower_Defenc
                 map.ContainerSetMaxSide(ContainerName + "top", 42);
                 map.ContainerSetCoordinate(ContainerName + "top", X, Y);
                 map.AnimationStart(ContainerName + "top", "Explosion_Collision", 1, StopAnimation);
-                SetHp(-20);
+                AddHp(-20);
                 DamageCounter = 0;
             }
             else
@@ -295,8 +295,10 @@ namespace Tower_Defenc
             // debug.writeline("{0}, {1}", x, y);
         }
 
-        bool CheckAim()
+        public bool CheckAim()
         {
+            if (TargetObject == null) return false;
+
             bool IsAimed = false;
             double AngleToVector = GameMath.GetAngleOfVector(TargetObject.X - X, TargetObject.Y - Y);
             if(Math.Abs(Angle - AngleToVector) < 3)
@@ -307,9 +309,10 @@ namespace Tower_Defenc
             return IsAimed;
         }
 
-        public void PerformAction()
+        /*ublic void PerformAction()
          {
-            if (mode == 2 && CheckAim() && Recharger.CheckCharge() && HP > 0)
+
+            if (mode == 2 && CheckAim() && Recharger != null && Recharger.CheckCharge() && HP > 0)
             {
                 // выполнение выстрела.                                 
                 // Мы дожны созать переменную типа GameObject.           
@@ -338,7 +341,7 @@ namespace Tower_Defenc
                 map.ContainerSetSize(Shell.ContainerName, 12);
                 Recharger.Reset();
             }
-        }
+        }*/
 
         public void ReCharge()
         {

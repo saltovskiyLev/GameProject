@@ -31,13 +31,13 @@ namespace Tower_Defenc
         SimpleTextBox TextTimer = new SimpleTextBox();
         static public GameObject SelectedUnit; // Переменная для хранения выбранного юнита.
         CellMapInfo cellMap = new CellMapInfo(100, 100, 50, 0);
-        InventoryPanel ipan;
+        static InventoryPanel ipan;
         public static int ClickCount = 0;
         int scrollX;
         int scrollY;
         GameObject basa;
         bool CanSpawn = true;
-        List<GameObject> Crystals = new List<GameObject>();
+        static public List<GameObject> Crystals = new List<GameObject>();
         static public List<GameObject> Enemis = new List<GameObject>();
         static public List<GameObject> Allies = new List<GameObject>();
         static public List<GameObject> AlliesShots = new List<GameObject>();
@@ -48,7 +48,7 @@ namespace Tower_Defenc
         InventoryPanel UnitsPanel;
         int countdown = 12;
         int counter = 0;
-        int money = 150;
+        static public int money = 150;
         int WaveNumber = 0;
         IGameScreenLayout lay;
         public MainWindow()
@@ -73,7 +73,7 @@ namespace Tower_Defenc
             UnitsPanel.AddItem("Cборщик ресурсов", "scavenger", "Он будет делать ваши деньги: 25. Имя: РООБ");
             UnitsPanel.AddItem("ЧИСТОТАНК", "Tank_Low_AllY", "Средний танк без поворота башни: 50. ИМЯ: ЖАР");
             UnitsPanel.SetMouseClickHandler(BuildUnit);
-            UnitsPanel.AddItem("ПУЛЕМЁТНИК", "TankMashingan_Medium_ALLY", "Малый танк без поворота башни: 100. ИМЯ: БАХ");
+            UnitsPanel.AddItem("ПУЛЕМЁТНИК", "ПУЛЕМЁТНИК", "Малый танк без поворота башни: 100. ИМЯ: БАХ");
             GameObject.map = map;
             basa = new GameObject("basa", "BASA", "basa");
             map.ContainerSetSize(basa.ContainerName, 100, 100);
@@ -93,6 +93,7 @@ namespace Tower_Defenc
             BaseEnemy.NeedToMove = false;
             BaseEnemy.NeedToRotate = false;
             BaseEnemy.SubdivisionNumber = 1;
+            timer.AddAction(CrystalSpawn, 1000);
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             map.Mouse.SetMouseSingleLeftClickHandler(MapClick);
 
@@ -214,17 +215,17 @@ namespace Tower_Defenc
                 Enemy = new GameObject(picture1, picture2, "Enemy1" + counter.ToString(), UnitType);
             }
             int x = CenterX, y = CenterY;
-            Enemy.mode = 2;
-          
-            Enemy.TargetObject = new GameObject();
+            Enemy.mode = 2;               
+           
+            Enemy.TargetObject = new GameObject();            
             Enemy.TargetObject.SetCoordinate(CenterX, CenterY);
 
-            MoveToTarget move = new MoveToTarget("move", Enemy, Enemy.TargetObject);
+            MoveToTarget move = new MoveToTarget("move", Enemy, Enemy.TargetObject, 320);
             Enemy.Actions.Add(move);
             while (x > CenterX - 900 && x < CenterX + 900 && y > CenterY - 600 && y < CenterY + 600)
             {
                 x = r.Next(0, CenterX * 2);
-                y = r.Next(0, CenterY * 2);
+                y = r.Next(0, CenterY * 2); 
             }
             Enemy.SetCoordinate(x, y);
             Enemy.SetAngle((int)GameMath.GetAngleOfVector(CenterX - x, CenterY - y));
@@ -251,7 +252,8 @@ namespace Tower_Defenc
                 y = r.Next(0, CenterY * 2);
             }
             GameObject crystal = new GameObject("crystal", "crystal" + counter, "crystal", x, y, 65);
-            Crystals.Add(crystal); 
+            Crystals.Add(crystal);
+            counter++;
         }
 
         void CreateWaves()
@@ -290,6 +292,9 @@ namespace Tower_Defenc
                         Enemy = GetEnemy(UnitName, "EnemyLOW");
                         map.ContainerSetMaxSide(Enemy.ContainerName, 72);//
                         Enemy.Speed = 1;//
+                        Enemy.CanClash = true;
+                        Shoot Shoot = new Shoot("shoot", Enemy, Allies);
+                        Enemy.Actions.Add(Shoot);
                         Enemy.Recharger = new SimpleRechargen();//
                         Enemy.Recharger.ChargeSpeed = 1;//
                         Enemy.Recharger.ChargeReady = 300;//
@@ -302,6 +307,7 @@ namespace Tower_Defenc
                         map.ContainerSetMaxSide(Enemy.ContainerName, 120);//
                         map.ContainerSetMaxSide(Enemy.Children[0].ContainerName, 100);
                         Enemy.Speed = 7;//
+                        Enemy.CanClash = true;
                         Enemy.Recharger = new SimpleRechargen();//
                         Enemy.Recharger.ChargeSpeed = 1;//
                         Enemy.Recharger.ChargeReady = 700;//
@@ -415,8 +421,11 @@ namespace Tower_Defenc
                         Tank.Recharger.ChargeReady = 5000;
                         Tank.Recharger.ChargeSpeed = 10;
                         Tank.SetHp(100);
+                        Shoot Shoot = new Shoot("shoot", Tank, Enemis);
+                        Tank.Actions.Add(Shoot);
                         Tank.Speed = 1;
                         Tank.SubdivisionNumber = 0;
+                        Tank.CanClash = true;
                         /*map.ContainerSetFrame(Tank.ContainerName + "Anime", "Fire Bolt1");
                         map.ContainerSetMaxSide(Tank.ContainerName + "Anime", 100);
                         map.AnimationStart(Tank.ContainerName + "Anime", "Fire1", -1);*/
@@ -428,14 +437,17 @@ namespace Tower_Defenc
                     if(money >= 100)
                     {
                         AddMoney(-100);
-                        GameObject Tank = new GameObject("TankMashingan_Medium_ALLY", "TankMashingan_Medium_ALLY" + counter.ToString(), "TankMashingan_Medium_ALLY", CenterX, CenterY, 55);
+                        GameObject Tank = new GameObject("ПУЛЕМЁТНИК", "TankMashingan_Medium_ALLY" + counter.ToString(), "TankMashingan_Medium_ALLY", CenterX, CenterY, 55);
                         CreatedAnimation.Add(Tank);
                         Tank.SetHp(120);
+                        Tank.CanClash = true;
                         Tank.Recharger = new BurstRecharger(30);
                         Tank.Recharger.ChargeReady = 2000;
                         Tank.Recharger.ChargeSpeed = 10;
                         Allies.Add(Tank);
                         Tank.Speed = 2;
+                        Shoot Shoot = new Shoot("shoot", Tank, Enemis);
+                        Tank.Actions.Add(Shoot);
                         Tank.SubdivisionNumber = 0;
                         obstacle.Add(Tank);
                         Tank.destroyedImage = "Destroyed_Tank_Low_ALLY";
@@ -453,6 +465,9 @@ namespace Tower_Defenc
                         //Tank.Recharger.ChargeSpeed = 32;
                         Tank.SetHp(30);
                         Tank.Speed = 3;
+                        CollectCrystals crystals = new CollectCrystals("Collector", Tank);
+                        Tank.Actions.Add(crystals);
+                        Tank.CanClash = true;
                         Tank.SubdivisionNumber = 0;
                         /*map.ContainerSetFrame(Tank.ContainerName + "Anime", "Fire Bolt1");
                         map.ContainerSetMaxSide(Tank.ContainerName + "Anime", 100);
@@ -471,7 +486,7 @@ namespace Tower_Defenc
             }
         }
 
-        void AddMoney(int NewMoney)
+        static public void AddMoney(int NewMoney)
         {
             money = money + NewMoney;
             ipan.SetText("money", money.ToString());
@@ -529,7 +544,7 @@ namespace Tower_Defenc
                     continue;
                 }
 
-                Allies[i].PerformAction();
+                //Allies[i].PerformAction();
                 Allies[i].ReCharge();
                 for(int j = 0; j < Allies[i].Children.Count; j++)
                 {
@@ -558,7 +573,7 @@ namespace Tower_Defenc
                     continue;
                 }
                 Enemis[i].CheckMaxCounter();
-                Enemis[i].PerformAction();
+                //Enemis[i].PerformAction();
                 Enemis[i].ReCharge();
                 for (int j = 0; j < Enemis[i].Children.Count; j++)
                 {
