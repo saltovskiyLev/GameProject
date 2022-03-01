@@ -4,18 +4,21 @@ namespace Tower_Defenc
 {
     class Shoot : IAction
     {
-        GameObject Unit; // обьект который снаряд :)
+        GameObject Unit;
         public string Name { get; }
         static int counter;
         public Shoot(string name, GameObject unit, List<GameObject> targets)
         {
             Name = name;
-            Unit = unit;
+            Unit = unit; 
         }
         public void Act()
         {
-            if (Unit.CheckAim() && Unit.Recharger != null && Unit.Recharger.CheckCharge() && Unit.HP > 0)
+            if (Unit.CheckAim() && Unit.Recharger != null
+                && Unit.Recharger.CheckCharge()
+                && Unit.HP > 0 && Unit.Ammo > 0)
             {
+
                 // выполнение выстрела.                                 
                 // Мы дожны созать переменную типа GameObject.           
                 // Координаты и угол как у игрокау этого GameObject(а). 
@@ -34,6 +37,8 @@ namespace Tower_Defenc
                 }
                 Shell.Type = "Shell";
                 Shell.Speed = 10;
+                //Unit.Ammo--;
+                Unit.AddAmmo(-1);
                 Shell.SubdivisionNumber = Unit.SubdivisionNumber;
                 Shell.SetCoordinate(Unit.X, Unit.Y);
                 Shell.NeedToMove = true;

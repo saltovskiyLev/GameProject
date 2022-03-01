@@ -153,6 +153,7 @@ namespace Tower_Defenc
             map.Library.AddPicture("background", "Сзади.png");
             map.Library.AddPicture("money", "money.png");
             map.Library.AddPicture("nothing", "nothing.png");
+            map.Library.AddPicture("warehouse", "i.png");
             map.Library.AddPicture("Tank_Low_AllY", "Танк с башней без поворота(ДОБРЫЙ средний).png");
             map.Library.AddPicture("BulletAllies", "СнарядДобрый.png");
             map.Library.AddPicture("basa", "base.png");
@@ -262,7 +263,7 @@ namespace Tower_Defenc
             waves[0].Units = new List<WaveUnit>();
             WaveUnit unit = new WaveUnit();
             unit.UnitName = "EnemyLOW";
-            unit.UnitCount = 3;
+            unit.UnitCount = 0;
             waves[0].Units.Add(unit);
         }
 
@@ -299,6 +300,8 @@ namespace Tower_Defenc
                         Enemy.Recharger.ChargeSpeed = 1;//
                         Enemy.Recharger.ChargeReady = 300;//
                         Enemy.SetHp(72);//
+                        Enemy.MaxAmmo = 10;
+                        Enemy.AddAmmo(10);
                         Enemy.Range = 150;//
                         break;
 
@@ -307,6 +310,8 @@ namespace Tower_Defenc
                         map.ContainerSetMaxSide(Enemy.ContainerName, 120);//
                         map.ContainerSetMaxSide(Enemy.Children[0].ContainerName, 100);
                         Enemy.Speed = 7;//
+                        Enemy.MaxAmmo = 32;
+                        Enemy.AddAmmo(32);
                         Enemy.CanClash = true;
                         Enemy.Recharger = new SimpleRechargen();//
                         Enemy.Recharger.ChargeSpeed = 1;//
@@ -417,6 +422,8 @@ namespace Tower_Defenc
                         GameObject Tank = new GameObject("Tank_Low_AllY", "Tank_Low_ally" + counter.ToString(), "Tank_Low_ally", CenterX, CenterY, 70);
                         CreatedAnimation.Add(Tank);
                         Allies.Add(Tank);
+                        Tank.MaxAmmo = 12;
+                        Tank.AddAmmo(12);
                         Tank.Recharger = new SimpleRechargen();
                         Tank.Recharger.ChargeReady = 5000;
                         Tank.Recharger.ChargeSpeed = 10;
@@ -440,6 +447,8 @@ namespace Tower_Defenc
                         GameObject Tank = new GameObject("ПУЛЕМЁТНИК", "TankMashingan_Medium_ALLY" + counter.ToString(), "TankMashingan_Medium_ALLY", CenterX, CenterY, 55);
                         CreatedAnimation.Add(Tank);
                         Tank.SetHp(120);
+                        Tank.MaxAmmo = 1200;
+                        Tank.AddAmmo(1200);
                         Tank.CanClash = true;
                         Tank.Recharger = new BurstRecharger(30);
                         Tank.Recharger.ChargeReady = 2000;

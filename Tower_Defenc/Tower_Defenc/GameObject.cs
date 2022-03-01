@@ -43,6 +43,8 @@ namespace Tower_Defenc
         public int HP { get; private set; }
         public List<IAction> Actions = new List<IAction>();
         public bool IsMarked = false;
+        public int Ammo;
+        public int MaxAmmo;
         public string destroyedImage;
         public bool IsDeleted = false;
         public string destroyedAmimathion = "";
@@ -53,6 +55,7 @@ namespace Tower_Defenc
         public GameObject TargetObject;
         public GameObject SelectedObject;
         Rectangle HPLINE = new Rectangle();
+        Rectangle AMMOLINE = new Rectangle();
         public bool NeedToMove = false;
         bool CanSetCharacts = true;
         //public int TargetX;
@@ -73,9 +76,15 @@ namespace Tower_Defenc
             map.Library.AddContainer(ContainerName + "mark", "AllyScope", ContainerType.AutosizedSingleImage);
             map.Library.AddContainer(ContainerName + "Anime", "nothing", ContainerType.AutosizedSingleImage);
             Type = type;
+
             HPLINE.Height = 10;
             HPLINE.Fill = Brushes.Green;
             map.Canvas.Children.Add(HPLINE);
+
+            AMMOLINE.Height = 10;
+            AMMOLINE.Fill = Brushes.Yellow;
+            map.Canvas.Children.Add(AMMOLINE);
+
             map.ContainerSetZIndex(ContainerName + "Anime", 86);
             //map.DrawRectangle((int)X - 35, (int)Y + 25, hp, 10, Brushes.Green, Brushes.Green);
         }
@@ -212,6 +221,8 @@ namespace Tower_Defenc
 
                 Canvas.SetTop(HPLINE, Y + 35);
                 Canvas.SetLeft(HPLINE, X - 35);
+                Canvas.SetTop(AMMOLINE, Y + 55);
+                Canvas.SetLeft(AMMOLINE, X - 35);
                 map.ContainerSetCoordinate(ContainerName, x, y);
 
                 for (int i = 0; i < Children.Count; i++)
@@ -430,6 +441,13 @@ namespace Tower_Defenc
                 map.ContainerSetFrame(ContainerName + "Anime", "nothing");
             }
             HPLINE.Width = HP / 2;
+            
+        }
+
+        public void AddAmmo(int ammo)
+        {
+            Ammo = Ammo + ammo;
+            AMMOLINE.Width = (double)Ammo / MaxAmmo * 70;
         }
 
         void SetDestroyedImage()
