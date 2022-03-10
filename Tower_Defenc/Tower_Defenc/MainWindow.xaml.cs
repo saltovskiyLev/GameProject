@@ -35,6 +35,7 @@ namespace Tower_Defenc
         public static int ClickCount = 0;
         int scrollX;
         int scrollY;
+        int CursorMode = 1;
         GameObject basa;
         bool CanSpawn = true;
         static public List<GameObject> Crystals = new List<GameObject>();
@@ -50,6 +51,7 @@ namespace Tower_Defenc
         int counter = 0;
         static public int money = 150;
         int WaveNumber = 0;
+        Rectangle PlaceHolder = new Rectangle();
         IGameScreenLayout lay;
         public MainWindow()
         {
@@ -72,8 +74,9 @@ namespace Tower_Defenc
             ipan.AddItem("money", "money", money.ToString());
             UnitsPanel.AddItem("Cборщик ресурсов", "scavenger", "Он будет делать ваши деньги: 25. Имя: РООБ");
             UnitsPanel.AddItem("ЧИСТОТАНК", "Tank_Low_AllY", "Средний танк без поворота башни: 50. ИМЯ: ЖАР");
-            UnitsPanel.SetMouseClickHandler(BuildUnit);
+            UnitsPanel.SetMouseClickHandler(Build);
             UnitsPanel.AddItem("ПУЛЕМЁТНИК", "ПУЛЕМЁТНИК", "Малый танк без поворота башни: 100. ИМЯ: БАХ");
+            UnitsPanel.AddItem("БОЕЗАПАС", "warehouse", "Домик с Боезопасом: 500. Имя: BVZ");
             GameObject.map = map;
             basa = new GameObject("basa", "BASA", "basa");
             map.ContainerSetSize(basa.ContainerName, 100, 100);
@@ -100,6 +103,9 @@ namespace Tower_Defenc
             CreateWaves();
             GameObject BossEnemy = new GameObject();
             timer.AddAction(CheckScroll, 12);
+            map.Canvas.Children.Add(PlaceHolder);
+            PlaceHolder.Fill = Brushes.Gray;
+            PlaceHolder.Opacity = 0.5;
             //map.Keyboard.SetSingleKeyEventHandler(CheckKey);А
         }
 
@@ -406,6 +412,39 @@ namespace Tower_Defenc
             }
         }
 
+        void Build(string UnitName)
+        {
+            if (UnitName == "ЧИСТОТАНК" ||
+              UnitName == "ПУЛЕМЁТНИК" ||
+              UnitName == "Cборщик ресурсов")
+            {
+                BuildUnit(UnitName);
+            }
+
+            else
+            {
+                BuildHouse(UnitName);
+            }
+        }
+
+        public string SelectedUnitName;
+
+        void BuildHouse(string UnitName)
+        {
+            SelectedUnitName = UnitName;
+            CursorMode = 2;
+            PlaceHolder.Visibility = Visibility.Visible;
+            switch (UnitName)
+            {
+
+                case "БОЕЗАПАС":
+                    PlaceHolder.Width = 120;
+                    PlaceHolder.Height = 78;
+                    break;
+            }
+        }
+
+
         void BuildUnit(string UnitName)
         {
             if (!CanSpawn)
@@ -414,7 +453,7 @@ namespace Tower_Defenc
             }
             counter++;
             switch (UnitName)
-            {   
+            {
                 case "ЧИСТОТАНК":
                     if (money >= 50)
                     {
@@ -441,7 +480,7 @@ namespace Tower_Defenc
                     }
                     break;
                 case "ПУЛЕМЁТНИК":
-                    if(money >= 100)
+                    if (money >= 100)
                     {
                         AddMoney(-100);
                         GameObject Tank = new GameObject("ПУЛЕМЁТНИК", "TankMashingan_Medium_ALLY" + counter.ToString(), "TankMashingan_Medium_ALLY", CenterX, CenterY, 55);
@@ -631,6 +670,15 @@ namespace Tower_Defenc
 
             }
         }
+
+        void CheckCursor()
+        {
+            Coordinate cord = map.Mouse.GetCursorPosition();
+            Canvas.SetLeft(PlaceHolder, cord.X);
+            Canvas.SetTop(PlaceHolder, cord.Y);
+        }
+
+
         void GameCycle()
         {
             AnimatCreation();
@@ -640,6 +688,7 @@ namespace Tower_Defenc
             CheckEnemyBase();
             AlliesCheckShots();
             EnemisCheckShots();
+            CheckCursor();
             ClickCount--;
         }
     }

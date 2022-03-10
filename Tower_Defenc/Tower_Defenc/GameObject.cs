@@ -21,7 +21,7 @@ namespace Tower_Defenc
 
         // если SubdivisionNumber = 0, НАШ.
         // если SubdivisionNumber = 1, ВРАГ самаходка LOW.
-        Int64 state = 0;
+        Int64 state = 0;   
         int MaxCounter;
         //int ChargeRate = 5000000;
         //public int ChargeReady;
