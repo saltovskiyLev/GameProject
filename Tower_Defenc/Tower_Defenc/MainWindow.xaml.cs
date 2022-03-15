@@ -269,7 +269,7 @@ namespace Tower_Defenc
             waves[0].Units = new List<WaveUnit>();
             WaveUnit unit = new WaveUnit();
             unit.UnitName = "EnemyLOW";
-            unit.UnitCount = 0;
+            unit.UnitCount = 3;
             waves[0].Units.Add(unit);
         }
 
@@ -378,12 +378,42 @@ namespace Tower_Defenc
 
         void MapClick(int x, int y, int Cx, int Cy)
         {
+            if(CursorMode == 1)
+            {
+                UnitClick(x, y);
+            }
+            else
+            {
+                BuildingClick(x, y);
+            }
+        }
+
+        void BuildingClick(int x, int y)
+        {
+            GameObject Building;
+            switch (SelectedUnitName) {
+
+                case "БОЕЗАПАС":
+                    Building = new GameObject("warehouse", "Building" + counter, SelectedUnitName);
+                    counter++;
+                    map.ContainerSetSize(Building.ContainerName, (int)PlaceHolder.Width, (int)PlaceHolder.Height);
+                    Building.SetCoordinate(x + PlaceHolder.Width / 2, y + PlaceHolder.Height / 2);
+                    Allies.Add(Building);
+                    Building.CanClash = true;
+                    CursorMode = 1;
+                    PlaceHolder.Visibility = Visibility.Collapsed;
+                    break;
+            }
+        }
+
+        void UnitClick(int x, int y)
+        {
             if (SelectedUnit == null) return;
             if (SelectedUnit.HP == 0) return;
             if (ClickCount > 0)
             {
                 SelectedUnit.NeedToRotate = true;
-                if(map.Keyboard.IsKeyPressed(Key.Space))
+                if (map.Keyboard.IsKeyPressed(Key.Space))
                 {
                     //SelectedUnit.NeedToMove = true;
                     SelectedUnit.RemoveAction("move");
@@ -396,7 +426,7 @@ namespace Tower_Defenc
                 SelectedUnit.TargetObject = SelectedEnemyUnit;
             }
 
-            else 
+            else
             {
                 SelectedUnit.TargetObject = new GameObject();
                 SelectedUnit.TargetObject.SetCoordinate(x, y);
@@ -682,7 +712,7 @@ namespace Tower_Defenc
         void GameCycle()
         {
             AnimatCreation();
-            ChekSpawn();
+            ChekSpawn();   
             AlliesActions();
             EnemisActions();
             CheckEnemyBase();
