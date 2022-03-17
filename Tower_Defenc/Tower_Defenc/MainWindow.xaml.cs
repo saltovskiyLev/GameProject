@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text; 
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using GameMaps;
 using GameMaps.Layouts;
 using System.Windows.Shapes;
- 
+
 namespace Tower_Defenc
 {
     /// <summary>b
@@ -36,6 +36,7 @@ namespace Tower_Defenc
         int scrollX;
         int scrollY;
         int CursorMode = 1;
+        Dictionary<AllyUnits, int> Cost = new Dictionary<AllyUnits, int>(); 
         GameObject basa;
         bool CanSpawn = true;
         static public List<GameObject> Crystals = new List<GameObject>();
@@ -71,12 +72,23 @@ namespace Tower_Defenc
             lay.Attach(UnitsPanel, 1);
             lay.Attach(TextTimer, 1);
             AddPictures();
+            // Стоимость объектов
+            Cost.Add(AllyUnits.БОЕЗАПАС, 500);
+            Cost.Add(AllyUnits.ПУЛЕМЁТНИК, 100);
+            Cost.Add(AllyUnits.ЧИСТОТАНК, 50);
+            Cost.Add(AllyUnits.Cборщик_Ресурсов, 25);
+            // Стоимость объектов
             ipan.AddItem("money", "money", money.ToString());
-            UnitsPanel.AddItem("Cборщик ресурсов", "scavenger", "Он будет делать ваши деньги: 25. Имя: РООБ");
-            UnitsPanel.AddItem("ЧИСТОТАНК", "Tank_Low_AllY", "Средний танк без поворота башни: 50. ИМЯ: ЖАР");
+            UnitsPanel.AddItem(AllyUnits.Cборщик_Ресурсов.ToString(), "scavenger",
+                "Он будет делать ваши деньги: " + Cost[AllyUnits.Cборщик_Ресурсов] + " Имя: РООБ");
+            UnitsPanel.AddItem(AllyUnits.ЧИСТОТАНК.ToString(), "Tank_Low_AllY",
+                "Средний танк без поворота башни: " + Cost[AllyUnits.ЧИСТОТАНК] + " ЖАР");
+            UnitsPanel.AddItem(AllyUnits.ПУЛЕМЁТНИК.ToString(), "ПУЛЕМЁТНИК",
+                "Малый танк без поворота башни: " + Cost[AllyUnits.ПУЛЕМЁТНИК] + " ИМЯ: БАХ");
+            UnitsPanel.AddItem(AllyUnits.БОЕЗАПАС.ToString(), "warehouse",
+                "Домик с Боезопасом: " + Cost[AllyUnits.БОЕЗАПАС] + " Имя: BVZ");
+            
             UnitsPanel.SetMouseClickHandler(Build);
-            UnitsPanel.AddItem("ПУЛЕМЁТНИК", "ПУЛЕМЁТНИК", "Малый танк без поворота башни: 100. ИМЯ: БАХ");
-            UnitsPanel.AddItem("БОЕЗАПАС", "warehouse", "Домик с Боезопасом: 500. Имя: BVZ");
             GameObject.map = map;
             basa = new GameObject("basa", "BASA", "basa");
             map.ContainerSetSize(basa.ContainerName, 100, 100);
@@ -393,8 +405,8 @@ namespace Tower_Defenc
             GameObject Building;
             switch (SelectedUnitName) {
 
-                case "БОЕЗАПАС":
-                    Building = new GameObject("warehouse", "Building" + counter, SelectedUnitName);
+                case AllyUnits.БОЕЗАПАС:
+                    Building = new GameObject("warehouse", "Building" + counter, SelectedUnitName.ToString());
                     counter++;
                     map.ContainerSetSize(Building.ContainerName, (int)PlaceHolder.Width, (int)PlaceHolder.Height);
                     Building.SetCoordinate(x + PlaceHolder.Width / 2, y + PlaceHolder.Height / 2);
@@ -444,22 +456,23 @@ namespace Tower_Defenc
 
         void Build(string UnitName)
         {
-            if (UnitName == "ЧИСТОТАНК" ||
-              UnitName == "ПУЛЕМЁТНИК" ||
-              UnitName == "Cборщик ресурсов")
+            AllyUnits Unit = (AllyUnits)Enum.Parse(typeof(AllyUnits), UnitName, true);
+            if (Unit == AllyUnits.ЧИСТОТАНК ||
+              Unit == AllyUnits.ПУЛЕМЁТНИК ||
+              Unit == AllyUnits.Cборщик_Ресурсов)
             {
-                BuildUnit(UnitName);
+                BuildUnit(Unit);
             }
 
             else
             {
-                BuildHouse(UnitName);
+                BuildHouse(Unit);
             }
         }
 
-        public string SelectedUnitName;
+        public AllyUnits SelectedUnitName;
 
-        void BuildHouse(string UnitName)
+        void BuildHouse(AllyUnits UnitName)
         {
             SelectedUnitName = UnitName;
             CursorMode = 2;
@@ -467,15 +480,16 @@ namespace Tower_Defenc
             switch (UnitName)
             {
 
-                case "БОЕЗАПАС":
+                case AllyUnits.БОЕЗАПАС:
                     PlaceHolder.Width = 120;
                     PlaceHolder.Height = 78;
+                    
                     break;
             }
         }
 
 
-        void BuildUnit(string UnitName)
+        void BuildUnit(AllyUnits UnitName)
         {
             if (!CanSpawn)
             {
@@ -484,7 +498,7 @@ namespace Tower_Defenc
             counter++;
             switch (UnitName)
             {
-                case "ЧИСТОТАНК":
+                case AllyUnits.ЧИСТОТАНК:
                     if (money >= 50)
                     {
                         AddMoney(-50);
@@ -509,7 +523,7 @@ namespace Tower_Defenc
                         Tank.destroyedImage = "Destroyed_Tank_Low_ALLY";
                     }
                     break;
-                case "ПУЛЕМЁТНИК":
+                case AllyUnits.ПУЛЕМЁТНИК:
                     if (money >= 100)
                     {
                         AddMoney(-100);
@@ -532,7 +546,7 @@ namespace Tower_Defenc
                     }
                     break;
 
-                case "Cборщик ресурсов":
+                case AllyUnits.Cборщик_Ресурсов:
                     if (money >= 25)
                     {
                         AddMoney(-25);
@@ -723,3 +737,4 @@ namespace Tower_Defenc
         }
     }
 }
+

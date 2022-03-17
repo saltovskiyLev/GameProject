@@ -59,7 +59,7 @@ namespace Tower_Defenc
         public bool NeedToMove = false;
         bool CanSetCharacts = true;
         //public int TargetX;
-        //public int TargetY;
+        //public int TargetY; 
         public int Angle;
         public double Speed;
         public string Type;

@@ -75,6 +75,7 @@
     <Compile Include="Actions\LaunchMissile.cs" />
     <Compile Include="Actions\MoveForward.cs" />
     <Compile Include="Actions\Shoot.cs" />
+    <Compile Include="AllyUnits.cs" />
     <Compile Include="BurstRecharger.cs" />
     <Compile Include="Actions\DefendBase.cs" />
     <Compile Include="Actions\IAction.cs" />
