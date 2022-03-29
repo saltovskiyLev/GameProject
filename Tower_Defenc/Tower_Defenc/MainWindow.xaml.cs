@@ -38,6 +38,7 @@ namespace Tower_Defenc
         int CursorMode = 1;
         Dictionary<AllyUnits, int> Cost = new Dictionary<AllyUnits, int>(); 
         GameObject basa;
+        List<GameObject> AmmoDeports = new List<GameObject>();
         bool CanSpawn = true;
         static public List<GameObject> Crystals = new List<GameObject>();
         static public List<GameObject> Enemis = new List<GameObject>();
@@ -411,6 +412,7 @@ namespace Tower_Defenc
                     map.ContainerSetSize(Building.ContainerName, (int)PlaceHolder.Width, (int)PlaceHolder.Height);
                     Building.SetCoordinate(x + PlaceHolder.Width / 2, y + PlaceHolder.Height / 2);
                     Allies.Add(Building);
+                    AmmoDeports.Add(Building);
                     Building.CanClash = true;
                     CursorMode = 1;
                     PlaceHolder.Visibility = Visibility.Collapsed;
@@ -479,10 +481,18 @@ namespace Tower_Defenc
             PlaceHolder.Visibility = Visibility.Visible;
             switch (UnitName)
             {
-
                 case AllyUnits.БОЕЗАПАС:
-                    PlaceHolder.Width = 120;
-                    PlaceHolder.Height = 78;
+                    if (money >= 500)
+                    {
+                        PlaceHolder.Width = 120;
+                        PlaceHolder.Height = 78;
+                        AddMoney(-500);
+                    }
+
+                    else
+                    {
+                        CursorMode = 1;
+                    }
                     
                     break;
             }
@@ -722,9 +732,24 @@ namespace Tower_Defenc
             Canvas.SetTop(PlaceHolder, cord.Y);
         }
 
+        void ReloadingAmmo()
+        {
+            for(int i = 0; i < Allies.Count; i++)
+            {
+                for(int j = 0; j < AmmoDeports.Count; j++)
+                {
+                    if(map.CollisionContainers(Allies[i].ContainerName, AmmoDeports[j].ContainerName))
+                    {
+                        Allies[i].AddAmmo(1);
+                    }
+                }
+            }
+        }
+
 
         void GameCycle()
         {
+            ReloadingAmmo();
             AnimatCreation();
             ChekSpawn();   
             AlliesActions();
