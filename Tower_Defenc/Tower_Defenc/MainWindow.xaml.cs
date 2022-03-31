@@ -38,6 +38,7 @@ namespace Tower_Defenc
         int CursorMode = 1;
         Dictionary<AllyUnits, int> Cost = new Dictionary<AllyUnits, int>(); 
         GameObject basa;
+        List<GameObject> Mins = new List<GameObject>();
         List<GameObject> AmmoDeports = new List<GameObject>();
         bool CanSpawn = true;
         static public List<GameObject> Crystals = new List<GameObject>();
@@ -51,7 +52,7 @@ namespace Tower_Defenc
         InventoryPanel UnitsPanel;
         int countdown = 12;
         int counter = 0;
-        static public int money = 150;
+        static public int money = 5000;
         int WaveNumber = 0;
         Rectangle PlaceHolder = new Rectangle();
         IGameScreenLayout lay;
@@ -78,6 +79,7 @@ namespace Tower_Defenc
             Cost.Add(AllyUnits.ПУЛЕМЁТНИК, 100);
             Cost.Add(AllyUnits.ЧИСТОТАНК, 50);
             Cost.Add(AllyUnits.Cборщик_Ресурсов, 25);
+            Cost.Add(AllyUnits.МИНА, 100);
             // Стоимость объектов
             ipan.AddItem("money", "money", money.ToString());
             UnitsPanel.AddItem(AllyUnits.Cборщик_Ресурсов.ToString(), "scavenger",
@@ -88,7 +90,9 @@ namespace Tower_Defenc
                 "Малый танк без поворота башни: " + Cost[AllyUnits.ПУЛЕМЁТНИК] + " ИМЯ: БАХ");
             UnitsPanel.AddItem(AllyUnits.БОЕЗАПАС.ToString(), "warehouse",
                 "Домик с Боезопасом: " + Cost[AllyUnits.БОЕЗАПАС] + " Имя: BVZ");
-            
+            UnitsPanel.AddItem(AllyUnits.МИНА.ToString(), "mine",
+                "МИНА ВЗОРВЁТ ВСЕХ: " + Cost[AllyUnits.МИНА] + " Имя: БАБАХ");
+
             UnitsPanel.SetMouseClickHandler(Build);
             GameObject.map = map;
             basa = new GameObject("basa", "BASA", "basa");
@@ -187,6 +191,7 @@ namespace Tower_Defenc
             map.Library.AddPicture("AllyScope", "Выбрал нашего.png");
             map.Library.AddPicture("ПУЛЕМЁТНИК", "Танк с башней без поворота(ДОБРЫЙ СЛАБЫЙПУЛЕМЁТНЫЙ).png");
             map.Library.AddPicture("EnemyBase", "scr_2.jpg");
+            map.Library.AddPicture("mine", "mine.png");
             map.Library.AddPicture("EnemyBase(D)", "scr_2(B).png");
             map.Library.AddPicture("EnemyLOW", "Враг(самаходка).png");
             map.Library.AddPicture("Destroyed_Tank_Low_ALLY", "Танк подорвали(первый).png");
@@ -493,7 +498,22 @@ namespace Tower_Defenc
                     {
                         CursorMode = 1;
                     }
-                    
+
+                    break;
+
+                case AllyUnits.МИНА:
+                    if(money >= 100)
+                    {
+                        PlaceHolder.Width = 50;
+                        PlaceHolder.Height = 50;
+                        AddMoney(-100);
+                    }
+
+                    else
+                    {
+                        CursorMode = 1;
+                    }
+
                     break;
             }
         }
