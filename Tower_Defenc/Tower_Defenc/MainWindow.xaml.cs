@@ -36,7 +36,7 @@ namespace Tower_Defenc
         int scrollX;
         int scrollY;
         int CursorMode = 1;
-        Dictionary<AllyUnits, int> Cost = new Dictionary<AllyUnits, int>(); 
+        Dictionary<AllyUnits, int> Cost = new Dictionary<AllyUnits, int>();
         GameObject basa;
         List<GameObject> Mins = new List<GameObject>();
         List<GameObject> AmmoDeports = new List<GameObject>();
@@ -48,7 +48,7 @@ namespace Tower_Defenc
         static public List<GameObject> EnemisShots = new List<GameObject>();
         GameObject BaseEnemy;
         List<GameObject> CreatedAnimation = new List<GameObject>();
-        Wave[] waves = new Wave[1]; 
+        Wave[] waves = new Wave[1];
         InventoryPanel UnitsPanel;
         int countdown = 12;
         int counter = 0;
@@ -128,9 +128,9 @@ namespace Tower_Defenc
 
         void CheckEnemyBase()
         {
-            for(int i = 0; i < Allies.Count; i++)
+            for (int i = 0; i < Allies.Count; i++)
             {
-                if(map.CollisionContainers(Allies[i].ContainerName, BaseEnemy.ContainerName))
+                if (map.CollisionContainers(Allies[i].ContainerName, BaseEnemy.ContainerName))
                 {
                     Allies[i].RemoveAction("move");
                     GameObject Point = new GameObject();
@@ -148,7 +148,7 @@ namespace Tower_Defenc
             if (map.Keyboard.IsKeyPressed(Key.Up))
             {
                 scrollY = scrollY - 5;
-                map.Canvas.Margin = new Thickness(scrollX,scrollY, 0, 0);
+                map.Canvas.Margin = new Thickness(scrollX, scrollY, 0, 0);
             }
 
             if (map.Keyboard.IsKeyPressed(Key.Down))
@@ -211,7 +211,7 @@ namespace Tower_Defenc
             /////////////////////////////////////////////////////// а
             map.Library.AddContainer("TextureUp", "snow", ContainerType.AutosizedSingleImage);
             //map.ContainerSetSize("TextureUp", 5000, 1000);
-            map.ContainerSetMaxSide("TextureUp", 2000 );
+            map.ContainerSetMaxSide("TextureUp", 2000);
             map.ContainerSetCoordinate("TextureUp", 2500, 1000);
             //map.Library.AddContainer("MainTexture", "background", ContainerType.SingleImage);
             //map.ContainerSetSize("MainTexture", 400, 400);
@@ -220,9 +220,9 @@ namespace Tower_Defenc
 
         void RandomEnemy()
         {
-            if(r.Next(0, 100) < 100)
+            if (r.Next(0, 100) < 100)
             {
-                
+
                 SpaunEnemy("EnemyBoss", 1);
             }
         }
@@ -236,13 +236,13 @@ namespace Tower_Defenc
                 Enemy = new GameObject(picture1, "Enemy1" + counter.ToString(), UnitType);
             }
             else
-            {               
+            {
                 Enemy = new GameObject(picture1, picture2, "Enemy1" + counter.ToString(), UnitType);
             }
             int x = CenterX, y = CenterY;
-            Enemy.mode = 2;               
-           
-            Enemy.TargetObject = new GameObject();            
+            Enemy.mode = 2;
+
+            Enemy.TargetObject = new GameObject();
             Enemy.TargetObject.SetCoordinate(CenterX, CenterY);
 
             MoveToTarget move = new MoveToTarget("move", Enemy, Enemy.TargetObject, 320);
@@ -250,7 +250,7 @@ namespace Tower_Defenc
             while (x > CenterX - 900 && x < CenterX + 900 && y > CenterY - 600 && y < CenterY + 600)
             {
                 x = r.Next(0, CenterX * 2);
-                y = r.Next(0, CenterY * 2); 
+                y = r.Next(0, CenterY * 2);
             }
             Enemy.SetCoordinate(x, y);
             Enemy.SetAngle((int)GameMath.GetAngleOfVector(CenterX - x, CenterY - y));
@@ -267,7 +267,7 @@ namespace Tower_Defenc
             Enemy.destroyedImage = "Destroyed_Tank_Low_ALLY";
             return Enemy;
         }
-        
+
         void CrystalSpawn()
         {
             int x = CenterX, y = CenterY;
@@ -295,7 +295,7 @@ namespace Tower_Defenc
         {
             RandomEnemy();
             for (int i = 0; i < waves[number].Units.Count; i++)
-                {
+            {
                 switch (waves[number].Units[i].UnitName)
                 {
                     case "EnemyLOW":
@@ -306,12 +306,12 @@ namespace Tower_Defenc
             }
         }
 
-        void SpaunEnemy(string UnitName , int UnitNumber)
+        void SpaunEnemy(string UnitName, int UnitNumber)
         {
             for (int i = 0; i < UnitNumber; i++)
             {
                 GameObject Enemy;
-                switch (UnitName) 
+                switch (UnitName)
                 {
                     case "EnemyLOW":
                         Enemy = GetEnemy(UnitName, "EnemyLOW");
@@ -396,7 +396,7 @@ namespace Tower_Defenc
 
         void MapClick(int x, int y, int Cx, int Cy)
         {
-            if(CursorMode == 1)
+            if (CursorMode == 1)
             {
                 UnitClick(x, y);
             }
@@ -408,20 +408,32 @@ namespace Tower_Defenc
 
         void BuildingClick(int x, int y)
         {
-            GameObject Building;
+            GameObject Building = null;
             switch (SelectedUnitName) {
 
                 case AllyUnits.БОЕЗАПАС:
                     Building = new GameObject("warehouse", "Building" + counter, SelectedUnitName.ToString());
                     counter++;
-                    map.ContainerSetSize(Building.ContainerName, (int)PlaceHolder.Width, (int)PlaceHolder.Height);
-                    Building.SetCoordinate(x + PlaceHolder.Width / 2, y + PlaceHolder.Height / 2);
                     Allies.Add(Building);
                     AmmoDeports.Add(Building);
                     Building.CanClash = true;
                     CursorMode = 1;
                     PlaceHolder.Visibility = Visibility.Collapsed;
                     break;
+
+                case AllyUnits.МИНА:
+                    Building = new GameObject("mine", "Building" + counter, SelectedUnitName.ToString());
+                    counter++;
+                    Allies.Add(Building);
+                    PlaceHolder.Visibility = Visibility.Collapsed;
+                    Mins.Add(Building);
+                    CursorMode = 1;
+                    break;
+            }
+            if (Building != null)
+            {
+                map.ContainerSetSize(Building.ContainerName, (int)PlaceHolder.Width, (int)PlaceHolder.Height);
+                Building.SetCoordinate(x + PlaceHolder.Width / 2, y + PlaceHolder.Height / 2);
             }
         }
 
@@ -502,7 +514,7 @@ namespace Tower_Defenc
                     break;
 
                 case AllyUnits.МИНА:
-                    if(money >= 100)
+                    if (money >= 100)
                     {
                         PlaceHolder.Width = 50;
                         PlaceHolder.Height = 50;
@@ -616,7 +628,7 @@ namespace Tower_Defenc
 
         void AnimatCreation()
         {
-            for(int i = 0; i < CreatedAnimation.Count; i++)
+            for (int i = 0; i < CreatedAnimation.Count; i++)
             {
                 var unit = CreatedAnimation[i];
                 if (basa.X - unit.X < 100)
@@ -636,9 +648,9 @@ namespace Tower_Defenc
         }*/
         void ChekSpawn()
         {
-            for(int i = 0; i < Allies.Count; i++)
+            for (int i = 0; i < Allies.Count; i++)
             {
-                if(Allies[i].X < CenterX &&
+                if (Allies[i].X < CenterX &&
                    Allies[i].X > CenterX - 150 &&
                    Allies[i].Y < CenterX + 50 &&
                    Allies[i].Y > CenterY - 50)
@@ -650,6 +662,22 @@ namespace Tower_Defenc
             CanSpawn = true;
         }
 
+        void CheckMine()
+        {
+            for(int i = 0; i < Mins.Count; i++)
+            {
+                for(int j = 0; j < Enemis.Count; j++)
+                {
+                    if (map.CollisionContainers(Mins[i].ContainerName, Enemis[j].ContainerName))
+                    {
+                        Enemis[j].AddHp(-50);
+                        map.AnimationStart(Mins[i].ContainerName, "Explosion_Collision", 1);
+                        Mins.RemoveAt(i);
+                        break;
+                    }
+                }
+            }
+        }
         void AlliesActions()
         {
             for (int i = 0; i < Allies.Count; i++)
@@ -756,6 +784,8 @@ namespace Tower_Defenc
         {
             for(int i = 0; i < Allies.Count; i++)
             {
+                if (Allies[i].MaxAmmo == 0) continue;
+                
                 for(int j = 0; j < AmmoDeports.Count; j++)
                 {
                     if(map.CollisionContainers(Allies[i].ContainerName, AmmoDeports[j].ContainerName))
@@ -769,6 +799,7 @@ namespace Tower_Defenc
 
         void GameCycle()
         {
+            CheckMine();
             ReloadingAmmo();
             AnimatCreation();
             ChekSpawn();   

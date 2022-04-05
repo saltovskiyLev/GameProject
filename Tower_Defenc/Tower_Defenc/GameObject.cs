@@ -446,8 +446,11 @@ namespace Tower_Defenc
 
         public void AddAmmo(int ammo)
         {
-            Ammo = Ammo + ammo;
-            AMMOLINE.Width = (double)Ammo / MaxAmmo * 70;
+            if (Ammo < MaxAmmo)
+            {
+                Ammo = Ammo + ammo;
+                AMMOLINE.Width = (double)Ammo / MaxAmmo * 70;
+            }
         }
 
         void SetDestroyedImage()
