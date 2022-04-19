@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -23,31 +21,39 @@ namespace MenuPanel_For_TowerDefenc_
         public MainWindow()
         {
             InitializeComponent();
-            hello.Children.Add(Menu);
+            grid.Children.Add(Menu);
+            Test.MouseDown += Test_MouseDown_2;
             Menu.AddTab("Танки");
             Menu.AddTab("Здания");
+            Menu.SetImageSize("Здания", 70);
+            Menu.CreateNewItem("Тест", @"C:\Users\Admin\Documents\GitHub\GameProject\Tower_Defenc\Tower_Defenc\images\Танк с башней без поворота(ДОБРЫЙ СЛАБЫЙПУЛЕМЁТНЫЙ).png",
+                "Тест#3", "Танки", TestLeftClickHandler);
+            Menu.CreateNewItem("Тест#2", @"C:\Users\Admin\Documents\GitHub\GameProject\Tower_Defenc\Tower_Defenc\images\Танк с башней без поворота(ДОБРЫЙ средний).png",
+                "Тест#2", "Танки", TestLeftClickHandler);
+            Menu.CreateNewItem("Тест#3", @"C:\Users\Admin\Documents\GitHub\GameProject\Tower_Defenc\Tower_Defenc\images\i.png",
+                "Тест#3", "Здания", TestLeftClickHandler);
         }
-        MenuPanel Menu = new MenuPanel();
-    }
 
-    public class MenuPanel : TabControl
-    {
-        Dictionary<string, MenuTab> Tabs = new Dictionary<string, MenuTab>();
-        public void AddTab(string TabName)
-        { 
-            MenuTab Tab = new MenuTab(TabName);
-            Items.Add(Tab);
-            Tabs.Add(TabName, Tab);
-        }
-    }
-
-    public class MenuTab : TabItem
-    {
-        public WrapPanel Panel = new WrapPanel();
-        public MenuTab(string TabName)
+        void TestLeftClickHandler(string text)
         {
-            Content = Panel;
-            Header = new TextBlock { Text = TabName };
+            MessageBox.Show(text);
+        }
+
+        MenuPanel Menu = new MenuPanel();
+
+        private void Test_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            MessageBox.Show("Текст");
+        }
+
+        private void Test_MouseDown_2(object sender, MouseButtonEventArgs e)
+        {
+            MessageBox.Show("HELLO");
+        }
+
+        private void button_1_Click(object sender, RoutedEventArgs e)
+        {
+            Test.MouseDown -= Test_MouseDown_2;
         }
     }
 }

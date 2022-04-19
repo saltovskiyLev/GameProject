@@ -7,8 +7,13 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid x:Name="grid">
-        <StackPanel x:Name="hello">
-            
+        <StackPanel x:Name="hello" Visibility="Collapsed">
+            <TextBlock x:Name="Test" Text = "Я тут Лёвка" MouseDown="Test_MouseDown">
+                
+            </TextBlock>
+            <Button x:Name="button_1" Content="Нажми меня" Click="button_1_Click">
+                
+            </Button>
         </StackPanel>
     </Grid>
 </Window>
