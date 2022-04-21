@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30413.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameMunu", "GameMunu\GameMunu.csproj", "{EF2DB720-E9F9-4533-9A51-43B9522E4822}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EF2DB720-E9F9-4533-9A51-43B9522E4822}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF2DB720-E9F9-4533-9A51-43B9522E4822}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF2DB720-E9F9-4533-9A51-43B9522E4822}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF2DB720-E9F9-4533-9A51-43B9522E4822}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {29C2FEA7-A8C2-437E-A5F3-41A97F49947A}
+	EndGlobalSection
+EndGlobal

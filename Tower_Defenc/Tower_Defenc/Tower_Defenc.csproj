@@ -83,6 +83,9 @@
     <Compile Include="Actions\MoveToTarget.cs" />
     <Compile Include="Actions\Rotate.cs" />
     <Compile Include="Actions\RotateToAngle.cs" />
+    <Compile Include="Menu\MenuItem.cs" />
+    <Compile Include="Menu\MenuPanel.cs" />
+    <Compile Include="Menu\MenuTab.cs" />
     <Compile Include="SimpleRechargen.cs" />
     <Compile Include="Wave.cs" />
     <Compile Include="WaveUnit.cs" />

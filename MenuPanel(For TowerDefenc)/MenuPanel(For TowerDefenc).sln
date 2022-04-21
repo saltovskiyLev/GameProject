@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MenuPanel(For TowerDefenc)", "MenuPanel(For TowerDefenc)\MenuPanel(For TowerDefenc).csproj", "{0BD35681-549D-4597-AEF1-0D52EA882C8D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameMenu", "GameMenu\GameMenu.csproj", "{D7DDAD63-0ACD-4722-B605-3E87E212DFA2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{0BD35681-549D-4597-AEF1-0D52EA882C8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0BD35681-549D-4597-AEF1-0D52EA882C8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0BD35681-549D-4597-AEF1-0D52EA882C8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7DDAD63-0ACD-4722-B605-3E87E212DFA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7DDAD63-0ACD-4722-B605-3E87E212DFA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7DDAD63-0ACD-4722-B605-3E87E212DFA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7DDAD63-0ACD-4722-B605-3E87E212DFA2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

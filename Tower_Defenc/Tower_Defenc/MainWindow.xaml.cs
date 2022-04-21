@@ -31,7 +31,7 @@ namespace Tower_Defenc
         SimpleTextBox TextTimer = new SimpleTextBox();
         static public GameObject SelectedUnit; // Переменная для хранения выбранного юнита.
         CellMapInfo cellMap = new CellMapInfo(100, 100, 50, 0);
-        static InventoryPanel ipan;
+        //MenuPanel_For_TowerDefenc_ MenuPanel
         public static int ClickCount = 0;
         int scrollX;
         int scrollY;
