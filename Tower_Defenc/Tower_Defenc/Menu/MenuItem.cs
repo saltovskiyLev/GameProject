@@ -13,8 +13,9 @@ namespace MenuPanel_For_TowerDefenc_
         TextBlock text = new TextBlock();
         Uri uri;
         BitmapImage img;
+        string ItemName;
         Action<string> LeftClickHandler;
-        public MenuItem(string text, string ImagePath, int ImageSize, Action<string> leftClickhHandler)
+        public MenuItem(string text, string ImagePath, int ImageSize, Action<string> leftClickhHandler, string itemName)
         {
             this.Orientation = Orientation.Vertical;
             this.text.Text = text;
@@ -22,6 +23,7 @@ namespace MenuPanel_For_TowerDefenc_
             var uri = new Uri(ImagePath); 
             var img = new BitmapImage(uri);
             LeftClickHandler = leftClickhHandler;
+            ItemName = itemName;
             image.Source = img;
             image.Width = ImageSize;
             Margin = new System.Windows.Thickness(7);
@@ -32,7 +34,8 @@ namespace MenuPanel_For_TowerDefenc_
         {
             if (e.ClickCount == 1)
             {
-                MessageBox.Show("Текст");
+                LeftClickHandler(ItemName);
+                //MessageBox.Show("Текст");
             }
         }
     }

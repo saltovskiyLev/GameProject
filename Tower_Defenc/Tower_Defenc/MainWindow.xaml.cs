@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using GameMaps;
 using GameMaps.Layouts;
 using System.Windows.Shapes;
+using MenuPanel_For_TowerDefenc_;
 
 namespace Tower_Defenc
 {
@@ -36,6 +37,7 @@ namespace Tower_Defenc
         int scrollX;
         int scrollY;
         int CursorMode = 1;
+        MenuPanel UnitsMenu = new MenuPanel();
         Dictionary<AllyUnits, int> Cost = new Dictionary<AllyUnits, int>();
         GameObject basa;
         List<GameObject> Mins = new List<GameObject>();
@@ -65,12 +67,12 @@ namespace Tower_Defenc
             scrollX = -CenterX + 800;
             scrollY = -CenterY + 400;
             map.Canvas.Margin = new Thickness(scrollX, scrollY, 0, 0);
-            ipan = new InventoryPanel(map.Library, 40, 16);
+            //ipan = new InventoryPanel(map.Library, 40, 16);
             UnitsPanel = new InventoryPanel(map.Library, 120, 16);
-            lay = LayoutsFactory.GetLayout(LayoutType.Vertical, this.Content);
+            lay = LayoutsFactory.GetLayout(LayoutType.SingleZone, GridMap);
             lay.SetBackground(Brushes.Wheat);
             lay.Attach(map, 0);
-            lay.Attach(ipan, 1);
+            //lay.Attach(ipan, 1);
             lay.Attach(UnitsPanel, 1);
             lay.Attach(TextTimer, 1);
             AddPictures();
@@ -81,7 +83,7 @@ namespace Tower_Defenc
             Cost.Add(AllyUnits.Cборщик_Ресурсов, 25);
             Cost.Add(AllyUnits.МИНА, 100);
             // Стоимость объектов
-            ipan.AddItem("money", "money", money.ToString());
+            //ipan.AddItem("money", "money", money.ToString());
             UnitsPanel.AddItem(AllyUnits.Cборщик_Ресурсов.ToString(), "scavenger",
                 "Он будет делать ваши деньги: " + Cost[AllyUnits.Cборщик_Ресурсов] + " Имя: РООБ");
             UnitsPanel.AddItem(AllyUnits.ЧИСТОТАНК.ToString(), "Tank_Low_AllY",
@@ -124,6 +126,7 @@ namespace Tower_Defenc
             PlaceHolder.Fill = Brushes.Gray;
             PlaceHolder.Opacity = 0.5;
             //map.Keyboard.SetSingleKeyEventHandler(CheckKey);А
+            CreateMenu();
         }
 
         void CheckEnemyBase()
@@ -279,6 +282,15 @@ namespace Tower_Defenc
             GameObject crystal = new GameObject("crystal", "crystal" + counter, "crystal", x, y, 65);
             Crystals.Add(crystal);
             counter++;
+        }
+
+        void CreateMenu()
+        {
+            GridMenu.Children.Add(UnitsMenu);
+            UnitsMenu.AddTab("Танки");
+            UnitsMenu.AddTab("Здания");
+            UnitsMenu.CreateNewItem("Текст", @"C:\Users\Admin\Documents\GitHub\GameProject\Tower_Defenc\Tower_Defenc\images\Танк с башней без поворота(ДОБРЫЙ средний).png", "ЧИСТОТАНК", "Танки" , Build);
+            //UnitsMenu.
         }
 
         void CreateWaves()
@@ -623,7 +635,7 @@ namespace Tower_Defenc
         static public void AddMoney(int NewMoney)
         {
             money = money + NewMoney;
-            ipan.SetText("money", money.ToString());
+            //ipan.SetText("money", money.ToString());
         }
 
         void AnimatCreation()

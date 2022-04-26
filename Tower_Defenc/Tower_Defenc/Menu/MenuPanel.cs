@@ -15,7 +15,7 @@ namespace MenuPanel_For_TowerDefenc_
         }
         public void CreateNewItem(string text, string ImagePath, string ItemName, string TabName, Action <string> leftClickhHandler)
         {// картинка + текст
-            MenuItem Item = new MenuItem(text, ImagePath, Tabs[TabName].ImageSize, leftClickhHandler);
+            MenuItem Item = new MenuItem(text, ImagePath, Tabs[TabName].ImageSize, leftClickhHandler, ItemName);
             Tabs[TabName].AddItem(ItemName, Item);
             // принимает: Элемент(текст, путь к файлу с картинкой);
             
