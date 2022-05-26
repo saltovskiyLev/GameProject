@@ -26,6 +26,7 @@ namespace Tower_Defenc
         int CenterX, CenterY;
         Random r = new Random();
         TimerController timer = new TimerController();
+        static TextBlock tbShowMoney;
         static public UniversalMap_Wpf map;
         static public GameObject SelectedEnemyUnit;
         static public List<GameObject> obstacle = new List<GameObject>();
@@ -56,6 +57,7 @@ namespace Tower_Defenc
         int counter = 0;
         static public int money = 5000;
         int WaveNumber = 0;
+        int PlaceHolderAngle;
         Rectangle PlaceHolder = new Rectangle();
         IGameScreenLayout lay;
         public MainWindow()
@@ -118,13 +120,16 @@ namespace Tower_Defenc
             timer.AddAction(CrystalSpawn, 1000);
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             map.Mouse.SetMouseSingleLeftClickHandler(MapClick);
+            tbShowMoney = tbMoney;
 
             CreateWaves();
             GameObject BossEnemy = new GameObject();
             timer.AddAction(CheckScroll, 12);
+            timer.AddAction(RotateObject, 12);
             map.Canvas.Children.Add(PlaceHolder);
             PlaceHolder.Fill = Brushes.Gray;
             PlaceHolder.Opacity = 0.5;
+            AddMoney(0);
             //map.Keyboard.SetSingleKeyEventHandler(CheckKey);А
             CreateMenu();
         }
@@ -284,13 +289,32 @@ namespace Tower_Defenc
             counter++;
         }
 
+        // 
+        void RotateObject()
+        {
+            if (CursorMode != 2) return;
+            if(map.Keyboard.IsKeyPressed(Key.D9))
+            {
+                SetPlaceHolderAngle(PlaceHolderAngle + 5);
+            }
+
+            if (map.Keyboard.IsKeyPressed(Key.D0))
+            {
+                SetPlaceHolderAngle(PlaceHolderAngle - 5);
+            }
+        }
+
         void CreateMenu()
         {
-            GridMenu.Children.Add(UnitsMenu);
+            menuPanel.Children.Add(UnitsMenu);
+
             UnitsMenu.AddTab("Танки");
             UnitsMenu.AddTab("Здания");
-            UnitsMenu.CreateNewItem("Текст", @"C:\Users\Admin\Documents\GitHub\GameProject\Tower_Defenc\Tower_Defenc\images\Танк с башней без поворота(ДОБРЫЙ средний).png", "ЧИСТОТАНК", "Танки" , Build);
+            UnitsMenu.CreateNewItem("Средний танк\nбез поворота\nбашни: 50", @"C:\Users\Admin\Documents\GitHub\GameProject\Tower_Defenc\Tower_Defenc\images\Танк с башней без поворота(ДОБРЫЙ средний).png", "ЧИСТОТАНК", "Танки", Build);
+            UnitsMenu.CreateNewItem("Средний танк\nбез поворота\nбашни: 100", @"C:\Users\Admin\Documents\GitHub\GameProject\Tower_Defenc\Tower_Defenc\images\Танк с башней без поворота(ДОБРЫЙ СЛАБЫЙПУЛЕМЁТНЫЙ).png", "ПУЛЕМЁТНИК", "Танки", Build);
             //UnitsMenu.
+            UnitsMenu.CreateNewItem("Дом со снарядами: 500", @"C:\Users\Admin\Documents\GitHub\GameProject\Tower_Defenc\Tower_Defenc\images\i.png", "БОЕЗАПАС", "Здания", Build);
+            UnitsMenu.CreateNewItem("Мина танковая: 100", @"C:\Users\Admin\Documents\GitHub\GameProject\Tower_Defenc\Tower_Defenc\images\mine.png", "МИНА", "Здания", Build);
         }
 
         void CreateWaves()
@@ -446,6 +470,7 @@ namespace Tower_Defenc
             {
                 map.ContainerSetSize(Building.ContainerName, (int)PlaceHolder.Width, (int)PlaceHolder.Height);
                 Building.SetCoordinate(x + PlaceHolder.Width / 2, y + PlaceHolder.Height / 2);
+                map.ContainerSetAngle(Building.ContainerName, PlaceHolderAngle);
             }
         }
 
@@ -501,13 +526,19 @@ namespace Tower_Defenc
             }
         }
 
+        void SetPlaceHolderAngle(int angle)
+        {
+            PlaceHolderAngle = angle;
+            RotateTransform rotate = new RotateTransform(PlaceHolderAngle, PlaceHolder.Width / 2, PlaceHolder.Height / 2);
+            PlaceHolder.RenderTransform = rotate;
+        }
+
         public AllyUnits SelectedUnitName;
 
         void BuildHouse(AllyUnits UnitName)
         {
-            SelectedUnitName = UnitName;
-            CursorMode = 2;
-            PlaceHolder.Visibility = Visibility.Visible;
+            if (CursorMode == 2) return;
+            bool IsBuilt = false;
             switch (UnitName)
             {
                 case AllyUnits.БОЕЗАПАС:
@@ -516,6 +547,7 @@ namespace Tower_Defenc
                         PlaceHolder.Width = 120;
                         PlaceHolder.Height = 78;
                         AddMoney(-500);
+                        IsBuilt = true;
                     }
 
                     else
@@ -531,6 +563,7 @@ namespace Tower_Defenc
                         PlaceHolder.Width = 50;
                         PlaceHolder.Height = 50;
                         AddMoney(-100);
+                        IsBuilt = true;
                     }
 
                     else
@@ -540,6 +573,14 @@ namespace Tower_Defenc
 
                     break;
             }
+            if (IsBuilt)
+            {
+                SelectedUnitName = UnitName;
+                SetPlaceHolderAngle(0);
+                CursorMode = 2;
+                PlaceHolder.Visibility = Visibility.Visible;
+            }
+            
         }
 
 
@@ -636,6 +677,7 @@ namespace Tower_Defenc
         {
             money = money + NewMoney;
             //ipan.SetText("money", money.ToString());
+            tbShowMoney.Text = "Деньги(мифриил)= : " + money;
         }
 
         void AnimatCreation()
@@ -814,7 +856,7 @@ namespace Tower_Defenc
             CheckMine();
             ReloadingAmmo();
             AnimatCreation();
-            ChekSpawn();   
+            ChekSpawn();
             AlliesActions();
             EnemisActions();
             CheckEnemyBase();

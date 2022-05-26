@@ -12,6 +12,10 @@
             <ColumnDefinition Width="200"> </ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0" Name="GridMap"> </Grid>
-        <Grid Grid.Column="1" x:Name="GridMenu"> </Grid>
+        <Grid Grid.Column="1" x:Name="GridMenu">
+            <StackPanel x:Name="menuPanel" Orientation="Vertical">
+                <TextBlock x:Name="tbMoney"> </TextBlock>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>
