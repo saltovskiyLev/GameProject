@@ -20,46 +20,59 @@ namespace Tower_Defenc
 {
     /// <summary>b
     /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    /// </summary> 
+
+    // класс I(добавление переменных и тд.)
+    public partial class MainWindow : Window 
     {
-        int CenterX, CenterY;
-        Random r = new Random();
-        TimerController timer = new TimerController();
-        static TextBlock tbShowMoney;
-        static public UniversalMap_Wpf map;
-        static public GameObject SelectedEnemyUnit;
-        static public List<GameObject> obstacle = new List<GameObject>();
-        SimpleTextBox TextTimer = new SimpleTextBox();
-        static public GameObject SelectedUnit; // Переменная для хранения выбранного юнита.
-        CellMapInfo cellMap = new CellMapInfo(100, 100, 50, 0);
-        //MenuPanel_For_TowerDefenc_ MenuPanel
-        public static int ClickCount = 0;
-        int scrollX;
-        int scrollY;
-        int CursorMode = 1;
-        MenuPanel UnitsMenu = new MenuPanel();
-        Dictionary<AllyUnits, int> Cost = new Dictionary<AllyUnits, int>();
-        GameObject basa;
-        List<GameObject> Mins = new List<GameObject>();
-        List<GameObject> AmmoDeports = new List<GameObject>();
-        bool CanSpawn = true;
         static public List<GameObject> Crystals = new List<GameObject>();
         static public List<GameObject> Enemis = new List<GameObject>();
         static public List<GameObject> Allies = new List<GameObject>();
         static public List<GameObject> AlliesShots = new List<GameObject>();
         static public List<GameObject> EnemisShots = new List<GameObject>();
+        //
+        int CenterX, CenterY;
+        int scrollX;
+        int scrollY;
+        //
+        static public UniversalMap_Wpf map;
+        CellMapInfo cellMap = new CellMapInfo(100, 100, 50, 0);
+        //
+        List<GameObject> Mins = new List<GameObject>();
+        List<GameObject> AmmoDeports = new List<GameObject>();
+        //
+        static public GameObject SelectedEnemyUnit;
+        static public GameObject SelectedUnit; // Переменная для хранения выбранного юнита.
+        // остальное <ниже>
+        Random r = new Random();
+        static TextBlock tbShowMoney;
+        MenuPanel UnitsMenu = new MenuPanel();
+        Dictionary<AllyUnits, int> Cost = new Dictionary<AllyUnits, int>();
+        bool CanSpawn = true;
+        //остальное <выше>
+        GameObject basa;
         GameObject BaseEnemy;
+        //
+        TimerController timer = new TimerController();
+        SimpleTextBox TextTimer = new SimpleTextBox();
+        //
+        static public List<GameObject> obstacle = new List<GameObject>();
         List<GameObject> CreatedAnimation = new List<GameObject>();
+        //
         Wave[] waves = new Wave[1];
         InventoryPanel UnitsPanel;
+        //
+        int CursorMode = 1;
         int countdown = 12;
         int counter = 0;
+        public static int ClickCount = 0;
         static public int money = 5000;
         int WaveNumber = 0;
         int PlaceHolderAngle;
+        //
         Rectangle PlaceHolder = new Rectangle();
         IGameScreenLayout lay;
+        // Функция I(вызов функций, добавление объектов в панели, создание карты и тд.)
         public MainWindow()
         {
             InitializeComponent();
@@ -85,7 +98,7 @@ namespace Tower_Defenc
             Cost.Add(AllyUnits.Cборщик_Ресурсов, 25);
             Cost.Add(AllyUnits.МИНА, 100);
             // Стоимость объектов
-            //ipan.AddItem("money", "money", money.ToString());
+            //ipan.AddItem("money", "money", money.ToString()); <- СТАРАЯ СИСТЕМА
             UnitsPanel.AddItem(AllyUnits.Cборщик_Ресурсов.ToString(), "scavenger",
                 "Он будет делать ваши деньги: " + Cost[AllyUnits.Cборщик_Ресурсов] + " Имя: РООБ");
             UnitsPanel.AddItem(AllyUnits.ЧИСТОТАНК.ToString(), "Tank_Low_AllY",
@@ -96,17 +109,18 @@ namespace Tower_Defenc
                 "Домик с Боезопасом: " + Cost[AllyUnits.БОЕЗАПАС] + " Имя: BVZ");
             UnitsPanel.AddItem(AllyUnits.МИНА.ToString(), "mine",
                 "МИНА ВЗОРВЁТ ВСЕХ: " + Cost[AllyUnits.МИНА] + " Имя: БАБАХ");
-
+            // выше идёт добавление танков и зданиний в UnitsPanel
             UnitsPanel.SetMouseClickHandler(Build);
             GameObject.map = map;
             basa = new GameObject("basa", "BASA", "basa");
-            map.ContainerSetSize(basa.ContainerName, 100, 100);
-            basa.SetCoordinate(CenterX, CenterY);
+            // ниже координаты базы и размеры
+            // ниже работа с таймером
             timer.AddAction(GameCycle, 20);
             timer.AddAction(Countdown, 1000);
+
             TextTimer.TextBox.IsEnabled = false;
 
-            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+             // работа с базой врага //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             BaseEnemy = new GameObject("EnemyBase", "BaseEnemy", "EnemyBase");
             map.ContainerSetMaxSide("BaseEnemy", 100);
             BaseEnemy.SetCoordinate(240, 300);
@@ -118,7 +132,19 @@ namespace Tower_Defenc
             BaseEnemy.NeedToRotate = false;
             BaseEnemy.SubdivisionNumber = 1;
             timer.AddAction(CrystalSpawn, 1000);
-            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // работа с базой врага //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // работа с нашей базой
+            map.ContainerSetSize(basa.ContainerName, 100, 100);
+            basa.SetCoordinate(CenterX, CenterY);
+            Allies.Add(basa);
+            basa.destroyedImage = "DeathBase";
+            basa.destroyedAmimathion = "Explosion_Collision";
+            basa.NeedToMove = false;
+            basa.NeedToRotate = false;
+            basa.SubdivisionNumber = 0;
+            basa.SetHp(120);
+            // работа с нашей базой
+
             map.Mouse.SetMouseSingleLeftClickHandler(MapClick);
             tbShowMoney = tbMoney;
 
@@ -182,6 +208,7 @@ namespace Tower_Defenc
         {
             map.Library.ImagesFolder = new PathInfo { Path = "..\\..\\images", Type = PathType.Relative };
             map.Library.AddPicture("background", "Сзади.png");
+            map.Library.AddPicture("DeathBase", "DeathBase.png");
             map.Library.AddPicture("money", "money.png");
             map.Library.AddPicture("nothing", "nothing.png");
             map.Library.AddPicture("warehouse", "i.png");
@@ -311,7 +338,8 @@ namespace Tower_Defenc
             UnitsMenu.AddTab("Танки");
             UnitsMenu.AddTab("Здания");
             UnitsMenu.CreateNewItem("Средний танк\nбез поворота\nбашни: 50", @"C:\Users\Admin\Documents\GitHub\GameProject\Tower_Defenc\Tower_Defenc\images\Танк с башней без поворота(ДОБРЫЙ средний).png", "ЧИСТОТАНК", "Танки", Build);
-            UnitsMenu.CreateNewItem("Средний танк\nбез поворота\nбашни: 100", @"C:\Users\Admin\Documents\GitHub\GameProject\Tower_Defenc\Tower_Defenc\images\Танк с башней без поворота(ДОБРЫЙ СЛАБЫЙПУЛЕМЁТНЫЙ).png", "ПУЛЕМЁТНИК", "Танки", Build);
+            UnitsMenu.CreateNewItem("Средний танк\nбез поворота\nбашни: 100", @"C:\Users\Admin\Documents\GitHub\GameProject\Tower_Defenc\Tower_Defenc\images\flyerSand4.png", "Cборщик_Ресурсов", "Танки", Build);
+            UnitsMenu.CreateNewItem("сборщик ресуросов\nбез поворота\nбашни: 100", @"C:\Users\Admin\Documents\GitHub\GameProject\Tower_Defenc\Tower_Defenc\images\Танк с башней без поворота(ДОБРЫЙ СЛАБЫЙПУЛЕМЁТНЫЙ).png", "ПУЛЕМЁТНИК", "Танки", Build);
             //UnitsMenu.
             UnitsMenu.CreateNewItem("Дом со снарядами: 500", @"C:\Users\Admin\Documents\GitHub\GameProject\Tower_Defenc\Tower_Defenc\images\i.png", "БОЕЗАПАС", "Здания", Build);
             UnitsMenu.CreateNewItem("Мина танковая: 100", @"C:\Users\Admin\Documents\GitHub\GameProject\Tower_Defenc\Tower_Defenc\images\mine.png", "МИНА", "Здания", Build);
@@ -586,10 +614,7 @@ namespace Tower_Defenc
 
         void BuildUnit(AllyUnits UnitName)
         {
-            if (!CanSpawn)
-            {
-                return;
-            }
+            if (!CanSpawn || basa.HP == 0) return;
             counter++;
             switch (UnitName)
             {
@@ -823,7 +848,6 @@ namespace Tower_Defenc
                         break;
                     }
                 }
-
             }
         }
 
