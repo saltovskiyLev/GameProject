@@ -27,6 +27,8 @@ namespace Tower_Defenc
         //public int ChargeReady;
         //public int ChargeSpeed;
         public IRecharger Recharger;
+        public int ContainerWidth;
+        public int ContainerHeight;
         static int counter = 0;
         //public int TowerAngle;
         public bool NeedToRotate = false;
@@ -36,7 +38,7 @@ namespace Tower_Defenc
         //public string TowerContainerName = "";
         public int Range = 5;
         int DamageCounter = 2000;
-        public bool CanClash = false;  
+        public bool CanClash = false;
         public double X { get; private set; }
         public double Y { get; private set; }
         public List<GameObject> targets = new List<GameObject>(); // список целей для атаки
@@ -423,12 +425,13 @@ namespace Tower_Defenc
             }
             else if (state != 3 && HP <= 0)
             {
+                state = 3;
                 // Если есть анимация уничтожение то воспроизводим её иначе вызываем SetDestroyedImage
                 //map.ContainerSetFrame(ContainerName, "Destroyed_Tank_Low_ALLY");
-                if(destroyedAmimathion!= "")
+                if(destroyedAmimathion != "")
                 {
                     map.AnimationStart(ContainerName, destroyedAmimathion, 1, SetDestroyedImage);
-                }    
+                }
                 else
                 {
                     SetDestroyedImage();
@@ -456,6 +459,7 @@ namespace Tower_Defenc
         void SetDestroyedImage()
         {
             map.ContainerSetFrame(ContainerName, destroyedImage);
+            map.ContainerSetSize(ContainerName, ContainerWidth, ContainerHeight);
         }
 
         public void SetHp(int hp)

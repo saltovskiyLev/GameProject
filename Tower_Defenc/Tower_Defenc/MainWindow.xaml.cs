@@ -143,6 +143,9 @@ namespace Tower_Defenc
             basa.NeedToRotate = false;
             basa.SubdivisionNumber = 0;
             basa.SetHp(120);
+            basa.ContainerHeight = 100;
+            basa.ContainerWidth = 100;
+            map.ContainerSetIndents(basa.ContainerName, 27, 27);
             // работа с нашей базой
 
             map.Mouse.SetMouseSingleLeftClickHandler(MapClick);
@@ -636,6 +639,8 @@ namespace Tower_Defenc
                         Tank.Speed = 1;
                         Tank.SubdivisionNumber = 0;
                         Tank.CanClash = true;
+                        //Tank.ContainerWidth = 
+                        //Tank.Container = 
                         /*map.ContainerSetFrame(Tank.ContainerName + "Anime", "Fire Bolt1");
                         map.ContainerSetMaxSide(Tank.ContainerName + "Anime", 100);
                         map.AnimationStart(Tank.ContainerName + "Anime", "Fire1", -1);*/
@@ -650,8 +655,8 @@ namespace Tower_Defenc
                         GameObject Tank = new GameObject("ПУЛЕМЁТНИК", "TankMashingan_Medium_ALLY" + counter.ToString(), "TankMashingan_Medium_ALLY", CenterX, CenterY, 55);
                         CreatedAnimation.Add(Tank);
                         Tank.SetHp(120);
-                        Tank.MaxAmmo = 1200;
-                        Tank.AddAmmo(1200);
+                        Tank.MaxAmmo = 1000;
+                        Tank.AddAmmo(300);
                         Tank.CanClash = true;
                         Tank.Recharger = new BurstRecharger(30);
                         Tank.Recharger.ChargeReady = 2000;
@@ -675,6 +680,8 @@ namespace Tower_Defenc
                         Allies.Add(Tank);
                         //Tank.Recharger = new SimpleRechargen();
                         //Tank.Recharger.ChargeSpeed = 32;
+                        Tank.ContainerWidth = 50;
+                        Tank.ContainerHeight = 60;
                         Tank.SetHp(30);
                         Tank.Speed = 3;
                         CollectCrystals crystals = new CollectCrystals("Collector", Tank);
