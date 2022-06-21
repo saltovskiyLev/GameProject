@@ -40,6 +40,7 @@ namespace Tower_Defenc
         //
         List<GameObject> Mins = new List<GameObject>();
         List<GameObject> AmmoDeports = new List<GameObject>();
+        List<GameObject> Artillery = new List<GameObject>();
         //
         static public GameObject SelectedEnemyUnit;
         static public GameObject SelectedUnit; // Переменная для хранения выбранного юнита.
@@ -49,6 +50,12 @@ namespace Tower_Defenc
         MenuPanel UnitsMenu = new MenuPanel();
         Dictionary<AllyUnits, int> Cost = new Dictionary<AllyUnits, int>();
         bool CanSpawn = true;
+        int ChargeArtilleryReload = 0;
+        int ArtylleryState = 0;
+        // 0 - заряжается
+        // 1 - готово к выстрелу
+        // 2 - стреляет
+        int ArtilleryLoad = 4000;
         //остальное <выше>
         GameObject basa;
         GameObject BaseEnemy;
@@ -97,6 +104,7 @@ namespace Tower_Defenc
             Cost.Add(AllyUnits.ЧИСТОТАНК, 50);
             Cost.Add(AllyUnits.Cборщик_Ресурсов, 25);
             Cost.Add(AllyUnits.МИНА, 100);
+            Cost.Add(AllyUnits.Арта, 200);
             // Стоимость объектов
             //ipan.AddItem("money", "money", money.ToString()); <- СТАРАЯ СИСТЕМА
             UnitsPanel.AddItem(AllyUnits.Cборщик_Ресурсов.ToString(), "scavenger",
@@ -109,6 +117,8 @@ namespace Tower_Defenc
                 "Домик с Боезопасом: " + Cost[AllyUnits.БОЕЗАПАС] + " Имя: BVZ");
             UnitsPanel.AddItem(AllyUnits.МИНА.ToString(), "mine",
                 "МИНА ВЗОРВЁТ ВСЕХ: " + Cost[AllyUnits.МИНА] + " Имя: БАБАХ");
+            UnitsPanel.AddItem(AllyUnits.Арта.ToString(), "Artillery",
+                "СЕЙЧАС БУДЕТ ЖАРКО: " + Cost[AllyUnits.Арта] + " Имя: Арта");
             // выше идёт добавление танков и зданиний в UnitsPanel
             UnitsPanel.SetMouseClickHandler(Build);
             GameObject.map = map;
@@ -158,6 +168,7 @@ namespace Tower_Defenc
             map.Canvas.Children.Add(PlaceHolder);
             PlaceHolder.Fill = Brushes.Gray;
             PlaceHolder.Opacity = 0.5;
+            map.Keyboard.SetSingleKeyEventHandler(CheckKey);
             AddMoney(0);
             //map.Keyboard.SetSingleKeyEventHandler(CheckKey);А
             CreateMenu();
@@ -215,6 +226,7 @@ namespace Tower_Defenc
             map.Library.AddPicture("money", "money.png");
             map.Library.AddPicture("nothing", "nothing.png");
             map.Library.AddPicture("warehouse", "i.png");
+            map.Library.AddPicture("Artillery", "Artillery.png");
             map.Library.AddPicture("Tank_Low_AllY", "Танк с башней без поворота(ДОБРЫЙ средний).png");
             map.Library.AddPicture("BulletAllies", "СнарядДобрый.png");
             map.Library.AddPicture("basa", "base.png");
@@ -229,6 +241,7 @@ namespace Tower_Defenc
             map.Library.AddPicture("AllyScope", "Выбрал нашего.png");
             map.Library.AddPicture("ПУЛЕМЁТНИК", "Танк с башней без поворота(ДОБРЫЙ СЛАБЫЙПУЛЕМЁТНЫЙ).png");
             map.Library.AddPicture("EnemyBase", "scr_2.jpg");
+            map.Library.AddPicture("Арта", "P2.png");
             map.Library.AddPicture("mine", "mine.png");
             map.Library.AddPicture("EnemyBase(D)", "scr_2(B).png");
             map.Library.AddPicture("EnemyLOW", "Враг(самаходка).png");
@@ -344,6 +357,7 @@ namespace Tower_Defenc
             UnitsMenu.CreateNewItem("Средний танк\nбез поворота\nбашни: 100", @"C:\Users\Admin\Documents\GitHub\GameProject\Tower_Defenc\Tower_Defenc\images\flyerSand4.png", "Cборщик_Ресурсов", "Танки", Build);
             UnitsMenu.CreateNewItem("сборщик ресуросов\nбез поворота\nбашни: 100", @"C:\Users\Admin\Documents\GitHub\GameProject\Tower_Defenc\Tower_Defenc\images\Танк с башней без поворота(ДОБРЫЙ СЛАБЫЙПУЛЕМЁТНЫЙ).png", "ПУЛЕМЁТНИК", "Танки", Build);
             //UnitsMenu.
+            UnitsMenu.CreateNewItem("Арта: 200", @"C:\Users\Admin\Documents\GitHub\GameProject\Tower_Defenc\Tower_Defenc\images\Artillery.png", "Арта", "Здания", Build);
             UnitsMenu.CreateNewItem("Дом со снарядами: 500", @"C:\Users\Admin\Documents\GitHub\GameProject\Tower_Defenc\Tower_Defenc\images\i.png", "БОЕЗАПАС", "Здания", Build);
             UnitsMenu.CreateNewItem("Мина танковая: 100", @"C:\Users\Admin\Documents\GitHub\GameProject\Tower_Defenc\Tower_Defenc\images\mine.png", "МИНА", "Здания", Build);
         }
@@ -467,9 +481,30 @@ namespace Tower_Defenc
             {
                 UnitClick(x, y);
             }
-            else
+            else if(CursorMode == 2)
             {
                 BuildingClick(x, y);
+            }
+            else if(CursorMode == 3)
+            {
+
+            }
+        }
+
+        void CheckKey(Key k)
+        {
+            if (k ==  Key.A && Artillery.Count > 0)
+            {
+                if(CursorMode == 1)
+                {
+                    CursorMode = 3;
+                    map.Canvas.Cursor = Cursors.Cross;
+                }
+                else
+                {
+                    CursorMode = 1;
+                    map.Canvas.Cursor = Cursors.Arrow;
+                }
             }
         }
 
@@ -491,9 +526,18 @@ namespace Tower_Defenc
                 case AllyUnits.МИНА:
                     Building = new GameObject("mine", "Building" + counter, SelectedUnitName.ToString());
                     counter++;
-                    Allies.Add(Building);
+                    //Allies.Add(Building);
                     PlaceHolder.Visibility = Visibility.Collapsed;
                     Mins.Add(Building);
+                    CursorMode = 1;
+                    break;
+
+                case AllyUnits.Арта:
+                    Building = new GameObject("Artillery", "Building" + counter, SelectedUnitName.ToString());
+                    counter++;
+                    //Allies.Add(Building); Не точно...
+                    PlaceHolder.Visibility = Visibility.Collapsed;
+                    Artillery.Add(Building);
                     CursorMode = 1;
                     break;
             }
@@ -585,9 +629,23 @@ namespace Tower_Defenc
                     {
                         CursorMode = 1;
                     }
-
                     break;
 
+                case AllyUnits.Арта:
+                    if (money >= 200)
+                    {
+                        PlaceHolder.Width = 70;
+                        PlaceHolder.Height = 80;
+                        AddMoney(-200);
+                        IsBuilt = true;
+                    }
+
+                    else
+                    {
+                        CursorMode = 1;
+                    }
+                    break;
+                // Нужно позже разобратся...
                 case AllyUnits.МИНА:
                     if (money >= 100)
                     {
@@ -702,6 +760,24 @@ namespace Tower_Defenc
 
                         }
                         break;*/
+            }
+        }
+
+        void ArtilleryShoot()
+        {
+            if(ArtylleryState == 0)
+            {
+                ChargeArtilleryReload++;
+                if (ChargeArtilleryReload >= ArtilleryLoad)
+                    ArtylleryState = 1;
+            }
+            else if(ArtylleryState == 1)
+            {
+                
+            }
+            else
+            {
+
             }
         }
 
@@ -846,7 +922,6 @@ namespace Tower_Defenc
                 EnemisShots[i].Move();
                 for (int j = 0; j < Allies.Count; j++)
                 {
-
                     if (map.CollisionContainers(EnemisShots[i].ContainerName, Allies[j].ContainerName))
                     {
                         Allies[j].AddHp(-EnemisShots[i].GetCharact("damage"));
@@ -892,6 +967,7 @@ namespace Tower_Defenc
             EnemisActions();
             CheckEnemyBase();
             AlliesCheckShots();
+            ArtilleryShoot();
             EnemisCheckShots();
             CheckCursor();
             ClickCount--;

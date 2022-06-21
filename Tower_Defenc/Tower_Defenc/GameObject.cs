@@ -458,8 +458,9 @@ namespace Tower_Defenc
 
         void SetDestroyedImage()
         {
+            Dimensions d = map.ContainerGetDimensions(ContainerName);
             map.ContainerSetFrame(ContainerName, destroyedImage);
-            map.ContainerSetSize(ContainerName, ContainerWidth, ContainerHeight);
+            map.ContainerSetSize(ContainerName, d.Width, d.Height);
         }
 
         public void SetHp(int hp)
