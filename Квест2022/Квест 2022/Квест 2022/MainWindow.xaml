@@ -8,7 +8,9 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <StackPanel Orientation="Vertical" x:Name="MapContainer">
-            
+            <StackPanel Orientation="Horizontal" Name="ItemPanel">
+                <TextBlock Text=" "> </TextBlock>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>
