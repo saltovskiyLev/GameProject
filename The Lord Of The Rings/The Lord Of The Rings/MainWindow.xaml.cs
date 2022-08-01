@@ -26,17 +26,17 @@ namespace The_Lord_Of_The_Rings
         static public UniversalMap_Wpf map;
         int X;
         int Y;
-        //char[,] Chelz = new char[];
-        public string[] path = new string[2];
+        char[,] Chelz = new char[];
+        public string[] path = new string[1];
         public MainWindow()
         {
             InitializeComponent();
             map = MapCreator.GetUniversalMap(this, MapInfo);
             panelMap.Children.Add(map.Canvas);
             map.DrawGrid();
+            path[0] = @"C:\Users\Admin\Documents\GitHub\GameProject\The Lord Of The Rings\The Lord Of The Rings\карта.txt";
             File.ReadAllLines(path[0]);
             MaxLenght();
-            path[0] = @"C:\Users\Admin\Documents\GitHub\GameProject\The Lord Of The Rings\The Lord Of The Rings\карта.txt"
             AddPictures();
         }
         void AddPictures()
@@ -45,11 +45,11 @@ namespace The_Lord_Of_The_Rings
             map.Library.AddPicture("enemy", "enemy.png");
             map.Library.AddPicture("Frodo", "frodo.png");
         }
-        int maxLenght = 0;
-        int number = path[maxLenght].Length;
         void MaxLenght()
         {
-            for(int i = 0; i < maxLenght; i++)
+            int number = 0;
+            int maxLenght = path[number].Length;
+            for (int i = 0; i < path.Length; i++)
             {
                 if(path[i].Length > maxLenght)
                 {
