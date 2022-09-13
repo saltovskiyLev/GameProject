@@ -9,7 +9,7 @@
     <Grid>
         <StackPanel Orientation="Vertical" x:Name="MapContainer">
             <StackPanel Orientation="Horizontal" Name="ItemPanel">
-                <TextBlock Text=" "> </TextBlock>
+                <TextBlock x:Name="tbItemText"> </TextBlock>
             </StackPanel>
         </StackPanel>
     </Grid>
