@@ -28,6 +28,7 @@ namespace Квест_2022
         GameObject Player;
         char[,] Cells;
         int Level = 0;
+        List<GameObject> JsonMap;
         List<string> Maps = new List<string>();
         Dictionary<char, string> Scrolls = new Dictionary<char, string>();
         Dictionary<string, int> Items = new Dictionary<string, int>();
@@ -53,6 +54,17 @@ namespace Квест_2022
             Maps.Add(@"C:\GameProject-master\GameProject-master\Квест2022\Документация\002карта.txt");
         }
 
+        void ReadJsonMap(string path)
+        {
+
+        }
+
+        void DrawJsonMap()
+        {
+
+        }
+
+        [Obsolete]
         void DrawNewMap(string FileName)
         {
             EraseMap();
@@ -120,7 +132,8 @@ namespace Квест_2022
         void ReadScrolls(int MapNumber)
         {
             Scrolls.Clear();
-            string[] s = File.ReadAllLines(@"C:\GameProject-master\GameProject-master\Квест2022\Квест 2022\scrolls" + MapNumber + ".txt");
+            string[] s = File.ReadAllLines(@"C:\Users\Admin\Documents\GitHub\GameProject\Квест2022\Квест 2022\scrolls" + MapNumber + ".txt");
+
             for(int i = 0; i < s.Length; i++)
             {
                 string[] str = s[i].Split('|');
