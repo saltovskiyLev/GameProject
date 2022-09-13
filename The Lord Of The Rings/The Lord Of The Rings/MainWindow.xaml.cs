@@ -78,14 +78,7 @@ namespace The_Lord_Of_The_Rings
             string items = "";
             foreach (string Key in Items.Keys)
             {
-                if (Items.Count > 1)
-                {
-                    items = Key + ":" + Items[Key] + " ";
-                }
-                else
-                {
-                    items = Key + ": " + Items[Key] + " ";
-                }
+                items += Key + ":" + Items[Key] + " ";
                 // ПРОБЛЕМА при сборе нескольких предметов предыдущий записывается на его место.
                 // тут подсмотрел КВЕСТ 2022
             }
