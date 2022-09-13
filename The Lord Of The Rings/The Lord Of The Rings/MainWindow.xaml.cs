@@ -22,41 +22,190 @@ namespace The_Lord_Of_The_Rings
     /// </summary>
     public partial class MainWindow : Window
     {
-        CellMapInfo MapInfo = new CellMapInfo(64, 35, 30, 0);
+        CellMapInfo MapInfo;
         static public UniversalMap_Wpf map;
-        int X;
-        int Y;
-        char[,] Chelz = new char[];
-        public string[] path = new string[1];
+        char[,] Cells;
+        int cellsX;
+        GameObject Player;
+        Dictionary<string, int> Items = new Dictionary<string, int>();
+        Dictionary<char, string> Scrolls = new Dictionary<char, string>();
         public MainWindow()
         {
             InitializeComponent();
+            string path = @"C:\GameProject-master\GameProject-master\The Lord Of The Rings\The Lord Of The Rings\карта.txt";
+            string[] lines = File.ReadAllLines(path);
+            cellsX = MaxLenght(lines);
+            Cells = new char[cellsX, lines.Length];
+            GetCharMap(lines);
+            MapInfo = new CellMapInfo(cellsX, lines.Length, 30, 0);
             map = MapCreator.GetUniversalMap(this, MapInfo);
+            GameObject.Map = map;
             panelMap.Children.Add(map.Canvas);
-            map.DrawGrid();
-            path[0] = @"C:\Users\Admin\Documents\GitHub\GameProject\The Lord Of The Rings\The Lord Of The Rings\карта.txt";
-            File.ReadAllLines(path[0]);
-            MaxLenght();
+            //map.DrawGrid();
+            Key k = new Key();
+            map.Keyboard.SetSingleKeyEventHandler(CheckKey);
             AddPictures();
+            ReadScrolls(1);
+            DrawMap();
+            ///////////////////////////////////////////////
         }
+
+        void ReadScrolls(int number)
+        {
+            Scrolls.Clear();
+            string[] str = File.ReadAllLines(@"E:\GameProject-master (1)\GameProject-master\The Lord Of The Rings\The Lord Of The Rings\scrolls" + number + ".txt");
+            for (int i = 0; i < str.Length; i++)
+            {
+                string[] s = str[i].Split('|');
+                Scrolls.Add(s[0][0], s[1]);
+            }
+        }
+
+
+        void GetCharMap(string[] str)
+        {
+            for (int i = 0; i < str.Length; i++)
+            {
+                for (int j = 0; j < str[i].Length; j++)
+                {
+                    Cells[j, i] = str[i][j];
+                }
+            }
+        }
+
+        string GetText()
+        {
+            string items = "";
+            foreach (string Key in Items.Keys)
+            {
+                if (Items.Count > 1)
+                {
+                    items = Key + ":" + Items[Key] + " ";
+                }
+                else
+                {
+                    items = Key + ": " + Items[Key] + " ";
+                }
+                // ПРОБЛЕМА при сборе нескольких предметов предыдущий записывается на его место.
+                // тут подсмотрел КВЕСТ 2022
+            }
+            return items;
+        }
+
+        void Collect(int x, int y)
+        {
+            string ItemName = "";
+            switch (Cells[x, y])
+            {
+                case '#':
+                    map.RemoveFromCell("money", x, y);
+                    ItemName = "money";
+                    break;
+
+                case '3':
+                    map.RemoveFromCell("scroll", x, y);
+                    ItemName = "scroll";
+                    MessageBox.Show(Scrolls['!']);
+
+                    // Тут вывод сообщения, пока можно хардкод, но хотели сделать с помощью JSON
+                    break;
+            }
+            if (ItemName == "") return;
+            if (Items.Keys.Contains(ItemName))
+            {
+                Items[ItemName]++;
+            }
+            else
+            {
+                Items.Add(ItemName, 1);
+            }
+            string text = GetText();
+            ItemsPanel.Text = text;
+            // ???
+        }
+
+        void CheckKey(Key k)
+        {
+            // Создаём переменные для новых координат
+            // Если нажата кнопка движения, вычисляем новые координаты
+            // Внутри swich игрока не перерисовываем
+            // После swich проверяем отсутствие в клетке с новыми координатами непроходимых объектов
+            int x = Player.X;
+            int y = Player.Y;
+            switch (k)
+            {
+                case Key.W:
+                    y = Player.Y - 1;
+                    break;
+
+                case Key.S:
+                    y = Player.Y + 1;
+                    break;
+
+                case Key.D:
+                    x = Player.X + 1;
+                    break;
+
+                case Key.A:
+                    x = Player.X - 1;
+                    break;
+            }
+            if (Cells[x, y] != '1')
+            {
+                Player.Move(x, y);
+            }
+            Collect(x, y);
+        }
+
         void AddPictures()
         {
             map.Library.ImagesFolder = new PathInfo { Path = "..\\..\\images", Type = PathType.Relative };
             map.Library.AddPicture("enemy", "enemy.png");
             map.Library.AddPicture("Frodo", "frodo.png");
+            map.Library.AddPicture("tree", "tree.png");
+            map.Library.AddPicture("money", "Монета_01.png");
+            map.Library.AddPicture("scroll", "i.png");
         }
-        void MaxLenght()
+        void DrawMap()
+        {
+            for (int i = 0; i < Cells.GetLength(0); i++)
+            {
+                for (int j = 0; j < Cells.GetLength(1); j++)
+                {
+                    switch (Cells[i, j])
+                    {
+                        case '1':
+                            map.DrawInCell("tree", i, j);
+                            break;
+
+                        case '#':
+                            map.DrawInCell("money", i, j);
+                                break;
+
+                        case '2':
+                            Player = new GameObject(i, j, "Frodo");
+                            break;
+
+                        case '3':
+                            map.DrawInCell("scroll", i, j);
+                            break;
+                    }
+                }
+            }
+        }
+        int MaxLenght(string[] path)
         {
             int number = 0;
             int maxLenght = path[number].Length;
             for (int i = 0; i < path.Length; i++)
             {
-                if(path[i].Length > maxLenght)
+                if (path[i].Length > maxLenght)
                 {
                     maxLenght = path[i].Length;
                     number = i;
                 }
             }
+            return maxLenght;
         }
     }
 }
