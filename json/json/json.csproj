@@ -73,7 +73,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Map.cs" />
+    <Compile Include="JsonMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -99,6 +99,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LevJson\LevJson.csproj">
+      <Project>{c1ca01aa-c462-480f-b9c7-c852898572bd}</Project>
+      <Name>LevJson</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

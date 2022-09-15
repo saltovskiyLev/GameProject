@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace json
+namespace LevJson
 {
-    class Map
+    public class JsonMap
     {
         [JsonProperty("mapName")]
         public string MapName { get; set; }
@@ -11,11 +11,11 @@ namespace json
         public int XCells { get; set; }
         [JsonProperty("SizeY")]
         public int YCells { get; set; }
-        public List<GameObject> Objects { get; set; }
+        public List<JsonGameObject> Objects { get; set; }
 
-        public Map()
+        public JsonMap()
         {
-            Objects = new List<GameObject>();
+            Objects = new List<JsonGameObject>();
         }
     }
 }

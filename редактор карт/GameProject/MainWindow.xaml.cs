@@ -10,6 +10,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using Newtonsoft.Json;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -78,6 +79,7 @@ namespace GameProject
             {
                 //MessageBox.Show("введите названия файла для сохранения");
                 SaveFile();
+                SaveJsonFile();
             }
             if(element == "load")
             {
@@ -94,6 +96,29 @@ namespace GameProject
             ipan.SetItemBackground(element,Brushes.Blue);
             Picture = element;
         }
+
+        void SaveJsonFile()
+        {
+            List<JsonGameObject> Obj = new List<JsonGameObject>();
+            for (int i = 0; i < map.XCells; i++)
+            {
+                for (int j = 0; j < map.YCells; j++)
+                {
+                    string[] str = map.GetImagesInCell(i, j);
+                    for (int k = 0; k < str.Length; k++)
+                    {
+                        JsonGameObject json = new JsonGameObject();
+                        json.X = i;
+                        json.Y = j;
+                        json.PictureName = str[k];
+                        Obj.Add(json);
+                    }
+                }
+            }
+            string Json = JsonConvert.SerializeObject(Obj);
+            File.WriteAllText("..\\..\\Maps\\" + FileName.TextBox.Text + ".json", Json);
+        }
+
         void SaveFile()
         {
             //0,0,ЗАБОР
@@ -169,3 +194,4 @@ namespace GameProject
         }
     }
 }
+

@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
+using Newtonsoft.Json;
 using GameMaps;
 using System.Net.Http.Headers;
 
@@ -28,6 +29,7 @@ namespace Квест_2022
         GameObject Player;
         char[,] Cells;
         int Level = 0;
+        string ResoursesFolderPath;
         List<GameObject> JsonMap;
         List<string> Maps = new List<string>();
         Dictionary<char, string> Scrolls = new Dictionary<char, string>();
@@ -35,6 +37,7 @@ namespace Квест_2022
         public MainWindow()
         {
             InitializeComponent();
+            ResoursesFolderPath = GetResoursDirectory();
             map = MapCreator.GetUniversalMap(this, mapInfo);
             MapContainer.Children.Add(map.Canvas);
             map.SetGridColor(Brushes.RosyBrown);
@@ -50,18 +53,33 @@ namespace Квест_2022
 
         void CreateMapList()
         {
-            Maps.Add(@"C:\GameProject-master\GameProject-master\Квест2022\Документация\001карта.txt");
-            Maps.Add(@"C:\GameProject-master\GameProject-master\Квест2022\Документация\002карта.txt");
+            Maps.Add(ResoursesFolderPath + @"maps\001карта.txt");
+            Maps.Add(ResoursesFolderPath + @"maps\002карта.txt");
         }
 
+        string GetResoursDirectory()
+        {
+            string path = Directory.GetCurrentDirectory();
+            if(Directory.Exists(path + @"\resourses\"))
+            {
+                return path;
+            }
+            else
+            {
+                return path + @"\..\..\resourses\";
+            }
+        }
         void ReadJsonMap(string path)
         {
-
+            JsonConvert.DeserializeObject<List<GameObject>>(File.ReadAllText(path));
         }
 
-        void DrawJsonMap()
+        void DrawJsonMap(List<GameObject> CellsObjects)
         {
-
+            for (int i = 0; i < CellsObjects.Count; i++)
+            {
+                map.DrawInCell(CellsObjects[i]., CellsObjects[i].X, CellsObjects[i].Y);
+            }
         }
 
         [Obsolete]
@@ -92,7 +110,8 @@ namespace Квест_2022
          */
         void AddPictures()
         {
-            map.Library.ImagesFolder = new PathInfo { Path = "..\\..\\images", Type = PathType.Relative };
+            map.Library.ImagesFolder = new PathInfo { Path = "..\\..\\resourses\\images", Type = PathType.Relative };
+            //map.Library.ImagesFolder = new PathInfo { Path = ResoursesFolderPath + @"images\", Type = PathType.Absolute };
             map.Library.AddPicture("hero", "Hero.png");
             map.Library.AddPicture("money", "Money.png");
             map.Library.AddPicture("enemy", "enemy.png");
@@ -132,7 +151,7 @@ namespace Квест_2022
         void ReadScrolls(int MapNumber)
         {
             Scrolls.Clear();
-            string[] s = File.ReadAllLines(@"C:\Users\Admin\Documents\GitHub\GameProject\Квест2022\Квест 2022\scrolls" + MapNumber + ".txt");
+            string[] s = File.ReadAllLines(ResoursesFolderPath + @"\scrolls\scrolls" + MapNumber + ".txt");
 
             for(int i = 0; i < s.Length; i++)
             {

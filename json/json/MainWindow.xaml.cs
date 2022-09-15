@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using LevJson;
 using Newtonsoft.Json;
 using System.IO;
 
@@ -25,7 +26,7 @@ namespace json
         public MainWindow()
         {
             InitializeComponent();
-            Map m = new Map();
+            JsonMap m = new JsonMap();
             m.MapName = "map01";
             m.XCells = 10;
             m.YCells = 26;
@@ -48,7 +49,7 @@ namespace json
             Deserialize("TestMap01.json");
         }
 
-        void SerializeMap(Map map)
+        void SerializeMap(JsonMap map)
         {
             string s = JsonConvert.SerializeObject(map);
             File.WriteAllText("TestMap.json", s);
@@ -57,7 +58,7 @@ namespace json
         void Deserialize(string path)
         {
             string s = File.ReadAllText(path);
-            Map m = JsonConvert.DeserializeObject<Map>(s);
+            JsonMap m = JsonConvert.DeserializeObject<JsonMap>(s);
         }
     }
 }
