@@ -31,14 +31,14 @@ namespace json
             m.XCells = 10;
             m.YCells = 26;
 
-            GameObject player = new GameObject();
+            JsonGameObject player = new JsonGameObject();
             player.Name = "player";
             player.X = 12;
             player.Y = 14;
 
             m.Objects.Add(player);
 
-            player = new GameObject();
+            player = new JsonGameObject();
             player.Name = "enemy";
             player.X = 32;
             player.Y = 16;

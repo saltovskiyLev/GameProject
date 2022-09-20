@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿/*using Newtonsoft.Json;
 
 namespace GameProject
 {
@@ -11,5 +11,5 @@ namespace GameProject
         [JsonProperty("y")]
         public int Y { get; set; }
     }
-}
+}*/
 

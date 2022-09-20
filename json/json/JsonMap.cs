@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿/*using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace LevJson
@@ -18,4 +18,4 @@ namespace LevJson
             Objects = new List<JsonGameObject>();
         }
     }
-}
+}*/

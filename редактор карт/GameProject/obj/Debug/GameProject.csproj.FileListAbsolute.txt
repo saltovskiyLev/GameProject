@@ -138,3 +138,4 @@ E:\GameProject-master (1)\GameProject-master\редактор карт\GameProje
 E:\GameProject-master (1)\GameProject-master\редактор карт\GameProject\obj\Debug\GameProject.pdb
 C:\Users\Admin\Documents\GitHub\GameProject\редактор карт\GameProject\bin\Debug\Newtonsoft.Json.dll
 C:\Users\Admin\Documents\GitHub\GameProject\редактор карт\GameProject\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Admin\Documents\GitHub\GameProject\редактор карт\GameProject\bin\Debug\LevJson.dll

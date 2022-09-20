@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using LevJson;
 using GameMaps;
 using GameMaps.Layouts;
 
@@ -99,7 +100,9 @@ namespace GameProject
 
         void SaveJsonFile()
         {
-            List<JsonGameObject> Obj = new List<JsonGameObject>();
+
+            JsonMap JMap = new JsonMap();
+            //List<JsonGameObject> Obj = new List<JsonGameObject>();
             for (int i = 0; i < map.XCells; i++)
             {
                 for (int j = 0; j < map.YCells; j++)
@@ -110,12 +113,12 @@ namespace GameProject
                         JsonGameObject json = new JsonGameObject();
                         json.X = i;
                         json.Y = j;
-                        json.PictureName = str[k];
-                        Obj.Add(json);
+                        json.Name = str[k];
+                        JMap.Objects.Add(json);
                     }
                 }
             }
-            string Json = JsonConvert.SerializeObject(Obj);
+            string Json = JsonConvert.SerializeObject(JMap);
             File.WriteAllText("..\\..\\Maps\\" + FileName.TextBox.Text + ".json", Json);
         }
 
@@ -194,4 +197,3 @@ namespace GameProject
         }
     }
 }
-

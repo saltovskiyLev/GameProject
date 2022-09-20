@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace LevJson
 {
-    class JsonMap
+    public class JsonMap
     {
         [JsonProperty("mapName")]
         public string MapName { get; set; }
