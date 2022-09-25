@@ -32,7 +32,7 @@ namespace The_Lord_Of_The_Rings
         public MainWindow()
         {
             InitializeComponent();
-            string path = @"C:\GameProject-master\GameProject-master\The Lord Of The Rings\The Lord Of The Rings\карта.txt";
+            string path = @"C:\Users\Admin\Documents\GitHub\GameProject\The Lord Of The Rings\The Lord Of The Rings\карта.txt";
             string[] lines = File.ReadAllLines(path);
             cellsX = MaxLenght(lines);
             Cells = new char[cellsX, lines.Length];
@@ -53,7 +53,7 @@ namespace The_Lord_Of_The_Rings
         void ReadScrolls(int number)
         {
             Scrolls.Clear();
-            string[] str = File.ReadAllLines(@"E:\GameProject-master (1)\GameProject-master\The Lord Of The Rings\The Lord Of The Rings\scrolls" + number + ".txt");
+            string[] str = File.ReadAllLines(@"C:\Users\Admin\Documents\GitHub\GameProject\The Lord Of The Rings\The Lord Of The Rings\scrolls" + number + ".txt");
             for (int i = 0; i < str.Length; i++)
             {
                 string[] s = str[i].Split('|');
@@ -85,6 +85,8 @@ namespace The_Lord_Of_The_Rings
             return items;
         }
 
+
+
         void Collect(int x, int y)
         {
             string ItemName = "";
@@ -112,13 +114,27 @@ namespace The_Lord_Of_The_Rings
             {
                 Items.Add(ItemName, 1);
             }
+
             string text = GetText();
             ItemsPanel.Text = text;
             // ???
         }
 
-        void CheckKey(Key k)
+        /*void M(Key k)
         {
+            int x = Player.X;
+            int y = Player.Y;
+            switch (k)
+            {
+                case Key.G:
+                    map.RemoveFromCell("money", x, y);
+                    map.DrawInCell("down", x, y);
+                    break;
+            }
+        }*/
+
+            void CheckKey(Key k)
+            {
             // Создаём переменные для новых координат
             // Если нажата кнопка движения, вычисляем новые координаты
             // Внутри swich игрока не перерисовываем
@@ -142,12 +158,25 @@ namespace The_Lord_Of_The_Rings
                 case Key.A:
                     x = Player.X - 1;
                     break;
+                   
+                case Key.G:
+                    if (Cells[x, y] == 'W')
+                    {
+                        map.RemoveFromCell("lever_down", x, y);
+                        map.DrawInCell("lever_up", x, y);
+                    }
+                    break;
             }
             if (Cells[x, y] != '1')
             {
                 Player.Move(x, y);
             }
             Collect(x, y);
+
+            if(Cells[x, y] == '#')
+            {
+                // Тут с графикой какие то беды.
+            }
         }
 
         void AddPictures()
@@ -158,6 +187,10 @@ namespace The_Lord_Of_The_Rings
             map.Library.AddPicture("tree", "tree.png");
             map.Library.AddPicture("money", "Монета_01.png");
             map.Library.AddPicture("scroll", "i.png");
+            map.Library.AddPicture("down", "down.png");
+            map.Library.AddPicture("up", "up.PNG");
+            map.Library.AddPicture("lever_up", "lever_up.png");
+            map.Library.AddPicture("lever_down", "lever_down.png");
         }
         void DrawMap()
         {
@@ -173,7 +206,8 @@ namespace The_Lord_Of_The_Rings
 
                         case '#':
                             map.DrawInCell("money", i, j);
-                                break;
+                            //Переключатель(i, j, Player.X, Player.Y);
+                            break;
 
                         case '2':
                             Player = new GameObject(i, j, "Frodo");
@@ -181,6 +215,10 @@ namespace The_Lord_Of_The_Rings
 
                         case '3':
                             map.DrawInCell("scroll", i, j);
+                            break;
+
+                        case 'W':
+                            map.DrawInCell("lever_down", i, j);
                             break;
                     }
                 }

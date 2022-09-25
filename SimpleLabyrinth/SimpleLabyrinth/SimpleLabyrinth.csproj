@@ -35,16 +35,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BaseLogic">
-      <HintPath>..\..\..\..\dll\BaseLogic.dll</HintPath>
+      <HintPath>..\..\dll\BaseLogic.dll</HintPath>
     </Reference>
     <Reference Include="CanvasVisualisation">
-      <HintPath>..\..\..\..\dll\CanvasVisualisation.dll</HintPath>
+      <HintPath>..\..\dll\CanvasVisualisation.dll</HintPath>
     </Reference>
     <Reference Include="Interaction">
-      <HintPath>..\..\..\..\dll\Interaction.dll</HintPath>
+      <HintPath>..\..\dll\Interaction.dll</HintPath>
     </Reference>
     <Reference Include="LabLib">
-      <HintPath>..\..\..\..\dll\LabLib.dll</HintPath>
+      <HintPath>..\..\dll\LabLib.dll</HintPath>
+    </Reference>
+    <Reference Include="LevJson">
+      <HintPath>..\..\dll\LevJson.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

@@ -97,7 +97,6 @@ namespace SimpleLabyrinth
             map.Library.AddPicture("key", "key.png");
             map.Library.AddPicture("unknown", "unknown.png");
             map.Library.AddPicture("rip", "rip1.png");
-
             AnimationDefinition a = new AnimationDefinition();
             for (int i = 1; i < 11; i++)
             {

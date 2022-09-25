@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.IO;
 using Newtonsoft.Json;
 using GameMaps;
+using LevJson;
 using System.Net.Http.Headers;
 
 namespace Квест_2022
@@ -30,7 +31,7 @@ namespace Квест_2022
         char[,] Cells;
         int Level = 0;
         string ResoursesFolderPath;
-        List<GameObject> JsonMap;
+        List<LevJson.JsonGameObject> JsonMap;
         List<string> Maps = new List<string>();
         Dictionary<char, string> Scrolls = new Dictionary<char, string>();
         Dictionary<string, int> Items = new Dictionary<string, int>();
@@ -43,12 +44,15 @@ namespace Квест_2022
             map.SetGridColor(Brushes.RosyBrown);
             //map.DrawGrid();
             AddPictures();
+            JsonMap = new List<JsonGameObject>();
             map.Keyboard.SetSingleKeyEventHandler(CheckKey);
             GameObject.map = map;
             //Cells = GetMap(@"C:\GameProject-master\GameProject-master\Квест2022\Документация\карта.txt");
             //DrawMap(Cells);
+            ReadJsonMap(@"C:\Users\Admin\Documents\GitHub\GameProject\Квест2022\Квест 2022\Квест 2022\resourses\JsonMaps\MapJson.json");
+            DrawJsonMap(JsonMap);
             CreateMapList();
-            DrawNewMap(Maps[Level]);
+            //DrawNewMap(Maps[Level]);
         }
 
         void CreateMapList()
@@ -71,14 +75,14 @@ namespace Квест_2022
         }
         void ReadJsonMap(string path)
         {
-            JsonConvert.DeserializeObject<List<GameObject>>(File.ReadAllText(path));
+            JsonConvert.DeserializeObject<List<LevJson.JsonGameObject>>(File.ReadAllText(path));
         }
 
-        void DrawJsonMap(List<GameObject> CellsObjects)
+        void DrawJsonMap(List<LevJson.JsonGameObject> CellsObjects)
         {
             for (int i = 0; i < CellsObjects.Count; i++)
             {
-                map.DrawInCell(CellsObjects[i]., CellsObjects[i].X, CellsObjects[i].Y);
+                map.DrawInCell(CellsObjects[i].Name, CellsObjects[i].X, CellsObjects[i].Y);
             }
         }
 
@@ -119,6 +123,8 @@ namespace Квест_2022
             map.Library.AddPicture("map", "map.jpg");
             map.Library.AddPicture("gate_opened", "gate_opened.png");
             map.Library.AddPicture("scroll", "i.png");
+            map.Library.AddPicture("stone", "stone.png");
+            map.Library.AddPicture("ЗАБОР", "ЗАБОР.png");
         }
         string[] GetLines(string FileName)
         {

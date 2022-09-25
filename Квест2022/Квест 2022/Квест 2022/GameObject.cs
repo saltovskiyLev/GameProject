@@ -12,7 +12,7 @@ namespace Квест_2022
         static public UniversalMap_Wpf map;
         public int X { get; private set; }
         public int Y { get; private set; }
-        string PictureName;
+        public string PictureName { get; }
         Dictionary<string, int> Params = new Dictionary<string, int>();
         Dictionary<string, int> Items = new Dictionary<string, int>();
 

@@ -1,0 +1,15 @@
+10,2,gem_blue
+15,2,gem_blue
+19,2,gem_blue
+8,3,gem_blue
+15,3,gem_blue
+16,3,gem_blue
+11,4,gem_blue
+14,4,gem_blue
+19,4,gem_blue
+15,5,gem_blue
+19,5,gem_blue
+13,7,gem_blue
+21,8,gem_blue
+15,9,gem_blue
+21,10,gem_blue
