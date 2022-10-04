@@ -27,6 +27,7 @@ namespace GameProject
     {
         TextArea_Vertical Help = new TextArea_Vertical();
         SimpleTextBox FileName = new SimpleTextBox();
+        SimpleTextBox MapName = new SimpleTextBox();
         string[] PictureNames;
         string Picture = "";
         InventoryPanel ipan,menu;
@@ -45,6 +46,7 @@ namespace GameProject
             lay.Attach(menu, 1);
             lay.Attach(Help, 1);
             lay.Attach(FileName, 1);
+            lay.Attach(MapName, 1);
             menu.SetBackground(Brushes.GreenYellow);
             map.DrawGrid();
             AddPictures();
@@ -85,7 +87,7 @@ namespace GameProject
             if(element == "load")
             {
                 //MessageBox.Show("введите названия файла для загрузки");
-                ReadFile();
+                ReadJsonFile();
             }
         }
         void CheckInventory(string element)
@@ -100,7 +102,6 @@ namespace GameProject
 
         void SaveJsonFile()
         {
-
             JsonMap JMap = new JsonMap();
             //List<JsonGameObject> Obj = new List<JsonGameObject>();
             for (int i = 0; i < map.XCells; i++)
@@ -118,6 +119,9 @@ namespace GameProject
                     }
                 }
             }
+            JMap.MapName = MapName.TextBox.Text;
+            JMap.XCells = map.XCells;
+            JMap.YCells = map.YCells;
             string Json = JsonConvert.SerializeObject(JMap);
             File.WriteAllText("..\\..\\Maps\\" + FileName.TextBox.Text + ".json", Json);
         }
@@ -150,7 +154,7 @@ namespace GameProject
             }
             //File.WriteAllText(string.Format("..\\..\\Карта {0} год - {1} месяц - {2} день - {3} час - {4} минута.TXT",DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute), mapTXT);
         }
-        void ReadFile()
+        void ReadJsonFile()
         {
             string s;
             string name;
@@ -158,9 +162,9 @@ namespace GameProject
             int x;
             int p1;
             int p2;
-            if (FileName.TextBox.Text != "" && File.Exists(("..\\..\\Maps\\" + FileName.TextBox.Text + ".TXT")))
+            if (FileName.TextBox.Text != "" && File.Exists(("..\\..\\Maps\\" + FileName.TextBox.Text + ".json")))
             {
-                string[] Read = File.ReadAllLines("..\\..\\Maps\\" + FileName.TextBox.Text + ".TXT");
+                /*string[] Read = File.ReadAllLines("..\\..\\Maps\\" + FileName.TextBox.Text + ".TXT");
                 for (int i = 0; i < Read.Length; i++)
                 {
                     // В этом цыкле мы ищем запятые,
@@ -173,7 +177,14 @@ namespace GameProject
                     y = int.Parse(s);
                     name = Read[i].Substring(p2 + 1);
                     map.DrawInCell(name, x, y);
+                }*/
+                string StringJson = File.ReadAllText("..\\..\\Maps\\" + FileName.TextBox.Text + ".json");
+                JsonMap JsonMap = JsonConvert.DeserializeObject<JsonMap>(StringJson);
+                for(int i = 0; i < JsonMap.Objects.Count; i++)
+                {
+                    map.DrawInCell(JsonMap.Objects[i].Name, JsonMap.Objects[i].X, JsonMap.Objects[i].Y);
                 }
+                MapName.TextBox.Text = JsonMap.MapName;
             }
             else
             {

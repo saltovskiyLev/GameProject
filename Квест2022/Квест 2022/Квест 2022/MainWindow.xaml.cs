@@ -47,12 +47,12 @@ namespace Квест_2022
             JsonMap = new List<JsonGameObject>();
             map.Keyboard.SetSingleKeyEventHandler(CheckKey);
             GameObject.map = map;
-            //Cells = GetMap(@"C:\GameProject-master\GameProject-master\Квест2022\Документация\карта.txt");
-            //DrawMap(Cells);
-            ReadJsonMap(@"C:\Users\Admin\Documents\GitHub\GameProject\Квест2022\Квест 2022\Квест 2022\resourses\JsonMaps\MapJson.json");
+            Cells = GetMap(@"C:\GameProject-master\GameProject-master\Квест2022\Документация\карта.txt");
+            DrawMap(Cells);
+            JsonMap = ReadJsonMap(@"C:\Users\Admin\Documents\GitHub\GameProject\Квест2022\Квест 2022\Квест 2022\resourses\JsonMaps\MapJson.json");
             DrawJsonMap(JsonMap);
             CreateMapList();
-            //DrawNewMap(Maps[Level]);
+            DrawNewMap(Maps[Level]);
         }
 
         void CreateMapList()
@@ -73,9 +73,9 @@ namespace Квест_2022
                 return path + @"\..\..\resourses\";
             }
         }
-        void ReadJsonMap(string path)
+        List<JsonGameObject> ReadJsonMap(string path)
         {
-            JsonConvert.DeserializeObject<List<LevJson.JsonGameObject>>(File.ReadAllText(path));
+            return JsonConvert.DeserializeObject<List<LevJson.JsonGameObject>>(File.ReadAllText(path));
         }
 
         void DrawJsonMap(List<LevJson.JsonGameObject> CellsObjects)
@@ -125,6 +125,7 @@ namespace Квест_2022
             map.Library.AddPicture("scroll", "i.png");
             map.Library.AddPicture("stone", "stone.png");
             map.Library.AddPicture("ЗАБОР", "ЗАБОР.png");
+            CreateAnimation("exp", 10);
         }
         string[] GetLines(string FileName)
         {
@@ -164,6 +165,23 @@ namespace Квест_2022
                 string[] str = s[i].Split('|');
                 Scrolls.Add(str[0][0], str[1]);
             }
+        }
+        /// <summary>
+        /// количество картинок начинается с нуля
+        /// </summary>
+        /// <param name="BaseName"></param>s
+        /// <param name="count"></param>
+        void CreateAnimation(string BaseName, int count)
+        {
+            AnimationDefinition a = new AnimationDefinition();
+            string path;
+            for (int i = 0; i < count; i++)
+            {
+                path = BaseName + i + ".png";
+                map.Library.AddPicture(BaseName + i, path);
+                a.AddFrame(100, BaseName);
+            }
+            map.Library.AddAnimation(BaseName, a);
         }
 
         string GetItemsText()
@@ -279,8 +297,19 @@ namespace Квест_2022
 
                     case Key.D:
                         if (CheckPassability(Player.X + 1, Player.Y)) Player.MoveTo(Player.X + 1, Player.Y);
-
                         break;
+
+                case Key.Space:
+                    if(Cells[Player.X, Player.Y] == '*')
+                    {
+                        
+                    }
+                    break;
+
+                case Key.V:
+                    map.AnimationInCell("exp", Player.X, Player.Y, 1);
+                        break;
+
                 }
                 Collect(Player.X, Player.Y);
                 CheckViktory();

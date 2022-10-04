@@ -24,7 +24,7 @@ namespace Медиа_Файлы
         public MainWindow()
         {
             InitializeComponent();
-            video.Source = new Uri("C:\\Users\\Admin\\Documents\\GitHub\\GameProject\\LeoJourney\\Баг _ чекбокс в фасетах и значения фильтров.wmv");
+            video.Source = new Uri(@"C:\Users\Admin\Documents\GitHub\GameProject\Медиа Файлы\Медиа Файлы\windows-xp-critical-stop.mp3");
         }
         MediaPlayer Audio = new MediaPlayer();
         private void Button_Click(object sender, RoutedEventArgs e)

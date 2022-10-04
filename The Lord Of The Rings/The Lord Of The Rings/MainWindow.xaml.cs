@@ -29,6 +29,7 @@ namespace The_Lord_Of_The_Rings
         GameObject Player;
         Dictionary<string, int> Items = new Dictionary<string, int>();
         Dictionary<char, string> Scrolls = new Dictionary<char, string>();
+        List<Changer> changers;
         public MainWindow()
         {
             InitializeComponent();
@@ -40,13 +41,17 @@ namespace The_Lord_Of_The_Rings
             MapInfo = new CellMapInfo(cellsX, lines.Length, 30, 0);
             map = MapCreator.GetUniversalMap(this, MapInfo);
             GameObject.Map = map;
+            changers = new List<Changer>();
             panelMap.Children.Add(map.Canvas);
             //map.DrawGrid();
             Key k = new Key();
             map.Keyboard.SetSingleKeyEventHandler(CheckKey);
             AddPictures();
-            ReadScrolls(1);
             DrawMap();
+            NewMoving();
+            DrawFogMap();
+            ReadScrolls(1);
+            //DrawMap();
             ///////////////////////////////////////////////
         }
 
@@ -85,7 +90,16 @@ namespace The_Lord_Of_The_Rings
             return items;
         }
 
-
+        void DrawFogMap()
+        {
+            for (int x = 0; x < Cells.GetLength(0); x++)
+            {
+                for (int y = 0; y < Cells.GetLength(1); y++)
+                {
+                    map.DrawInCell("fog", x, y);
+                }
+            }
+        }
 
         void Collect(int x, int y)
         {
@@ -120,20 +134,18 @@ namespace The_Lord_Of_The_Rings
             // ???
         }
 
-        /*void M(Key k)
+
+        void NewMoving()
         {
             int x = Player.X;
             int y = Player.Y;
-            switch (k)
-            {
-                case Key.G:
-                    map.RemoveFromCell("money", x, y);
-                    map.DrawInCell("down", x, y);
-                    break;
-            }
-        }*/
 
-            void CheckKey(Key k)
+            map.RemoveFromCell("fog", x - 1, y);
+            map.RemoveFromCell("fog", x + 1, y);
+            map.RemoveFromCell("fog", x, y - 1);
+            map.RemoveFromCell("fog", x, y + 1);
+        }
+        void CheckKey(Key k)
             {
             // Создаём переменные для новых координат
             // Если нажата кнопка движения, вычисляем новые координаты
@@ -159,14 +171,31 @@ namespace The_Lord_Of_The_Rings
                     x = Player.X - 1;
                     break;
                    
-                case Key.G:
+                case Key.Space:
                     if (Cells[x, y] == 'W')
                     {
-                        map.RemoveFromCell("lever_down", x, y);
-                        map.DrawInCell("lever_up", x, y);
+                        for (int i = 0; i < changers.Count; i++)
+                        {
+                            if(changers[i].X == x && changers[i].Y == y)
+                            {
+                                if(changers[i].Open == false)
+                                {
+                                    map.RemoveFromCell("lever_down", x, y);
+                                    map.DrawInCell("lever_up", x, y);
+                                    changers[i].Open = true;
+                                }
+                                else
+                                {
+                                    map.RemoveFromCell("lever_up", x, y);
+                                    map.DrawInCell("lever_down", x, y);
+                                    changers[i].Open = false;
+                                }
+                            }
+                        }
                     }
                     break;
             }
+            NewMoving();
             if (Cells[x, y] != '1')
             {
                 Player.Move(x, y);
@@ -191,6 +220,7 @@ namespace The_Lord_Of_The_Rings
             map.Library.AddPicture("up", "up.PNG");
             map.Library.AddPicture("lever_up", "lever_up.png");
             map.Library.AddPicture("lever_down", "lever_down.png");
+            map.Library.AddPicture("fog", "unknown.png");
         }
         void DrawMap()
         {
@@ -218,6 +248,10 @@ namespace The_Lord_Of_The_Rings
                             break;
 
                         case 'W':
+                            Changer lever = new Changer();
+                            lever.X = i;
+                            lever.Y = j;
+                            changers.Add(lever);
                             map.DrawInCell("lever_down", i, j);
                             break;
                     }
