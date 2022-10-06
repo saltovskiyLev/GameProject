@@ -33,6 +33,7 @@ namespace Квест_2022
         string ResoursesFolderPath;
         List<LevJson.JsonGameObject> JsonMap;
         List<string> Maps = new List<string>();
+        List<LevJson.JsonGameObject>[,] GameCells;
         Dictionary<char, string> Scrolls = new Dictionary<char, string>();
         Dictionary<string, int> Items = new Dictionary<string, int>();
         public MainWindow()
@@ -49,10 +50,28 @@ namespace Квест_2022
             GameObject.map = map;
             Cells = GetMap(@"C:\GameProject-master\GameProject-master\Квест2022\Документация\карта.txt");
             DrawMap(Cells);
-            JsonMap = ReadJsonMap(@"C:\Users\Admin\Documents\GitHub\GameProject\Квест2022\Квест 2022\Квест 2022\resourses\JsonMaps\MapJson.json");
+            JsonMap = ReadJsonMap(ResoursesFolderPath + @"JsonMaps\MapJson.json");
             DrawJsonMap(JsonMap);
             CreateMapList();
-            DrawNewMap(Maps[Level]);
+            //DrawNewMap(Maps[Level]);
+        }
+
+        void CreateGameCells(JsonMap Map)
+        {
+            GameCells = new List<JsonGameObject>[Map.XCells, Map.YCells];
+            for(int i = 0; i < Map.XCells; i++)
+            {
+                for(int j = 0; j < Map.YCells; j++)
+                {
+                    GameCells[i, j] = new List<JsonGameObject>();
+                }
+            }
+
+            for (int i = 0; i < Map.Objects.Count; i++)
+            {
+                var obj = Map.Objects[i];
+                GameCells[obj.X, obj.Y].Add(obj);
+            }
         }
 
         void CreateMapList()
@@ -86,21 +105,21 @@ namespace Квест_2022
             }
         }
 
-        [Obsolete]
+        /*[Obsolete]
         void DrawNewMap(string FileName)
         {
             EraseMap();
             Cells = GetMap(FileName);
             DrawMap(Cells);
             ReadScrolls(Level + 1);
-        }
+        }*/
 
         void CheckViktory()
         {
             if (Cells[Player.X, Player.Y] == 'W')
             {
                 Level++;
-                DrawNewMap(Maps[Level]);
+                //DrawNewMap(Maps[Level]);
             }
         }
 
@@ -140,7 +159,7 @@ namespace Квест_2022
 
         void EraseMap()
         {
-            map.RemoveAllImagesInCells();
+            map.RemoveAllImages();
         }
 
         int GetMaxLength(string[] map)
@@ -180,7 +199,7 @@ namespace Квест_2022
             {
                 path = BaseName + i + ".png";
                 map.Library.AddPicture(BaseName + i, path);
-                a.AddFrame(100, BaseName);
+                a.AddFrame(100, BaseName + i);
             }
             a.AddFrame(1, "nothing");
             a.LastFrame = "nothing";
@@ -250,18 +269,18 @@ namespace Квест_2022
                     {
                         switch (cells[x, y])
                         {
-                            case '1':
+                            /*case '1':
                                 map.DrawInCell("tree", x, y);
                                 break;
 
                             case '*':
                                 map.DrawInCell("enemy", x, y);
                                 break;
-
+                            */
                             case 'Y':
                                 Player = new GameObject("hero", x, y);
                                 break;
-
+                            /*
                             case '$':
                                 map.DrawInCell("money", x, y);
                                 break;
@@ -273,6 +292,7 @@ namespace Квест_2022
                             case '!':
                                 map.DrawInCell("scroll", x, y);
                                 break;
+                            */
                         }
                     }
                 }
@@ -311,7 +331,6 @@ namespace Квест_2022
                 case Key.V:
                     map.AnimationInCell("exp", Player.X, Player.Y, 1);
                         break;
-
                 }
                 Collect(Player.X, Player.Y);
                 CheckViktory();
