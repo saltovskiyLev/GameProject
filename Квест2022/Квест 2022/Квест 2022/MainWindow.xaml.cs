@@ -124,6 +124,7 @@ namespace Квест_2022
             map.Library.AddPicture("gate_opened", "gate_opened.png");
             map.Library.AddPicture("scroll", "i.png");
             map.Library.AddPicture("stone", "stone.png");
+            map.Library.AddPicture("nothing", "nothing.png");
             map.Library.AddPicture("ЗАБОР", "ЗАБОР.png");
             CreateAnimation("exp", 10);
         }
@@ -181,9 +182,10 @@ namespace Квест_2022
                 map.Library.AddPicture(BaseName + i, path);
                 a.AddFrame(100, BaseName);
             }
+            a.AddFrame(1, "nothing");
+            a.LastFrame = "nothing";
             map.Library.AddAnimation(BaseName, a);
         }
-
         string GetItemsText()
         {
             string Description = "";
