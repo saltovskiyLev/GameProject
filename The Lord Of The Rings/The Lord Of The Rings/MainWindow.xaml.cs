@@ -29,6 +29,7 @@ namespace The_Lord_Of_The_Rings
         GameObject Player;
         Dictionary<string, int> Items = new Dictionary<string, int>();
         Dictionary<char, string> Scrolls = new Dictionary<char, string>();
+        List<Gates> gates = new List<Gates>();
         List<Changer> changers;
         public MainWindow()
         {
@@ -182,6 +183,12 @@ namespace The_Lord_Of_The_Rings
                                 {
                                     map.RemoveFromCell("lever_down", x, y);
                                     map.DrawInCell("lever_up", x, y);
+                                    //map.DrawInCell("up", x, y);
+                                    for(int j = 0; j < gates.Count; j++)
+                                    {
+                                        map.RemoveFromCell("gate_closed", gates[j].X, gates[j].Y);
+                                        map.DrawInCell("gate_opened", gates[j].X, gates[j].Y);
+                                    }
                                     changers[i].Open = true;
                                 }
                                 else
@@ -189,9 +196,15 @@ namespace The_Lord_Of_The_Rings
                                     map.RemoveFromCell("lever_up", x, y);
                                     map.DrawInCell("lever_down", x, y);
                                     changers[i].Open = false;
+                                    for (int j = 0; j < gates.Count; j++)
+                                    {
+                                        map.RemoveFromCell("gate_opened", gates[j].X, gates[j].Y);
+                                        map.DrawInCell("gate_closed", gates[j].X, gates[j].Y);
+                                    }
                                 }
                             }
                         }
+
                     }
                     break;
             }
@@ -221,6 +234,8 @@ namespace The_Lord_Of_The_Rings
             map.Library.AddPicture("lever_up", "lever_up.png");
             map.Library.AddPicture("lever_down", "lever_down.png");
             map.Library.AddPicture("fog", "unknown.png");
+            map.Library.AddPicture("gate_closed", "gate_closed.png");
+            map.Library.AddPicture("gate_opened", "gate_opened.png");
         }
         void DrawMap()
         {
@@ -253,6 +268,14 @@ namespace The_Lord_Of_The_Rings
                             lever.Y = j;
                             changers.Add(lever);
                             map.DrawInCell("lever_down", i, j);
+                            break;
+
+                        case 'G':
+                            Gates gate = new Gates();
+                            gate.X = i;
+                            gate.Y = j;
+                            gates.Add(gate);
+                            map.DrawInCell("gate_closed", i, j);
                             break;
                     }
                 }
