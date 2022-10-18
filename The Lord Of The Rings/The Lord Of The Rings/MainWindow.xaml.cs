@@ -146,6 +146,23 @@ namespace The_Lord_Of_The_Rings
             map.RemoveFromCell("fog", x, y - 1);
             map.RemoveFromCell("fog", x, y + 1);
         }
+
+        void CreateAnimathion(int numbers, string baseName)
+        {
+            map.Library.ImagesFolder = new PathInfo { Path = "..\\..\\images", Type = PathType.Relative };
+            AnimationDefinition anim = new AnimationDefinition();
+            string BaseNamepng;
+            string Name;
+            for(int i = 0; i <= numbers; i++)
+            {
+                BaseNamepng = baseName + i + ".png";
+                Name = baseName + i;
+                map.Library.AddPicture(Name, BaseNamepng);
+                anim.AddFrame(100, Name);
+            }
+
+            map.Library.AddAnimation("exp", anim);
+        }
         void CheckKey(Key k)
             {
             // Создаём переменные для новых координат
@@ -171,7 +188,11 @@ namespace The_Lord_Of_The_Rings
                 case Key.A:
                     x = Player.X - 1;
                     break;
-                   
+
+                case Key.R:
+                    map.AnimationInCell("exp", Player.X, Player.Y, 2);
+                    break;
+
                 case Key.Space:
                     if (Cells[x, y] == 'W')
                     {
@@ -236,6 +257,7 @@ namespace The_Lord_Of_The_Rings
             map.Library.AddPicture("fog", "unknown.png");
             map.Library.AddPicture("gate_closed", "gate_closed.png");
             map.Library.AddPicture("gate_opened", "gate_opened.png");
+            CreateAnimathion(9, "exp");
         }
         void DrawMap()
         {

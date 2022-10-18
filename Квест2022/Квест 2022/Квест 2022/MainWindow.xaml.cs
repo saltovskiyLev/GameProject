@@ -48,12 +48,12 @@ namespace Квест_2022
             JsonMap = new List<JsonGameObject>();
             map.Keyboard.SetSingleKeyEventHandler(CheckKey);
             GameObject.map = map;
-            Cells = GetMap(@"C:\GameProject-master\GameProject-master\Квест2022\Документация\карта.txt");
+            Cells = GetMap(@"C:\Users\Admin\Documents\GitHub\GameProject\Квест2022\Квест 2022\Квест 2022\resourses\maps\001карта.txt");
             DrawMap(Cells);
             JsonMap = ReadJsonMap(ResoursesFolderPath + @"JsonMaps\MapJson.json");
             DrawJsonMap(JsonMap);
             CreateMapList();
-            //DrawNewMap(Maps[Level]);
+            DrawNewMap(Maps[Level]);
         }
 
         void CreateGameCells(JsonMap Map)
@@ -105,14 +105,14 @@ namespace Квест_2022
             }
         }
 
-        /*[Obsolete]
+        [Obsolete]
         void DrawNewMap(string FileName)
         {
             EraseMap();
             Cells = GetMap(FileName);
             DrawMap(Cells);
             ReadScrolls(Level + 1);
-        }*/
+        }
 
         void CheckViktory()
         {
@@ -269,18 +269,18 @@ namespace Квест_2022
                     {
                         switch (cells[x, y])
                         {
-                            /*case '1':
+                            case '1':
                                 map.DrawInCell("tree", x, y);
                                 break;
 
                             case '*':
                                 map.DrawInCell("enemy", x, y);
                                 break;
-                            */
+                            
                             case 'Y':
                                 Player = new GameObject("hero", x, y);
                                 break;
-                            /*
+                            
                             case '$':
                                 map.DrawInCell("money", x, y);
                                 break;
@@ -292,7 +292,7 @@ namespace Квест_2022
                             case '!':
                                 map.DrawInCell("scroll", x, y);
                                 break;
-                            */
+                            
                         }
                     }
                 }
@@ -348,4 +348,6 @@ namespace Квест_2022
                 }
             }
         }
+
+
     }
