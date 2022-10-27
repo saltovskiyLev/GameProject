@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -30,10 +29,13 @@ namespace Квест_2022
         GameObject Player;
         char[,] Cells;
         int Level = 0;
+        int PlayerLevel = 0;
+        int PlayerExpereince = 0;
         string ResoursesFolderPath;
         List<LevJson.JsonGameObject> JsonMap;
         List<string> Maps = new List<string>();
         List<LevJson.JsonGameObject>[,] GameCells;
+        List<Product> products = new List<Product>();
         Dictionary<char, string> Scrolls = new Dictionary<char, string>();
         Dictionary<string, int> Items = new Dictionary<string, int>();
         public MainWindow()
@@ -145,6 +147,7 @@ namespace Квест_2022
             map.Library.AddPicture("stone", "stone.png");
             map.Library.AddPicture("nothing", "nothing.png");
             map.Library.AddPicture("ЗАБОР", "ЗАБОР.png");
+            map.Library.AddPicture("shop", "Shop.png");
             CreateAnimation("exp", 10);
         }
         string[] GetLines(string FileName)
@@ -218,136 +221,147 @@ namespace Квест_2022
 
 
         char[,] GetMap(string FileName)
+        {
+            string[] MapLines = GetLines(FileName);
+            int MaxLength = GetMaxLength(MapLines);
+            char[,] map = new char[MaxLength, MapLines.Length];
+            for (int i = 0; i < MapLines.Length; i++)
             {
-                string[] MapLines = GetLines(FileName);
-                int MaxLength = GetMaxLength(MapLines);
-                char[,] map = new char[MaxLength, MapLines.Length];
-                for (int i = 0; i < MapLines.Length; i++)
+                for (int j = 0; j < MapLines[i].Length; j++)
                 {
-                    for (int j = 0; j < MapLines[i].Length; j++)
-                    {
-                        map[j, i] = MapLines[i][j];
-                    }
-                }
-                return map;
-            }
-
-            void Collect(int x, int y)
-            {
-                string ItemName = "";
-                switch (Cells[x, y])
-                {
-                    case '$':
-                        map.RemoveFromCell("money", x, y);
-                        ItemName = "coin";
-                        break;
-
-                    case '!':
-                        map.RemoveFromCell("scroll", x, y);
-                    MessageBox.Show(Scrolls['!']);
-                        break;
-
-                }
-                if (ItemName == "") return;
-                if (Items.Keys.Contains(ItemName))
-                {
-                    Items[ItemName]++;
-                }
-                else
-                {
-                    Items.Add(ItemName, 1);
-                }
-                string Itemstext = GetItemsText();
-                tbItemText.Text = Itemstext;
-            }
-
-            void DrawMap(char[,] cells)
-            {
-                for (int x = 0; x < cells.GetLength(0); x++)
-                {
-                    for (int y = 0; y < cells.GetLength(1); y++)
-                    {
-                        switch (cells[x, y])
-                        {
-                            case '1':
-                                map.DrawInCell("tree", x, y);
-                                break;
-
-                            case '*':
-                                map.DrawInCell("enemy", x, y);
-                                break;
-                            
-                            case 'Y':
-                                Player = new GameObject("hero", x, y);
-                                break;
-                            
-                            case '$':
-                                map.DrawInCell("money", x, y);
-                                break;
-
-                            case 'W':
-                                map.DrawInCell("gate_opened", x, y);
-                                break;
-
-                            case '!':
-                                map.DrawInCell("scroll", x, y);
-                                break;
-                            
-                        }
-                    }
+                    map[j, i] = MapLines[i][j];
                 }
             }
+            return map;
+        }
 
-            void CheckKey(Key k)
+        void Collect(int x, int y)
+        {
+            string ItemName = "";
+            switch (Cells[x, y])
             {
-                switch (k)
-                {
-                    case Key.W:
-                        if (CheckPassability(Player.X, Player.Y - 1))
-                        {
-                            Player.MoveTo(Player.X, Player.Y - 1);
-                        }
-                        break;
-
-                    case Key.S:
-                        if (CheckPassability(Player.X, Player.Y + 1)) Player.MoveTo(Player.X, Player.Y + 1);
-                        break;
-
-                    case Key.A:
-                        if (CheckPassability(Player.X - 1, Player.Y)) Player.MoveTo(Player.X - 1, Player.Y);
-                        break;
-
-                    case Key.D:
-                        if (CheckPassability(Player.X + 1, Player.Y)) Player.MoveTo(Player.X + 1, Player.Y);
-                        break;
-
-                case Key.Space:
-                    if(Cells[Player.X, Player.Y] == '*')
-                    {
-                        
-                    }
+                case '$':
+                    map.RemoveFromCell("money", x, y);
+                    ItemName = "coin";
                     break;
 
-                case Key.V:
-                    map.AnimationInCell("exp", Player.X, Player.Y, 1);
-                        break;
-                }
-                Collect(Player.X, Player.Y);
-                CheckViktory();
-            }
+                case '!':
+                    map.RemoveFromCell("scroll", x, y);
+                MessageBox.Show(Scrolls['!']);
+                    break;
 
-            bool CheckPassability(int x, int y)
+            }
+            if (ItemName == "") return;
+            if (Items.Keys.Contains(ItemName))
             {
-                if (Cells[x, y] == '1')
+                Items[ItemName]++;
+            }
+            else
+            {
+                Items.Add(ItemName, 1);
+            }
+            string Itemstext = GetItemsText();
+            tbItemText.Text = Itemstext;
+        }
+
+        void DrawMap(char[,] cells)
+        {
+            for (int x = 0; x < cells.GetLength(0); x++)
+            {
+                for (int y = 0; y < cells.GetLength(1); y++)
                 {
-                    return false;
-                }
-                else
-                {
-                    return true;
+                    switch (cells[x, y])
+                    {
+                        case '1':
+                            map.DrawInCell("tree", x, y);
+                            break;
+
+                        case '*':
+                            map.DrawInCell("enemy", x, y);
+                            break;
+                            
+                        case 'Y':
+                            Player = new GameObject("hero", x, y);
+                            break;
+                            
+                        case '$':
+                            map.DrawInCell("money", x, y);
+                            break;
+
+                        case 'W':
+                            map.DrawInCell("gate_opened", x, y);
+                            break;
+
+                        case '!':
+                            map.DrawInCell("scroll", x, y);
+                            break;
+
+                        case 'M':
+                            map.DrawInCell("shop", x, y);
+                            break;
+                            
+                    }
                 }
             }
         }
 
+        void CheckKey(Key k)
+        {
+            switch (k)
+            {
+                case Key.W:
+                    if (CheckPassability(Player.X, Player.Y - 1))
+                    {
+                        Player.MoveTo(Player.X, Player.Y - 1);
+                    }
+                    break;
 
+                case Key.S:
+                    if (CheckPassability(Player.X, Player.Y + 1)) Player.MoveTo(Player.X, Player.Y + 1);
+                    break;
+
+                case Key.A:
+                    if (CheckPassability(Player.X - 1, Player.Y)) Player.MoveTo(Player.X - 1, Player.Y);
+                    break;
+
+                case Key.D:
+                    if (CheckPassability(Player.X + 1, Player.Y)) Player.MoveTo(Player.X + 1, Player.Y);
+                    break;
+
+            case Key.Space:
+                if(Cells[Player.X, Player.Y] == 'M')
+                {
+                    ShopWindow w = new ShopWindow();
+                    w.ShowDialog();
+                }
+                break;
+
+            case Key.V:
+                map.AnimationInCell("exp", Player.X, Player.Y, 1);
+                    break;
+
+            }
+            Collect(Player.X, Player.Y);
+            CheckViktory();
+        }
+
+        void CreateProducts()
+        {
+            Product product = new Product(@"C:\Users\Admin\Documents\GitHub\GameProject\Квест2022\Квест 2022\Квест 2022\resourses\images\stone.png", 2 , "Хороший камень, можно использовать для создания разного оружия");
+            products.Add(product);
+        }
+
+        bool CheckPassability(int x, int y)
+        {
+            if (Cells[x, y] == '1')
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
     }
+
+}
