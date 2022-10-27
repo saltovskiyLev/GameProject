@@ -35,7 +35,9 @@ namespace json
             player.Name = "player";
             player.X = 12;
             player.Y = 14;
-
+            player.StringParams.Add("type", "unit");
+            player.StringParams.Add("unitType", "orc");
+            player.IntParams.Add("damage", 10);
             m.Objects.Add(player);
 
             player = new JsonGameObject();
@@ -46,7 +48,7 @@ namespace json
             m.Objects.Add(player);
 
             SerializeMap(m);
-            Deserialize("TestMap01.json");
+            Deserialize("TestMap.json");
         }
 
         void SerializeMap(JsonMap map)

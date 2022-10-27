@@ -30,7 +30,8 @@ namespace GameProject
         SimpleTextBox MapName = new SimpleTextBox();
         string[] PictureNames;
         string Picture = "";
-        InventoryPanel ipan,menu;
+        InventoryPanel ipan,menu,selectedCell;
+        List<JsonGameObject> objects = new List<JsonGameObject>();
         CellMapInfo cellMap = new CellMapInfo(100, 100, 50,0);
         IGameScreenLayout lay;
         UniversalMap_Wpf map;
@@ -42,14 +43,17 @@ namespace GameProject
             lay.Attach(map, 0);
             ipan = new InventoryPanel(map.Library, 40, 16);
             menu = new InventoryPanel(map.Library, 40, 16);
+            selectedCell = new InventoryPanel(map.Library, 40, 16);
             lay.Attach(ipan, 1);
             lay.Attach(menu, 1);
             lay.Attach(Help, 1);
             lay.Attach(FileName, 1);
             lay.Attach(MapName, 1);
+            lay.Attach(selectedCell, 1);
             menu.SetBackground(Brushes.GreenYellow);
             map.DrawGrid();
             AddPictures();
+            map.Mouse.SetMouseDoubleLeftClickHandler(LeftDoubleClickHandler);
             map.Mouse.SetMouseSingleLeftClickHandler(MouseHandler);
             map.Mouse.SetMouseRightClickHandler(RightClick);
             Help.AddTextBlock("FileName","Имя файла:");
@@ -75,7 +79,15 @@ namespace GameProject
             }
             ipan.SetMouseClickHandler(CheckInventory);
             menu.SetMouseClickHandler(CheckMenu);
+            selectedCell.SetMouseClickHandler(CheckSelectedCellItem);
         }
+
+
+        void CheckSelectedCellItem(string name)
+        {
+            MessageBox.Show(name);
+        }
+
         void CheckMenu(string element)
         {
             if (element == "save")
@@ -104,7 +116,7 @@ namespace GameProject
         {
             JsonMap JMap = new JsonMap();
             //List<JsonGameObject> Obj = new List<JsonGameObject>();
-            for (int i = 0; i < map.XCells; i++)
+            /*for (int i = 0; i < map.XCells; i++)
             {
                 for (int j = 0; j < map.YCells; j++)
                 {
@@ -118,7 +130,8 @@ namespace GameProject
                         JMap.Objects.Add(json);
                     }
                 }
-            }
+            }*/
+            JMap.Objects = objects;
             JMap.MapName = MapName.TextBox.Text;
             JMap.XCells = map.XCells;
             JMap.YCells = map.YCells;
@@ -156,28 +169,8 @@ namespace GameProject
         }
         void ReadJsonFile()
         {
-            string s;
-            string name;
-            int y;
-            int x;
-            int p1;
-            int p2;
             if (FileName.TextBox.Text != "" && File.Exists(("..\\..\\Maps\\" + FileName.TextBox.Text + ".json")))
             {
-                /*string[] Read = File.ReadAllLines("..\\..\\Maps\\" + FileName.TextBox.Text + ".TXT");
-                for (int i = 0; i < Read.Length; i++)
-                {
-                    // В этом цыкле мы ищем запятые,
-                    // Определяем три блока с данными.
-                    p1 = Read[i].IndexOf(',');
-                    p2 = Read[i].LastIndexOf(',');
-                    s = Read[i].Substring(0, p1);
-                    x = int.Parse(s);
-                    s = Read[i].Substring(p1 + 1, p2 - p1 - 1);
-                    y = int.Parse(s);
-                    name = Read[i].Substring(p2 + 1);
-                    map.DrawInCell(name, x, y);
-                }*/
                 string StringJson = File.ReadAllText("..\\..\\Maps\\" + FileName.TextBox.Text + ".json");
                 JsonMap JsonMap = JsonConvert.DeserializeObject<JsonMap>(StringJson);
                 for(int i = 0; i < JsonMap.Objects.Count; i++)
@@ -191,12 +184,28 @@ namespace GameProject
                 MessageBox.Show("укажите имя файла");
             }
         }
+
+        void LeftDoubleClickHandler(int x, int y, int xCell, int yCell)
+        {
+            selectedCell.Clear();
+            string[] images = map.GetImagesInCell(xCell, yCell);
+            for(int i = 0; i < images.Length; i++)
+            {
+                selectedCell.AddItem(images[i], images[i]);
+            }
+        }
+
         // В этой функции проверяем, какая клавиша была нажата
         void MouseHandler(int x, int y, int xCell, int yCell)
         {
-            if (!string.IsNullOrEmpty(Picture))
+            if (!string.IsNullOrEmpty(Picture) && !map.HasImageInCell(Picture, xCell, yCell))
             {
                 map.DrawInCell(Picture, xCell, yCell);
+                JsonGameObject obj = new JsonGameObject();
+                objects.Add(obj);
+                obj.X = xCell;
+                obj.Y = yCell;
+                obj.Name = Picture;
             }
         }
         void RightClick (int x, int y, int xCell, int yCell)
@@ -204,7 +213,20 @@ namespace GameProject
             for (int i = 0; i < PictureNames.Length; i++)
             {
                 map.RemoveFromCell(PictureNames[i], xCell, yCell);
-            }         
+                RemoveObjects(PictureNames[i], xCell, yCell);
+            }
+        }
+
+        void RemoveObjects(string Name, int X, int Y)
+        {
+            for(int i = 0; i < objects.Count; i++)
+            {
+                if (objects[i].X == X && objects[i].Y == Y && objects[i].Name == Name)
+                {
+                    objects.RemoveAt(i);
+                    break;
+                }
+            }
         }
     }
 }

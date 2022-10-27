@@ -128,6 +128,7 @@
 21,6,wall
 23,6,wall
 26,6,wall
+20,7,portal
 21,7,wall
 23,7,wall
 26,7,wall
@@ -149,6 +150,7 @@
 26,8,wall
 3,9,wall
 4,9,wall
+5,9,rip1
 6,9,wall
 10,9,wall
 17,9,wall
