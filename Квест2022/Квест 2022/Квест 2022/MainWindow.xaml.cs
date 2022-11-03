@@ -38,6 +38,7 @@ namespace Квест_2022
         List<Product> products = new List<Product>();
         Dictionary<char, string> Scrolls = new Dictionary<char, string>();
         Dictionary<string, int> Items = new Dictionary<string, int>();
+        Dictionary<string, int> ShopItems;
         public MainWindow()
         {
             InitializeComponent();
@@ -233,6 +234,19 @@ namespace Квест_2022
                 }
             }
             return map;
+
+        }
+
+        Dictionary<string, int> GetShopItems(string path)
+        {
+            string[] str = File.ReadAllLines(path);
+            Dictionary<string, int> ItemsShop = new Dictionary<string, int>();
+            for(int i = 0; i < str.Length; i++)
+            {
+                string[] subs = str[i].Split(',');
+                ItemsShop.Add(subs[0], int.Parse(subs[1]));
+            }
+            return ItemsShop;
         }
 
         void Collect(int x, int y)
@@ -332,6 +346,10 @@ namespace Квест_2022
                 if(Cells[Player.X, Player.Y] == 'M')
                 {
                     ShopWindow w = new ShopWindow();
+                    w.ShopItems = GetShopItems(@"C:\Users\Admin\Documents\GitHub\GameProject\Квест2022\Квест 2022\Квест 2022\resourses\Shop\товары.txt");
+                    w.PlayerItems = Items;
+                    w.Init();
+                        // TODO: Реализовать функцию Init
                     w.ShowDialog();
                 }
                 break;
@@ -339,7 +357,6 @@ namespace Квест_2022
             case Key.V:
                 map.AnimationInCell("exp", Player.X, Player.Y, 1);
                     break;
-
             }
             Collect(Player.X, Player.Y);
             CheckViktory();

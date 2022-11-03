@@ -153,7 +153,40 @@ for(int i = 0; i < s.Length; i++)
 9.1.6) В наш объект анимации добавляем(название объекта.AddFrame) кадр(картинку) с параметрами время отображения на экране и названия картинки.
 9.1.7) После цикла for добавляем объект анимации в карту с помощью map.Library.AddAnimation(основа слова, объект анимации).
 
+Окна WPF----------------------------------------------------------------------------Окна WPF
+0) Добавляем окно в проект;
+0.1) Кликаем на название проекта в Solushion Explorer и нахадим Add->NewItem
+0.2) Находим WindowWpf и называем класс
 
+1) Разметка окна;
+1.1) Внутри окна должен находится контейнер компоновки(StackPanel, WrapPanel, DockPanel, Grid, -)
+1.2) Неопходимо сделать рисунок с разметкой окна, с вложеными контейнерами компоновки
+1.3) 
+
+
+Контейнеры компоновки:
+StackPanel(Orientation)
+WrapPanel(Orientation)
+Grid -пример->
+
+<Grid>
+	<Grid.ColumnDefinitions> // ColumnDefinitions- это описание столбцов, каждый вложеный ColumnDefinition - это сталобец таблицы.
+		<ColumnDefinition Width="*"> </ColumnDefinition>
+		<ColumnDefinition Width="100"> </ColumnDefinition>
+	</Grid.ColumnDefinitions>
+
+	<Grid.RowDefinitions> // RowDefinitions - это описание строк, каждый вложеный RowDefinition - это строки таблицы.
+		<RowDefinition Height="2*"> </RowDefinition>
+		<RowDefinition Height="3*"> </RowDefinition>
+		
+	</Grid.RowDefinitions>
+	<TextBlock Grid.Column="0" Grid.Row="1" x:Name="tbGritings"> // Для каждого элемента внутри grid мы должны обозначить строку и столбец.
+	</TextBlock>
+	<Image Grid.Column="1" Grid.Row="1" Name="imgAvatar"> </Image>
+	<WrapPanel Name="ProductList" Grid.Row="0" Grid.Column="0"> </WrapPanel>
+</Grid>
+
+<-пример- Grid
 JSON--------------------------------------------------------------------------------JSON
 0)Подключение Newtonsoft.Json;
 0.1) Щёлкнуть правой кнопкой в имени проекта(Solushion Explorer), выбираем - Manage NuGet packages -
