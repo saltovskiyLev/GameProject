@@ -46,6 +46,7 @@ namespace Квест_2022
             map = MapCreator.GetUniversalMap(this, mapInfo);
             MapContainer.Children.Add(map.Canvas);
             map.SetGridColor(Brushes.RosyBrown);
+            Items.Add("coin", 0);
             //map.DrawGrid();
             AddPictures();
             JsonMap = new List<JsonGameObject>();

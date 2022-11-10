@@ -13,6 +13,7 @@ namespace Квест_2022
             this.Orientation = Orientation.Vertical;
             this.Children.Add(ItemName);
             this.Children.Add(ItemPrice);
+            this.Margin = new System.Windows.Thickness(10, 5, 10, 0);
             ItemName.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
             ItemPrice.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
         }
