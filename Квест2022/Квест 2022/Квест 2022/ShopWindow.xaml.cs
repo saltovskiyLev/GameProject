@@ -31,6 +31,7 @@ namespace Квест_2022
             TBmoney.Text = PlayerItems["coin"].ToString();
             foreach (string key in PlayerItems.Keys)
             {
+                if (key == "coin") continue;
                 ShopItemUI item = new ShopItemUI(key, PlayerItems[key]);
                 WPplayerItems.Children.Add(item);
             }
@@ -51,7 +52,39 @@ namespace Квест_2022
         private void Product_MouseDown(object sender, MouseButtonEventArgs e)
         {
             string productName = (sender as TextBlock).Text;
-            MessageBox.Show("Вы действительно хотите купить" + productName, "Покупка", MessageBoxButton.YesNo);
+            if (ShopItems[productName] <= PlayerItems["coin"])
+            {
+                MessageBoxResult res;
+                res = MessageBox.Show("Вы действительно хотите купить" + productName, "Покупка", MessageBoxButton.YesNo);
+                if (res == MessageBoxResult.Yes)
+                {
+                    PlayerItems["coin"] = PlayerItems["coin"] - ShopItems[productName];
+                    if (PlayerItems.ContainsKey(productName))
+                    {
+                        PlayerItems[productName]++;
+                        for(int i = 0; i < WPplayerItems.Children.Count; i++)
+                        {
+                            var s = WPplayerItems.Children[i] as ShopItemUI;
+                            if (s.ItemName.Text == productName)
+                            {
+                                s.ItemPrice.Text = PlayerItems[productName].ToString();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        PlayerItems.Add(productName, 1);
+                        ShopItemUI item = new ShopItemUI(productName, 1);
+                        WPplayerItems.Children.Add(item);
+                    }
+                    TBmoney.Text = PlayerItems["coin"].ToString();
+                }
+            }
+
+            else
+            {
+                MessageBox.Show("У вас недостаточно средств для покупки: " + productName);
+            }
         }
     }
 }

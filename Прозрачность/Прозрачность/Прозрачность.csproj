@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D5C9A5ED-F5D3-45A0-AB36-F05AB216C1D0}</ProjectGuid>
+    <ProjectGuid>{5854CD71-8EFA-4A27-B67C-85C847CF625D}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>The_Lord_Of_The_Rings</RootNamespace>
-    <AssemblyName>The Lord Of The Rings</AssemblyName>
+    <RootNamespace>Прозрачность</RootNamespace>
+    <AssemblyName>Прозрачность</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -35,18 +35,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BaseLogic">
-      <HintPath>..\..\dll\BaseLogic.dll</HintPath>
-    </Reference>
-    <Reference Include="CanvasVisualisation">
-      <HintPath>..\..\dll\CanvasVisualisation.dll</HintPath>
-    </Reference>
-    <Reference Include="Interaction">
-      <HintPath>..\..\dll\Interaction.dll</HintPath>
-    </Reference>
-    <Reference Include="LabLib">
-      <HintPath>..\..\dll\LabLib.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -67,12 +55,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Gates.cs" />
-    <Compile Include="Product.cs" />
-    <Compile Include="WindowShop.xaml.cs">
-      <DependentUpon>WindowShop.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Перекючатель.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -81,15 +63,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GameObject.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="WindowShop.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
