@@ -19,17 +19,19 @@
                 <RowDefinition Height="100"> </RowDefinition>
                 
             </Grid.RowDefinitions>
-            <TextBlock Grid.Column="0" Grid.Row="1" x:Name="tbGritings">
+            <TextBlock Grid.Column="0" Grid.Row="1" x:Name="tbGreetings">
             </TextBlock>
-            <Image Grid.Column="1" Grid.Row="1" Name="imgAvatar"> </Image>
+            <Border CornerRadius="50, 50, 50, 50" Grid.Column="1" Grid.Row="1">
+                <Image Name="imgAvatar" Width="100" Height="100"> </Image>
+            </Border>
             <WrapPanel Name="ProductList" Grid.Row="0" Grid.Column="0"> </WrapPanel>
             <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="0">
                 <TextBlock Text="Деньги" HorizontalAlignment="Center" FontSize="15" FontWeight="Bold"> </TextBlock>
                 <TextBlock x:Name="TBmoney" HorizontalAlignment="Center" FontSize="20" MouseDown="TBmoney_MouseDown"> </TextBlock>
                 <TextBlock Text="Предметы игрока" HorizontalAlignment="Center" FontWeight="Bold"> </TextBlock>
                 <WrapPanel Name="WPplayerItems">
-                    
                 </WrapPanel>
+                <TextBlock x:Name="tbMessage" Background="PaleVioletRed" Opacity="0"> </TextBlock>
             </StackPanel>
         </Grid>
     </StackPanel>

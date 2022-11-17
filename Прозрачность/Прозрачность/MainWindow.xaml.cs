@@ -24,17 +24,37 @@ namespace Прозрачность
         int counter = 100;
         Timer timer;
         Action timerAction;
+        Action TestAction;
         public MainWindow()
         {
             InitializeComponent();
             timerAction += SetOpacity;
             TimerCallback tc = new TimerCallback(CallBack);
             timer = new Timer(tc, null, 0, 10);
+            // пример работы с Action
+            TestAction += F1;
+            TestAction += F2;
+            TestAction -= F1;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             tb.Opacity = 1;
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            TestAction();
+        }
+
+        void F1()
+        {
+            MessageBox.Show("Функция 1");
+        }
+
+        void F2()
+        {
+            MessageBox.Show("Функция 2");
         }
 
         void SetOpacity()
@@ -52,5 +72,6 @@ namespace Прозрачность
                 Application.Current.Dispatcher.Invoke(timerAction);
             }
         }
+
     }
 }

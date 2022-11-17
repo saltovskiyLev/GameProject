@@ -10,6 +10,7 @@
         <StackPanel x:Name="stackPanel">
             <Button Content="здравствуйте" Click="Button_Click">
             </Button>
+            <Button Content="TestAction" Click="Button_Click_1"> </Button>
             <TextBlock x:Name="tb" Text="Это исчезающий текст" Background="LawnGreen" Foreground="Black" Opacity="0">> </TextBlock>
         </StackPanel>
     </Grid>

@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Threading;
+using System.Media;
 
 namespace Квест_2022
 {
@@ -21,10 +23,22 @@ namespace Квест_2022
     {
         public Dictionary<string, int> ShopItems;
         public Dictionary<string, int> PlayerItems;
-        public ShopWindow()
+        Timer timer;
+        Action ShowText;
+        public ShopWindow(BitmapImage avatar)
         {
             InitializeComponent();
+            imgAvatar.Source = avatar;
+            ShowText += SetOpacity;
+            TimerCallback tb = new TimerCallback(CallBack);
+            timer = new Timer(tb, null, 0, 20);
         }
+
+        void CallBack(object obj = null)
+        {
+            if(Application.Current != null) Application.Current.Dispatcher.Invoke(ShowText);
+        }
+
         public void Init()
         {
             // Заполнение панелей предметов игрока
@@ -83,7 +97,16 @@ namespace Квест_2022
 
             else
             {
-                MessageBox.Show("У вас недостаточно средств для покупки: " + productName);
+                tbMessage.Text = "У вас недостаточно средств";
+                tbMessage.Opacity = 1;
+            }
+        }
+
+        void SetOpacity()
+        {
+            if(tbMessage.Opacity > 0)
+            {
+                tbMessage.Opacity -= 0.01;
             }
         }
     }

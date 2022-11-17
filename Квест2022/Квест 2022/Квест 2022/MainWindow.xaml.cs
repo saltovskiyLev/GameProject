@@ -150,6 +150,7 @@ namespace Квест_2022
             map.Library.AddPicture("nothing", "nothing.png");
             map.Library.AddPicture("ЗАБОР", "ЗАБОР.png");
             map.Library.AddPicture("shop", "Shop.png");
+            map.Library.AddPicture("sidorowich", "сидорович.jpg");
             CreateAnimation("exp", 10);
         }
         string[] GetLines(string FileName)
@@ -346,7 +347,9 @@ namespace Квест_2022
             case Key.Space:
                 if(Cells[Player.X, Player.Y] == 'M')
                 {
-                    ShopWindow w = new ShopWindow();
+                    var uri = new Uri(ResoursesFolderPath + @"images\сидорович.jpg");
+                    var bmp = new BitmapImage(uri);
+                    ShopWindow w = new ShopWindow(bmp);
                     w.ShopItems = GetShopItems(@"C:\Users\Admin\Documents\GitHub\GameProject\Квест2022\Квест 2022\Квест 2022\resourses\Shop\товары.txt");
                     w.PlayerItems = Items;
                     w.Init();
@@ -363,6 +366,8 @@ namespace Квест_2022
             Collect(Player.X, Player.Y);
             CheckViktory();
         }
+
+
 
         void CreateProducts()
         {
