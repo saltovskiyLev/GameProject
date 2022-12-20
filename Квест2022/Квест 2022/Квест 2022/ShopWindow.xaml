@@ -6,9 +6,7 @@
         xmlns:local="clr-namespace:Квест_2022"
         mc:Ignorable="d"
         Title="ShopWindow" Height="450" Width="800">
-    <StackPanel Orientation="Vertical">
-        <WrapPanel Name="wpProducts"> </WrapPanel>
-        <Grid>
+        <Grid Background="DarkGray">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"> </ColumnDefinition>
                 <ColumnDefinition Width="150"> </ColumnDefinition>
@@ -21,8 +19,8 @@
             </Grid.RowDefinitions>
             <TextBlock Grid.Column="0" Grid.Row="1" x:Name="tbGreetings">
             </TextBlock>
-            <Border CornerRadius="50, 50, 50, 50" Grid.Column="1" Grid.Row="1">
-                <Image Name="imgAvatar" Width="100" Height="100"> </Image>
+            <Border CornerRadius="50, 50, 50, 50" Grid.Column="1" Grid.Row="1" Name="avatarImage">
+                
             </Border>
             <WrapPanel Name="ProductList" Grid.Row="0" Grid.Column="0"> </WrapPanel>
             <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="0">
@@ -34,5 +32,4 @@
                 <TextBlock x:Name="tbMessage" Background="PaleVioletRed" Opacity="0"> </TextBlock>
             </StackPanel>
         </Grid>
-    </StackPanel>
 </Window>

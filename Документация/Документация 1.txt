@@ -17,14 +17,13 @@
 		...пример...
         static public UniversalMap_Wpf map; // Объект карты. Объявляем на уровне класса. Создаём карту в конструкторе окна(Main Window).
         CellMapInfo mapInfo = new CellMapInfo(клеток по X, Клеток по Y, длина стороны клетки, отступ от границ контейнера);
+		map = MapCreator.GetUniversalMap(this, mapInfo); // В конструкторе окна создаётся карта по заланным параметрам. 
 		...пример...
 		
-1.4) Добавить объект карты в Children Containder.
+1.4) Добавить объект карты в Children Container.
 			...пример...
-            Имя_контейнера.карты_карты.Children.Add(map.Canvas); // Проблема с Children.
+            Имя_контейнера_карты.Children.Add(имя_карты.Canvas);
 			...пример...
-
-	//map = MapCreator.GetUniversalMap(this, mapInfo); Этой стоки и объяснения не было.
 
 	Как нарисовать на клеточной карте изображение?
 Ответ:

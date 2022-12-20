@@ -28,7 +28,8 @@ namespace Квест_2022
         public ShopWindow(BitmapImage avatar)
         {
             InitializeComponent();
-            imgAvatar.Source = avatar;
+            //imgAvatar.Source = avatar;
+            avatarImage.Background = new ImageBrush(avatar);
             ShowText += SetOpacity;
             TimerCallback tb = new TimerCallback(CallBack);
             timer = new Timer(tb, null, 0, 20);

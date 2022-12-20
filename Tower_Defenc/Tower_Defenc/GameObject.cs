@@ -97,7 +97,6 @@ namespace Tower_Defenc
             GameObject Tower = new GameObject(TowerPicture, ContainerName + "_2", "TOWER");
             map.ContainerSetZIndex(Tower.ContainerName, 120);
             Children.Add(Tower);
-
         }
 
 

@@ -1,0 +1,1 @@
+<Image Name="imgAvatar" Width="100" Height="100"> </Image>

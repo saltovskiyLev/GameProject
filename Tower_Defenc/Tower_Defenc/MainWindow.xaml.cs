@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using GameMaps;
+using Newtonsoft.Json;
+using System.IO;
 using GameMaps.Layouts;
 using System.Windows.Shapes;
 using MenuPanel_For_TowerDefenc_;
@@ -89,26 +91,52 @@ namespace Tower_Defenc
             scrollX = -CenterX + 800;
             scrollY = -CenterY + 400;
             map.Canvas.Margin = new Thickness(scrollX, scrollY, 0, 0);
-            //ipan = new InventoryPanel(map.Library, 40, 16);
             UnitsPanel = new InventoryPanel(map.Library, 120, 16);
             lay = LayoutsFactory.GetLayout(LayoutType.SingleZone, GridMap);
             lay.SetBackground(Brushes.Wheat);
             lay.Attach(map, 0);
-            //lay.Attach(ipan, 1);
             lay.Attach(UnitsPanel, 1);
             lay.Attach(TextTimer, 1);
             AddPictures();
-            // Стоимость объектов
+            SetCost();
+            CreateUsitsPanel();
+            GameObject.map = map;
+            basa = new GameObject("basa", "BASA", "basa");
+            timer.AddAction(GameCycle, 20);
+            timer.AddAction(Countdown, 1000);
+            TextTimer.TextBox.IsEnabled = false;
+            timer.AddAction(CrystalSpawn, 1000);
+            CreateBases();
+            map.Mouse.SetMouseSingleLeftClickHandler(MapClick);
+            tbShowMoney = tbMoney;
+            CreateWaves();
+            GameObject BossEnemy = new GameObject();
+            timer.AddAction(CheckScroll, 12);
+            timer.AddAction(RotateObject, 12);
+            map.Canvas.Children.Add(PlaceHolder);
+            PlaceHolder.Fill = Brushes.Gray;
+            PlaceHolder.Opacity = 0.5;
+            map.Keyboard.SetSingleKeyEventHandler(CheckKey);
+            AddMoney(0);
+            CreateMenu();
+            GameObject g = JsonGameObjects.GetJsonGO(@"C:\Users\Admin\Documents\GitHub\GameProject\Tower_Defenc\Tower_Defenc\Документы\параметры игровых объектов\ПротивникМалый.json");
+            g.SetCoordinate(700, 500);
+        }
+
+        void SetCost()
+        {
             Cost.Add(AllyUnits.БОЕЗАПАС, 500);
             Cost.Add(AllyUnits.ПУЛЕМЁТНИК, 100);
             Cost.Add(AllyUnits.ЧИСТОТАНК, 50);
             Cost.Add(AllyUnits.Cборщик_Ресурсов, 25);
             Cost.Add(AllyUnits.МИНА, 100);
             Cost.Add(AllyUnits.Арта, 200);
-            // Стоимость объектов
-            //ipan.AddItem("money", "money", money.ToString()); <- СТАРАЯ СИСТЕМА
+        }
+
+        void CreateUsitsPanel()
+        {
             UnitsPanel.AddItem(AllyUnits.Cборщик_Ресурсов.ToString(), "scavenger",
-                "Он будет делать ваши деньги: " + Cost[AllyUnits.Cборщик_Ресурсов] + " Имя: РООБ");
+    "Он будет делать ваши деньги: " + Cost[AllyUnits.Cборщик_Ресурсов] + " Имя: РООБ");
             UnitsPanel.AddItem(AllyUnits.ЧИСТОТАНК.ToString(), "Tank_Low_AllY",
                 "Средний танк без поворота башни: " + Cost[AllyUnits.ЧИСТОТАНК] + " ЖАР");
             UnitsPanel.AddItem(AllyUnits.ПУЛЕМЁТНИК.ToString(), "ПУЛЕМЁТНИК",
@@ -121,16 +149,12 @@ namespace Tower_Defenc
                 "СЕЙЧАС БУДЕТ ЖАРКО: " + Cost[AllyUnits.Арта] + " Имя: Арта");
             // выше идёт добавление танков и зданиний в UnitsPanel
             UnitsPanel.SetMouseClickHandler(Build);
-            GameObject.map = map;
-            basa = new GameObject("basa", "BASA", "basa");
-            // ниже координаты базы и размеры
-            // ниже работа с таймером
-            timer.AddAction(GameCycle, 20);
-            timer.AddAction(Countdown, 1000);
+        }
 
-            TextTimer.TextBox.IsEnabled = false;
+        void CreateBases()
+        {
 
-             // работа с базой врага //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // работа с базой врага //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             BaseEnemy = new GameObject("EnemyBase", "BaseEnemy", "EnemyBase");
             map.ContainerSetMaxSide("BaseEnemy", 100);
             BaseEnemy.SetCoordinate(240, 300);
@@ -141,7 +165,6 @@ namespace Tower_Defenc
             BaseEnemy.NeedToMove = false;
             BaseEnemy.NeedToRotate = false;
             BaseEnemy.SubdivisionNumber = 1;
-            timer.AddAction(CrystalSpawn, 1000);
             // работа с базой врага //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // работа с нашей базой
             map.ContainerSetSize(basa.ContainerName, 100, 100);
@@ -156,22 +179,6 @@ namespace Tower_Defenc
             basa.ContainerHeight = 100;
             basa.ContainerWidth = 100;
             map.ContainerSetIndents(basa.ContainerName, 27, 27);
-            // работа с нашей базой
-
-            map.Mouse.SetMouseSingleLeftClickHandler(MapClick);
-            tbShowMoney = tbMoney;
-
-            CreateWaves();
-            GameObject BossEnemy = new GameObject();
-            timer.AddAction(CheckScroll, 12);
-            timer.AddAction(RotateObject, 12);
-            map.Canvas.Children.Add(PlaceHolder);
-            PlaceHolder.Fill = Brushes.Gray;
-            PlaceHolder.Opacity = 0.5;
-            map.Keyboard.SetSingleKeyEventHandler(CheckKey);
-            AddMoney(0);
-            //map.Keyboard.SetSingleKeyEventHandler(CheckKey);А
-            CreateMenu();
         }
 
         void CheckEnemyBase()
@@ -353,9 +360,9 @@ namespace Tower_Defenc
 
             UnitsMenu.AddTab("Танки");
             UnitsMenu.AddTab("Здания");
-            UnitsMenu.CreateNewItem("Средний танк\nбез поворота\nбашни: 50", @"C:\Users\Admin\Documents\GitHub\GameProject\Tower_Defenc\Tower_Defenc\images\Танк с башней без поворота(ДОБРЫЙ средний).png", "ЧИСТОТАНК", "Танки", Build);
-            UnitsMenu.CreateNewItem("Средний танк\nбез поворота\nбашни: 100", @"C:\Users\Admin\Documents\GitHub\GameProject\Tower_Defenc\Tower_Defenc\images\flyerSand4.png", "Cборщик_Ресурсов", "Танки", Build);
-            UnitsMenu.CreateNewItem("сборщик ресуросов\nбез поворота\nбашни: 100", @"C:\Users\Admin\Documents\GitHub\GameProject\Tower_Defenc\Tower_Defenc\images\Танк с башней без поворота(ДОБРЫЙ СЛАБЫЙПУЛЕМЁТНЫЙ).png", "ПУЛЕМЁТНИК", "Танки", Build);
+            UnitsMenu.CreateNewItem("Малый танк\nбез поворота\nбашни: 50", @"C:\Users\Admin\Documents\GitHub\GameProject\Tower_Defenc\Tower_Defenc\images\Танк с башней без поворота(ДОБРЫЙ средний).png", "ЧИСТОТАНК", "Танки", Build);
+            UnitsMenu.CreateNewItem("сборщик ресурсов: 100", @"C:\Users\Admin\Documents\GitHub\GameProject\Tower_Defenc\Tower_Defenc\images\flyerSand4.png", "Cборщик_Ресурсов", "Танки", Build);
+            UnitsMenu.CreateNewItem("средний танк без поворота\nбашни: 100", @"C:\Users\Admin\Documents\GitHub\GameProject\Tower_Defenc\Tower_Defenc\images\Танк с башней без поворота(ДОБРЫЙ СЛАБЫЙПУЛЕМЁТНЫЙ).png", "ПУЛЕМЁТНИК", "Танки", Build);
             //UnitsMenu.
             UnitsMenu.CreateNewItem("Арта: 200", @"C:\Users\Admin\Documents\GitHub\GameProject\Tower_Defenc\Tower_Defenc\images\Artillery.png", "Арта", "Здания", Build);
             UnitsMenu.CreateNewItem("Дом со снарядами: 500", @"C:\Users\Admin\Documents\GitHub\GameProject\Tower_Defenc\Tower_Defenc\images\i.png", "БОЕЗАПАС", "Здания", Build);
@@ -438,6 +445,8 @@ namespace Tower_Defenc
                 */
             }
         }
+
+        //TODO: реальизовать деасириалезацию json File
 
         void Countdown()
         {
