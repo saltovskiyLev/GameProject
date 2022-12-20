@@ -10,5 +10,7 @@
 	"EnemyLOW"
 	],
 	"Type": "Type",
-	"MaxSide": 72
+	"MaxSide": 72,
+	"DestroyedImage": "Destroyed_Tank_Low_ALLY",
+	"Range": 150
 }

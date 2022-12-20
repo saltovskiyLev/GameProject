@@ -26,6 +26,10 @@ namespace Tower_Defenc
         public List<string> PictureSet { get; set; }
         [JsonProperty("MaxSide")]
         public int MaxSide { get; set; }
+        [JsonProperty("DestroyedImage")]
+        public string DestroyedImage { get; set; }
+        [JsonProperty("Range")]
+        public int Range { get; set; }
 
 
         static int counter = 0;
@@ -46,12 +50,15 @@ namespace Tower_Defenc
             }
             obj.Speed = obj1.speed;
             obj.CanClash = obj1.CanClash;
-            obj.Recharger = new SimpleRechargen();//
+            /*obj.Recharger = new SimpleRechargen();//
             obj.Recharger.ChargeSpeed = obj1.ChargeSpeed;
-            obj.Recharger.ChargeReady = obj1.ChargeReady;
+            obj.Recharger.ChargeReady = obj1.ChargeReady;*/
             obj.SetHp(obj.HP);
             obj.MaxAmmo = obj1.MaxAmmo;
+            obj.AddAmmo(obj1.MaxAmmo);
             MainWindow.map.ContainerSetMaxSide(obj.ContainerName, obj1.MaxSide);
+            obj.Range = obj1.Range;
+            obj.destroyedImage = obj1.DestroyedImage;
             return obj;
         }
     }
