@@ -374,7 +374,7 @@ namespace Tower_Defenc
             waves[0].Units = new List<WaveUnit>();
             WaveUnit unit = new WaveUnit();
             unit.UnitName = "EnemyLOW";
-            unit.UnitCount = 3;
+            unit.UnitCount = 1;
             waves[0].Units.Add(unit);
         }
 
@@ -404,7 +404,7 @@ namespace Tower_Defenc
                         Enemy = GetEnemy(@"C:\Users\Admin\Documents\GitHub\GameProject\Tower_Defenc\Tower_Defenc\Документы\параметры игровых объектов\ПротивникМалый.json");
                         //map.ContainerSetMaxSide(Enemy.ContainerName, 72);//
                         //Enemy.Speed = 1;//
-                        //Enemy.CanClash = true;
+                        //Enemy.CanClash =   true;
                         Shoot Shoot = new Shoot("shoot", Enemy, Allies);
                         Enemy.Actions.Add(Shoot);
                         Enemy.Recharger = new SimpleRechargen();//
@@ -884,6 +884,7 @@ namespace Tower_Defenc
                 //Enemis[i].Rotate();
                 for (int j = 0; j < Enemis[i].Actions.Count; j++)
                 {
+                    
                     Enemis[i].Actions[j].Act();
                 }
                 if (Enemis[i].IsDeleted)

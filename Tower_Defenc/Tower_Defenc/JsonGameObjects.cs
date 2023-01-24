@@ -53,7 +53,7 @@ namespace Tower_Defenc
             /*obj.Recharger = new SimpleRechargen();//
             obj.Recharger.ChargeSpeed = obj1.ChargeSpeed;
             obj.Recharger.ChargeReady = obj1.ChargeReady;*/
-            obj.SetHp(obj.HP);
+            obj.SetHp(obj1.Hp);
             obj.MaxAmmo = obj1.MaxAmmo;
             obj.AddAmmo(obj1.MaxAmmo);
             MainWindow.map.ContainerSetMaxSide(obj.ContainerName, obj1.MaxSide);

@@ -1,0 +1,16 @@
+{
+	"name": "EnemyLOW",
+	"speed": 1.0,
+	"CanClash": true,
+	"ChargeSpeed": 1,
+	"ChargeReady": 300,
+	"Hp": 72,
+	"MaxAmmo": 10,
+	"PictureSet": [
+	"EnemyLOW"
+	],
+	"Type": "Type",
+	"MaxSide": 72,
+	"DestroyedImage": "Destroyed_Tank_Low_ALLY",
+	"Range": 150
+}
