@@ -354,7 +354,7 @@ namespace Квест_2022
                     w.PlayerItems = Items;
                     w.Init();
                         // TODO: Реализовать функцию Init
-                    w.ShowDialog();
+                    w.ShowDialog(); 
                     tbItemText.Text = GetItemsText();
                 }
                 break;

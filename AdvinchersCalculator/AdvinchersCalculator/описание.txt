@@ -1,0 +1,20 @@
+0 TheFool
+A = 5
+B = 7
+C = I Создание форма из песка
+D = nf
+F = 8
+
+II MagicanRed
+A = 6
+B = 2
+С = Повеление огнём
+D = 6
+F = 9
+
+IV HightPressed 
+A = 8
+B = 9
+C = Летает
+D = 2
+F = 7

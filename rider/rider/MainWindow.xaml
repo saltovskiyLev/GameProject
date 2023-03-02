@@ -10,5 +10,7 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <StackPanel Name="SpMap"></StackPanel>
+        <Button x:Name="BWindow" MouseLeftButtonDown="BWindow_MouseLeftButtonDown" Content="Посмотреть достижения" BorderBrush="Black" Width="180" Height="20"></Button>
+        <TextBlock Text="Вы проиграли" Width="100" Margin="50" FontSize="1" Name="TBGameOwer"></TextBlock>
     </Grid>
 </Window>

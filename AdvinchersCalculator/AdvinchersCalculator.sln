@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30413.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdvinchersCalculator", "AdvinchersCalculator\AdvinchersCalculator.csproj", "{13F535A0-57CE-4388-AE23-061724E6146E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{13F535A0-57CE-4388-AE23-061724E6146E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13F535A0-57CE-4388-AE23-061724E6146E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13F535A0-57CE-4388-AE23-061724E6146E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13F535A0-57CE-4388-AE23-061724E6146E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2702ACB1-79F0-47F1-B881-F1B88DE9330A}
+	EndGlobalSection
+EndGlobal

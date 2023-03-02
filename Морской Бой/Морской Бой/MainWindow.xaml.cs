@@ -24,87 +24,202 @@ namespace Морской_Бой
     {
         Random r = new Random();
         CellMapInfo mapInfo = new CellMapInfo(10, 10, 50, 0);
-        UniversalMap_Wpf mapPL1;
-        UniversalMap_Wpf mapPL2;
+        UniversalMap_Wpf mapLeft;
+        UniversalMap_Wpf mapRight;
+        int Player = 1;
+        bool IsWaiting = false;
+        bool CanShoot = true;
         int[,] map1 = new int[10, 10];
         int[,] map2 = new int[10, 10];
+        List<ShipCoordinate>[] coordinates1 = new List<ShipCoordinate>[10];
+        List<ShipCoordinate>[] coordinates2 = new List<ShipCoordinate>[10];
+
 
         public MainWindow()
         {
             InitializeComponent();
-            mapPL1 = MapCreator.GetUniversalMap(this, mapInfo);
-            mapPL2 = MapCreator.GetUniversalMap(this, mapInfo);
-            GridMap.Children.Add(mapPL1.Canvas);
-            GridMap.Children.Add(mapPL2.Canvas);
-            Grid.SetColumn(mapPL1.Canvas, 0);
-            Grid.SetColumn(mapPL2.Canvas, 2);
+            mapLeft = MapCreator.GetUniversalMap(this, mapInfo);
+            mapRight = MapCreator.GetUniversalMap(this, mapInfo);
+            GridMap.Children.Add(mapLeft.Canvas);
+            GridMap.Children.Add(mapRight.Canvas);
+            Grid.SetColumn(mapLeft.Canvas, 0);
+            Grid.SetColumn(mapRight.Canvas, 2);
             AddPictures();
 
-            mapPL1.Canvas.HorizontalAlignment = HorizontalAlignment.Right;
+            mapLeft.Canvas.HorizontalAlignment = HorizontalAlignment.Right;
 
-            mapPL1.DrawGrid();
-            mapPL2.DrawGrid();
+            mapLeft.DrawGrid();
+            mapRight.DrawGrid();
 
-            map1 = CreateMap();
-            map2 = CreateMap();
+            CreateMap(out map1, out coordinates1);
+            CreateMap(out map2, out coordinates2);
+
+            DrawMap(map1, mapLeft, false);
+            DrawMap(map2, mapRight, true);
+
+            mapLeft.Canvas.Tag = "123";
+
+            mapRight.Mouse.SetMouseSingleLeftClickHandler(GetCellsShoot);
+
         }
 
         void AddPictures()
         {
-            mapPL1.Library.ImagesFolder = new PathInfo { Path = "..\\..\\images", Type = PathType.Relative };
-            mapPL1.Library.AddPicture("ship", "ship.png");
-            mapPL1.Library.AddPicture("DestroyedShip", "DestroesShip.png");
-            mapPL1.Library.AddPicture("miss", "miss.png");
+            mapLeft.Library.ImagesFolder = new PathInfo { Path = "..\\..\\images", Type = PathType.Relative };
+            mapLeft.Library.AddPicture("ship", "ship.png");
+            mapLeft.Library.AddPicture("DestroyedShip", "DestroesShip.png");
+            mapLeft.Library.AddPicture("miss", "miss.png");
 
-            mapPL2.Library.ImagesFolder = new PathInfo { Path = "..\\..\\images", Type = PathType.Relative };
-            mapPL2.Library.AddPicture("ship", "ship.png");
-            mapPL2.Library.AddPicture("DestroyedShip", "DestroesShip.png");
-            mapPL2.Library.AddPicture("miss", "miss.png");
+            mapRight.Library.ImagesFolder = new PathInfo { Path = "..\\..\\images", Type = PathType.Relative };
+            mapRight.Library.AddPicture("ship", "ship.png");
+            mapRight.Library.AddPicture("DestroyedShip", "DestroesShip.png");
+            mapRight.Library.AddPicture("miss", "miss.png");
+            mapRight.Library.AddPicture("o", "o.png");
 
         }
 
-
-        int[,] CreateMap()
+        bool CheckShipDestroyed(int[,] map, List<ShipCoordinate>[] coordinates, int X, int Y, out int index)
         {
-            int[,] map = new int[10, 10];
-            SetShip(map, 4);
-            SetShip(map, 3);
-            SetShip(map, 3);
-            SetShip(map, 2);
-            SetShip(map, 2);
-            SetShip(map, 2);
-            SetShip(map, 1);
-            SetShip(map, 1);
-            SetShip(map, 1);
-            SetShip(map, 1);
+            bool IsShipDestroyed = true;
+            index = -1;
 
-            return map;
+            for(int i = 0; i < coordinates.Length; i++)
+            {
+                IsShipDestroyed = true;
+                for (int j = 0; j < coordinates[i].Count; j++)
+                {
+                    if(coordinates[i][j].X == X && coordinates[i][j].Y == Y)
+                    {
+                        index = i;
+
+                        coordinates[i][j].IsDestroyed = true;
+                    }
+
+                    if(coordinates[i][j].IsDestroyed == false)
+                    {
+                        IsShipDestroyed = false;
+                    }
+
+                }
+
+                if(index >= 0)
+                {
+                    break;
+                }
+            }
+            return IsShipDestroyed;
         }
 
-        void DrawMap(int[,] map, UniversalMap_Wpf MapVisial)
+        void GetCellsShoot(int X, int Y, int cX, int cY)
+        {
+            if (!CanShoot) return;
+            int[,] map;
+            List<ShipCoordinate>[] coordinates;
+            if(Player == 1)
+            {
+                map = map2;
+                coordinates = coordinates2;
+            }
+            else
+            {
+                map = map1;
+                coordinates = coordinates1;
+            }
+
+            if (map[cX, cY] == 0)
+            {
+                map[cX, cY] = 3;
+                mapRight.DrawInCell("miss", cX, cY);
+                BTNnextTurn.IsEnabled = true;
+
+                CanShoot = false;
+            }
+
+            if(map[cX, cY] == 1)
+            {
+                map[cX, cY] = 2;
+                mapRight.DrawInCell("DestroyedShip", cX, cY);
+                BTNnextTurn.IsEnabled = true;
+                CanShoot = false;
+
+                int index;
+                bool IsDestroyed = CheckShipDestroyed(map, coordinates, cX, cY, out index);
+
+                if(IsDestroyed)
+                {
+                    DrawShipBorder(coordinates[index]);
+                    MessageBox.Show("...");
+                }
+            }
+        }
+
+
+        void CreateMap(out int[,] map, out List<ShipCoordinate>[] coordinates)
+        {
+            coordinates = new List<ShipCoordinate>[10];
+            map = new int[10, 10];
+            SetShip(map, 4, coordinates, 0);
+            SetShip(map, 3, coordinates, 1);
+            SetShip(map, 3, coordinates, 2);
+            SetShip(map, 2, coordinates, 3);
+            SetShip(map, 2, coordinates, 4);
+            SetShip(map, 2, coordinates, 5);
+            SetShip(map, 1, coordinates, 6);
+            SetShip(map, 1, coordinates, 7);
+            SetShip(map, 1, coordinates, 8);
+            SetShip(map, 1, coordinates, 9);
+        }
+
+        void DrawMap(int[,] map, UniversalMap_Wpf MapVisial, bool IsEnemy)
         {
             for (int i = 0; i < map.GetLength(1); i++)
             {
                 for (int j = 0; j < map.GetLength(0); j++)
                 {
-                    if (map[j, i] == 1)
+                    if (map[j, i] == 1 && !IsEnemy)
                     {
-                        mapPL1.DrawInCell("ship", j, i);
+                        MapVisial.DrawInCell("ship", j, i);
                     }
                     else if(map[j, i] == 2)
                     {
-                        mapPL1.DrawInCell("DestroyedShip", j, i);
+                        MapVisial.DrawInCell("DestroyedShip", j, i);
                     }
-                    else
+                    else if(map[j, i] == 3)
                     {
-                        mapPL1.DrawInCell("miss", j, i);
+                        MapVisial.DrawInCell("miss", j, i);
                     }
                 }
             }
         }
 
-        void SetShip(int[,] map, int Length)
+        void DrawShipBorder(List<ShipCoordinate> coords)
         {
+            for(int i = 0; i < coords.Count; i++)
+            {
+                for(int x = coords[i].X - 1; x <= coords[i].X + 1; x++)
+                {
+                    for (int y = coords[i].Y - 1; y <= coords[i].Y + 1; y++)
+                    {
+
+                        if(x < 0 || y < 0 || x > 9 || y > 9)
+                        {
+                            continue;
+                        }
+                        string[] images = mapRight.GetImagesInCell(x, y);
+
+                        if(images.Length == 0)
+                        {
+                            mapRight.DrawInCell("miss", x, y);
+                        }
+                    }
+                }
+            }
+        }
+
+        void SetShip(int[,] map, int Length, List<ShipCoordinate>[] coordinates, int index)
+        {
+            coordinates[index] = new List<ShipCoordinate>();
+
             int count = 0;
 
             int dX = 0;
@@ -154,7 +269,7 @@ namespace Морской_Бой
                         {
                             for (int j = y - 1; j <= y + 1; j++)
                             {
-                                if (map[i, j] != 0)
+                                if (i != 10 && j != 10 && i != -1 && j != -1 && map[i, j] != 0)
                                 {
                                     IsOkey = false;
                                 }
@@ -184,7 +299,7 @@ namespace Морской_Бой
                         {
                             for (int j = y - 1; j <= y + 1 + Length; j++)
                             {
-                                if (map[i, j] != 0)
+                                if (i != 10 && j != 10 && i != -1 && j != - 1 && map[i, j] != 0)
                                 {
                                     IsOkey = false;
                                 }
@@ -201,11 +316,54 @@ namespace Морской_Бой
             }
             for (int i = 0; i < Length; i++)
             {
+                ShipCoordinate c = new ShipCoordinate(x, y);
+                coordinates[index].Add(c);
                 map[x, y] = 1;
                 x += dX;
                 y += dY;
             }
             Debug.WriteLine(count);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if(IsWaiting)
+            {
+                CanShoot = true;
+                BTNnextTurn.Content = "Передать ход";
+                BTNnextTurn.IsEnabled = false;
+                if (Player == 1)
+                {
+                    DrawMap(map1, mapLeft, false);
+                    DrawMap(map2, mapRight, true);
+
+                }
+                else
+                {
+                    DrawMap(map2, mapLeft, false);
+                    DrawMap(map1, mapRight, true);
+                }
+            }
+            else
+            {
+                BTNnextTurn.Content = "Сделать ход";
+                mapLeft.RemoveAllImages();
+                mapRight.RemoveAllImages();
+                if(Player == 1)
+                {
+                    Player = 2;
+                    TBTurn.Text = "Игрок 1";
+                }
+                else
+                {
+                    Player = 1;
+                    TBTurn.Text = "Игрок 2";
+                }
+
+            }
+
+
+            IsWaiting = !IsWaiting;
         }
     }
 }
