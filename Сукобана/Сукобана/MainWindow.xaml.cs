@@ -24,7 +24,6 @@ namespace Сукобана
     {
         List<Box> Boxes = new List<Box>();
         GameObject player;
-        Box[] boxes;
         CellMapInfo mapInf = new CellMapInfo(30, 20, 45, 0);
         static public UniversalMap_Wpf map;
         char[,] Smap = new char[30, 20];
@@ -49,6 +48,7 @@ namespace Сукобана
             map.Library.AddPicture("wall", "wall.png");
             map.Library.AddPicture("box", "stone.png");
             map.Library.AddPicture("player", "enemy.png");
+            map.Library.AddPicture("finish", "Безымянный.png");
         }
 
         void DrawMap()
@@ -65,11 +65,16 @@ namespace Сукобана
 
                         case '@':
                             map.DrawInCell("box", x, y);
+                            Smap[x, y] = ' ';
                             break;
 
                         case '+':
                             map.DrawInCell("player", x, y);
                             player = new GameObject("player", x, y);
+                            break;
+
+                        case '!':
+                            map.DrawInCell("finish", x, y);
                             break;
                     }
                 }
@@ -78,7 +83,7 @@ namespace Сукобана
 
         void CheckKey(Key k)
         {
-            bool hasBox = false;
+            Box Found = null;
             int x = player.X;
             int y = player.Y;
 
@@ -86,61 +91,153 @@ namespace Сукобана
             {
                 case Key.W:
                     y = player.Y - 1;
-                    hasBox = HasBox(x, y);
-                    if (hasBox == false)
+                    Found = GetBox(x, y);
+                    if (Found == null)
                     {
                         player.Move(x, y);
                     }
                     else
                     {
-                        if(Smap[x, y - 1] == ' ')
+                        if (Smap[x, y - 1] == ' ' || Smap[x, y - 1] == '!')
                         {
+                            player.Move(x, y);
+                            map.RemoveFromCell("box", x, y);
+                            map.DrawInCell("box", x, y - 1);
+                            Found.Y = y - 1;
                             
+                            if(Smap[x, y - 1] == '!')
+                            {
+                                Found.IsOnPlace = true;
+                            }
+                            else
+                            {
+                                Found.IsOnPlace = false;
+                            }
                         }
                     }
                     break;
 
                 case Key.S:
                     y = player.Y + 1;
-                    hasBox = HasBox(x, y);
-                    if (hasBox == false)
+                    Found = GetBox(x, y);
+                    if (Found == null)
                     {
                         player.Move(x, y);
+                    }
+                    else
+                    {
+                        if (Smap[x, y + 1] == ' ' || Smap[x, y + 1] == '!')
+                        {
+                            player.Move(x, y);
+                            map.RemoveFromCell("box", x, y);
+                            map.DrawInCell("box", x, y + 1);
+                            Found.Y = y + 1;
+
+                            if (Smap[x, y + 1] == '!')
+                            {
+                                Found.IsOnPlace = true;
+                            }
+                            else
+                            {
+                                Found.IsOnPlace = false;
+                            }
+                        }
                     }
                     break;
 
                 case Key.D:
                     x = player.X + 1;
-                    hasBox = HasBox(x, y);
-                    if (hasBox == false)
+                    Found = GetBox(x, y);
+                    if (Found == null)
                     {
                         player.Move(x, y);
                     }
+                    else
+                    {
+                        if (Smap[x + 1,y] == ' ' || Smap[x + 1, y] == '!')
+                        {
+                            player.Move(x, y);
+                            map.RemoveFromCell("box", x, y);
+                            map.DrawInCell("box", x + 1, y);
+                            Found.X = x + 1;
+
+                            if (Smap[x + 1, y] == '!')
+                            {
+                                Found.IsOnPlace = true;
+                            }
+                            else
+                            {
+                                Found.IsOnPlace = false;
+                            }
+                        }
+                    }
+
                     break;
 
                 case Key.A:
                     x = player.X - 1;
-                    hasBox = HasBox(x, y);
-                    if (hasBox == false)
+                    Found = GetBox(x, y);
+                    if (Found == null)
                     {
                         player.Move(x, y);
                     }
+                    else
+                    {
+                        if (Smap[x - 1, y] == ' ' || Smap[x - 1, y] == '!')
+                        {
+                            player.Move(x, y);
+                            map.RemoveFromCell("box", x, y);
+                            map.DrawInCell("box", x - 1, y);
+                            Found.X = x - 1;
+
+                            if(Smap[x - 1, y] == '!')
+                            {
+                                Found.IsOnPlace = true;
+                            }
+                            else
+                            {
+                                Found.IsOnPlace = false;
+                            }
+                        }
+                    }
                     break;
             }
+            CheckVictori();
+
         }
 
-        bool HasBox(int x, int y)
+        void CheckVictori()
         {
-            bool HasBox = false;
+            bool IsWin = true;
+            for(int i = 0; i < Boxes.Count; i++)
+            {
+                if(!Boxes[i].IsOnPlace)
+                {
+                    IsWin = false;
+                    break;
+                }
+            }
+
+            if(IsWin)
+            {
+                MessageBox.Show("Ура победа");
+            }
+
+        }
+
+        Box GetBox(int x, int y)
+        {
+            Box box;
+            box = null;
             for(int i = 0; i < Boxes.Count; i++)
             {
                 if(Boxes[i].X == x && Boxes[i].Y == y)
                 {
-                    HasBox = true;
+                    box = Boxes[i];
                 }
             }
 
-            return HasBox;
+            return box;
         }
 
 
