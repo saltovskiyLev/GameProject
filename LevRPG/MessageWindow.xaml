@@ -1,0 +1,21 @@
+﻿<Window x:Class="LevRPG.MessageWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LevRPG"
+        mc:Ignorable="d"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Title="MessageWindow" Height="450" Width="800">
+    <Grid>
+        <Border Background="Cyan" CornerRadius="50">
+            <TextBlock Text="Добро пожаловать в новый мир..." Margin="50" FontSize="25"
+                       FontFamily="Segoe Script" Opacity="1"> </TextBlock>
+
+        </Border>
+
+        
+    </Grid>
+</Window>

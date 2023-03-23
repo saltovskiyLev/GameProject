@@ -24,7 +24,7 @@ namespace LevRPG
         GameEngine MainEngine;
 
         static public UniversalMap_Wpf map;
-        CellMapInfo MapInfo = new CellMapInfo(10, 10, 50, 0);
+        CellMapInfo MapInfo = new CellMapInfo(100, 100, 50, 0);
 
         NPC player = new NPC();
 
@@ -37,17 +37,18 @@ namespace LevRPG
 
             AddPictures();
 
-            map.SetMapBackground(Brushes.Navy);
             MainEngine = new GameEngine(map);
 
             player.id = "npc1";
-            player.Image = "pers";
+            player.Image = "player";
             player.Name = "npssh";
             player.MaxSide = 123;
-            player.CenterX = 153;
-            player.CenterY = 124;
+            player.CenterX = 553;
+            player.CenterY = 524;
             player.Speed = 2;
             MapData MapData;
+
+
 
             MapData = MapData.GetMapFromeFile(@"C:\Users\Admin\Documents\GitHub\GameProject\LevRPG\maps\map1.json");
             MainEngine.ReadMap(MapData);
@@ -64,6 +65,7 @@ namespace LevRPG
             map.Library.ImagesFolder = new PathInfo { Path = "..\\..\\images", Type = PathType.Relative };
             map.Library.AddPicture("wall1", "wall1.png");
             map.Library.AddPicture("pers", "pers.png");
+            map.Library.AddPicture("player", "enemy.png");
         }
 
         void Move()
@@ -73,27 +75,66 @@ namespace LevRPG
             {
                 dX = player.Speed * Math.Cos(GameMath.DegreesToRad(player.Angle));
                 dY = player.Speed * Math.Sin(GameMath.DegreesToRad(player.Angle));
+                if (MainEngine.CanMove(player, dX, dY, 0))
+                {
 
-                player.CenterX += dX;
-                player.CenterY += dY;
-                MainEngine.Move(player);
+                    player.CenterX += dX;
+                    player.CenterY += dY;
+                    MainEngine.Move(player);
+                }
 
             }
 
-            if(map.Keyboard.IsKeyPressed(Key.A))
+            if (map.Keyboard.IsKeyPressed(Key.S))
             {
-                player.Angle--;
+                dX = -player.Speed * Math.Cos(GameMath.DegreesToRad(player.Angle));
+                dY = -player.Speed * Math.Sin(GameMath.DegreesToRad(player.Angle));
+                if (MainEngine.CanMove(player, dX, dY, 0))
+                {
+
+                    player.CenterX += dX;
+                    player.CenterY += dY;
+                    MainEngine.Move(player);
+                }
+
+            }
+
+            if (map.Keyboard.IsKeyPressed(Key.A))
+            {
+                if (MainEngine.CanMove(player, 0, 0, -1))
+                {
+                    player.Angle--;
+
+                    MainEngine.Move(player);
+
+                }
+
             }
 
             if (map.Keyboard.IsKeyPressed(Key.D))
             {
-                player.Angle++;
+                if (MainEngine.CanMove(player, 0, 0, +1))
+                {
+                    player.Angle++;
+
+                    MainEngine.Move(player);
+
+                }
+
             }
         }
+
 
         void GameCycle()
         {
             Move();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+
+            MessageWindow w = new MessageWindow();
+            w.ShowDialog();
         }
     }
 

@@ -5,11 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LevRPG"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded">
     <Grid>
-        <StackPanel x:Name="SPCanMap">
-            
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="62*"/>
+            <ColumnDefinition Width="13*"/>
+            <ColumnDefinition Width="717*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel x:Name="SPCanMap" Grid.ColumnSpan="3">
+
         </StackPanel>
-        
+
     </Grid>
 </Window>
