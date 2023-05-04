@@ -22,7 +22,7 @@ namespace LevRPG
             map.ContainerSetSize(obj.Id, Math.Abs(obj.x1 - obj.x2), Math.Abs(obj.y1 - obj.y2));
             map.ContainerSetTileSize(obj.Id, 40, 40);
             map.ContainerSetCoordinate(obj.Id, (obj.x1 + obj.x2) / 2, (obj.y1 + obj.y2) / 2);
-         terainObjects.Add(obj);
+            terainObjects.Add(obj);
         }
 
         public void AddNPCObject(NPC npc)

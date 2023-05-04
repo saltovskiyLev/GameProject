@@ -1,0 +1,3 @@
+wall,wall1
+wall,wall2
+RIP,rip2

@@ -28,6 +28,8 @@ namespace LevRPG
 
         NPC player = new NPC();
 
+        List<NPC> nPCs = new List<NPC>();
+
         TimerController timer = new TimerController();
         public MainWindow()
         {
@@ -48,6 +50,17 @@ namespace LevRPG
             player.Speed = 2;
             MapData MapData;
 
+            NPC npc = new NPC();
+            npc.Angle = 30;
+            npc.CenterX = 290;
+            npc.CenterY = 300;
+            npc.id = "0";
+            npc.Image = "pers";
+            npc.MaxSide = 20;
+            npc.Name = "npc";
+            npc.Speed = 1;
+
+
 
 
             MapData = MapData.GetMapFromeFile(@"C:\Users\Admin\Documents\GitHub\GameProject\LevRPG\maps\map1.json");
@@ -64,8 +77,11 @@ namespace LevRPG
         {
             map.Library.ImagesFolder = new PathInfo { Path = "..\\..\\images", Type = PathType.Relative };
             map.Library.AddPicture("wall1", "wall1.png");
+            map.Library.AddPicture("wall2", "wall2.png");
             map.Library.AddPicture("pers", "pers.png");
             map.Library.AddPicture("player", "enemy.png");
+            map.Library.AddPicture("pers", "pers.png");
+
         }
 
         void Move()
@@ -134,6 +150,15 @@ namespace LevRPG
         {
 
             MessageWindow w = new MessageWindow();
+            w.SetMessageText("Здравствуйте");
+            w.SetButtonVisibility(1, Visibility.Collapsed);
+            w.SetButtonVisibility(3, Visibility.Collapsed);
+            w.SetButtonVisibility(2, Visibility.Visible);
+
+            w.SetButtonText(2, "Начать игру");
+
+
+
             w.ShowDialog();
         }
     }

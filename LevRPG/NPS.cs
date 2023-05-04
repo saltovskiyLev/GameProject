@@ -28,6 +28,14 @@ namespace LevRPG
         [JsonProperty("Speed")]
         public int Speed;
 
+        [JsonProperty("hp")]
+        public int hp;
+
+
+        static public void npc()
+        {
+
+        }
     }
 
 }
