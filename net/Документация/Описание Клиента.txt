@@ -1,0 +1,38 @@
+ 1.Пользователь может нажать на кнопку регистрации.
+
+	РАБОТА ФУНКЦИИ SEND REQUEST
+
+   1) Создаем экземпляр запроса HttpWebRequest request = (HttpWebRequest)WebRequest.Create(adress);
+   2) Параметры запроса:
+      {
+	  request.Method = type; // GET POST или другой метод
+          request.Timeout = 30000; // Время отклика от сервера(милесикунды)
+      }
+   3) проверка, что если мы выбрали метод POST, то мы формируем тело запроса   | в случае метода GET вся информация в адресной строке | в случае POST невидемое тело запроса
+                if(type == "POST")
+                {
+                    request.ContentLength = data.Length; // длинна тела запроса в byte
+                    request.ContentType = contentType; // код содержимого тела запроса 
+                    Stream stream = request.GetRequestStream(); // создается поток для создания данных
+                    stream.Write(data, 0, data.Length); // записывается поток
+                    stream.Close(); // подтверждения завершения потока
+                }
+
+   4) Это функция добавления http заголовка к http запросу request.Headers.Add(HttpRequestHeader.UserAgent, "LevClient...");
+   5) Отправляем запрос на сервер используя функцию GetResponse
+      using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+
+	
+
+
+
+
+
+
+
+
+
+
+
+    Обращаемся к сервису CheckLogIn с помощью метода POST и передаем строку с логином, который хочет использовать пользователь.
+    Мы получаем рузультат работы функции SendRequest(все ли нормально)

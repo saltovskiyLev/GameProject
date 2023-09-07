@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Packaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,12 +17,15 @@ using GameMaps;
 
 namespace LevRPG
 {
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
         GameEngine MainEngine;
+
+        NPC npc = new NPC();
 
         static public UniversalMap_Wpf map;
         CellMapInfo MapInfo = new CellMapInfo(100, 100, 50, 0);
@@ -30,6 +34,29 @@ namespace LevRPG
 
         List<NPC> nPCs = new List<NPC>();
 
+        static string ProjectPath = "E:\\GameProject\\GameProject\\LevRPG\\";
+
+        double ScrollLeft;
+        double ScrollRight;
+
+        double ScrollTop;
+        double ScrollBottom;
+
+        double MarginTop;
+        double MarginLeft;
+
+        double MarginLeftObjective;
+        double MarginToptObjective;
+
+        int ScrollSpeed = 5;
+
+        double Height = System.Windows.SystemParameters.PrimaryScreenHeight;
+        double Width = System.Windows.SystemParameters.PrimaryScreenWidth;
+
+        double DeltaMarginX;
+        double DeltaMarginY;
+
+
         TimerController timer = new TimerController();
         public MainWindow()
         {
@@ -37,7 +64,12 @@ namespace LevRPG
             map = MapCreator.GetUniversalMap(this, MapInfo);
             SPCanMap.Children.Add(map.Canvas);
 
+            DeltaMarginX = Width / 10;
+            DeltaMarginY = Height / 10;
+
             AddPictures();
+
+            SetScroll();
 
             MainEngine = new GameEngine(map);
 
@@ -50,7 +82,6 @@ namespace LevRPG
             player.Speed = 2;
             MapData MapData;
 
-            NPC npc = new NPC();
             npc.Angle = 30;
             npc.CenterX = 290;
             npc.CenterY = 300;
@@ -59,11 +90,17 @@ namespace LevRPG
             npc.MaxSide = 20;
             npc.Name = "npc";
             npc.Speed = 1;
+            npc.ContainerName = "nPc";
+
+            npc.Target = player;
+            map.Library.AddContainer(npc.ContainerName, npc.Image, ContainerType.AutosizedSingleImage);
+            map.ContainerSetMaxSide(npc.ContainerName, 40);
+            map.ContainerSetCoordinate(npc.ContainerName, npc.CenterX, npc.CenterY);
 
 
 
 
-            MapData = MapData.GetMapFromeFile(@"C:\Users\Admin\Documents\GitHub\GameProject\LevRPG\maps\map1.json");
+            MapData = MapData.GetMapFromeFile(ProjectPath + @"maps\map1.json");
             MainEngine.ReadMap(MapData);
 
             
@@ -71,6 +108,7 @@ namespace LevRPG
             MainEngine.AddNPCObject(player);
 
             timer.AddAction(GameCycle, 14);
+            timer.AddAction(Scroll, 14);
         }
 
         void AddPictures()
@@ -78,7 +116,6 @@ namespace LevRPG
             map.Library.ImagesFolder = new PathInfo { Path = "..\\..\\images", Type = PathType.Relative };
             map.Library.AddPicture("wall1", "wall1.png");
             map.Library.AddPicture("wall2", "wall2.png");
-            map.Library.AddPicture("pers", "pers.png");
             map.Library.AddPicture("player", "enemy.png");
             map.Library.AddPicture("pers", "pers.png");
 
@@ -134,9 +171,36 @@ namespace LevRPG
                     player.Angle++;
 
                     MainEngine.Move(player);
-
                 }
 
+            }
+
+            if(player.CenterY < ScrollTop)
+            {
+                MarginToptObjective += DeltaMarginY;
+                ScrollTop -= DeltaMarginY;
+                ScrollBottom -= DeltaMarginY;
+            }
+
+            if (player.CenterY > ScrollBottom)
+            {
+                MarginToptObjective -= DeltaMarginY;
+                ScrollBottom += DeltaMarginY;
+                ScrollTop += DeltaMarginY;
+            }
+
+            if (player.CenterX < ScrollLeft)
+            {
+                MarginLeftObjective += DeltaMarginX;
+                ScrollLeft -= DeltaMarginX;
+                ScrollRight -= DeltaMarginX;
+            }
+
+            if (player.CenterX > ScrollRight)
+            {
+                MarginLeftObjective -= DeltaMarginX;
+                ScrollRight += DeltaMarginX;
+                ScrollLeft += DeltaMarginX;
             }
         }
 
@@ -144,6 +208,54 @@ namespace LevRPG
         void GameCycle()
         {
             Move();
+            npc.Move();
+        }
+
+        void SetScroll()
+        {
+            double screenWidth = Width;
+
+            double screenHeight = Height;
+
+            ScrollTop = DeltaMarginY;
+            ScrollBottom = Height - ScrollTop;
+
+            ScrollLeft = DeltaMarginY;
+            ScrollRight = Width - ScrollLeft;
+        }
+
+        void Scroll()
+        {
+            bool IsChanged = false;
+
+            if(MarginTop > MarginToptObjective)
+            {
+                MarginTop = MarginTop - ScrollSpeed;
+                IsChanged = true;
+            }
+
+            else if(MarginTop < MarginToptObjective)
+            {
+                MarginTop = MarginTop + ScrollSpeed;
+                IsChanged = true;
+            }
+
+            if (MarginLeft > MarginLeftObjective)
+            {
+                MarginLeft = MarginLeft - ScrollSpeed;
+                IsChanged = true;
+            }
+
+            else if (MarginLeft < MarginLeftObjective)
+            {
+                MarginLeft = MarginLeft + ScrollSpeed;
+                IsChanged = true;
+            }
+
+            if(IsChanged)
+            {
+                map.Canvas.Margin = new Thickness(MarginLeft, MarginTop, 0, 0);
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json;
+using GameMaps;
+using System;
 
 namespace LevRPG
 {
-    class NPC
+    class NPC : ICoordinateProvider
     {
         [JsonProperty ("CenterX")]
         public double CenterX;
@@ -31,10 +33,50 @@ namespace LevRPG
         [JsonProperty("hp")]
         public int hp;
 
+        [JsonIgnore]
+        public ICoordinateProvider Target;
 
-        static public void npc()
+        [JsonIgnore]
+        public string ContainerName;
+
+        public double GetX()
+        {
+            return CenterX;
+        }
+
+        public double GetY()
+        {
+            return CenterY;
+        }
+
+        public void Move()
         {
 
+
+            if (Target == null) return;
+
+            double DistanceX = Target.GetX() - CenterX;
+            double DistanceY = Target.GetY() - CenterY;
+
+            if (Math.Abs(DistanceX) < 3 && Math.Abs(DistanceY) < 3)
+            {
+                return;
+            }
+
+
+                double AngleToTarget = GameMath.GetAngleOfVector(DistanceX, DistanceY);
+
+
+            double dX = Speed * Math.Cos(GameMath.DegreesToRad(AngleToTarget));
+            double dY = Speed * Math.Sin(GameMath.DegreesToRad(AngleToTarget));
+
+
+
+
+            CenterX = CenterX + dX;
+            CenterY = CenterY + dY;
+
+            MainWindow.map.ContainerSetCoordinate(ContainerName, CenterX, CenterY);
         }
     }
 
