@@ -70,7 +70,15 @@ namespace MessangerClient
                 requestResult = SendRequest("http://localhost:8000/register", "POST",
                 Encoding.GetEncoding("utf-8").GetBytes(login + "*" + pass), "text/plain", out Result);
 
-                MessageBox.Show("Вы зарегестрированы");
+                if(requestResult == RequestResult.Sucsess)
+                {
+                    MessageBox.Show("Вы зарегестрированы");
+                }
+                else
+                {
+                    MessageBox.Show("Ошибка регистрации " + requestResult.ToString());
+                }
+
             }
             catch(Exception ex) 
             {
@@ -110,6 +118,7 @@ namespace MessangerClient
                         using (StreamReader reader = new StreamReader(stream))
                         {
                             resultString = reader.ReadToEnd();
+                            result = RequestResult.Sucsess;
                         }
                     }
                 }
@@ -117,7 +126,10 @@ namespace MessangerClient
             catch (Exception e)
             {
                 MessageBox.Show(e.Message);
+                result = RequestResult.NotAvailible;
             }
+
+            return result;
 
         }
 
