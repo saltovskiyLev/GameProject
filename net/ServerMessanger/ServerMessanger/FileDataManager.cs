@@ -2,8 +2,36 @@
 
 class FileDataManager : IDataManager
 {
+    List<User> users;
+
     Random r = new Random();
     public string UserFolderPath = "E:\\GameProject\\GameProject\\net\\ServerMessanger\\ServerMessanger\\users";
+
+
+    public FileDataManager(string usersFolder = "")
+    {
+        if(usersFolder != "")
+        {
+            UserFolderPath = usersFolder;
+        }
+
+        users = new List<User>();
+
+
+        string[] files = Directory.GetFiles(UserFolderPath);
+        for (int i = 0; i < files.Length; i++)
+        {
+            string[] lines = File.ReadAllLines(files[i]);
+
+            User u = new User();
+            u.Login = lines[0];
+            u.Password = lines[1];
+            // TODO: сохранить ID
+
+            users.Add(u);
+        }
+    }
+
     public bool CheckLoginAvailability(string login)
     {
         string[] files = Directory.GetFiles(UserFolderPath);
@@ -55,4 +83,22 @@ class FileDataManager : IDataManager
 
         return success;
     }
+
+    public bool Auth(string login, string password)
+    {
+        var user = users.Where(u => u.Login == login).FirstOrDefault();
+
+        if(user == null)
+        {
+            return false;
+        }
+
+        if(user.Password != password)
+        {
+            return false;
+        }
+
+        return true;
+    }
 }
+

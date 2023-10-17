@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -10,6 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
@@ -30,9 +32,33 @@ namespace MessangerClient
             InitializeComponent();
         }
 
+        public string SessionKey = "";
+
         private void LogIn_Click(object sender, RoutedEventArgs e)
         {
 
+            string login = TBLoG.Text;
+            string pass = PBPass.Password;
+            string Result;
+
+            RequestResult requestResult;
+
+            requestResult = SendRequest("http://localhost:8000/auth", "POST",
+            Encoding.GetEncoding("utf-8").GetBytes(login + "*" + pass), "text/plain", out Result);
+
+
+            if(requestResult == RequestResult.Sucsess)
+            {
+                MessageBox.Show("Вы успешно вошли в систему");
+
+                
+
+                SessionKey = Result;
+            }
+            else
+            {
+                MessageBox.Show("Ошибка входа: " + requestResult.ToString() + " " + Result);
+            }
         }
 
         private void Registr_Click(object sender, RoutedEventArgs e)

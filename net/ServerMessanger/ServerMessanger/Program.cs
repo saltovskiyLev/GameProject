@@ -10,6 +10,7 @@ listener.Prefixes.Add("http://localhost:8000/");
 listener.Prefixes.Add("http://localhost:8000/checklogin/");
 listener.Prefixes.Add("http://localhost:8000/register/");
 IDataManager dataManager = new FileDataManager();
+ISessionManager sessionManager = new SimpleSessionManager();
 
 listener.Start();
 Console.WriteLine("server started");
@@ -26,7 +27,7 @@ while (true)
         requestBody = reader.ReadToEnd();
         Console.WriteLine(requestBody);
     }
-    HttpListenerResponse respones = context.Response;
+    HttpListenerResponse response = context.Response;
     /*respones.Headers.Set(HttpResponseHeader.ContentType, "text/html");
     string data = "    <html>\r\n        <head>\r\n            <meta charset='utf8'>\r\n            <title>Hello</title>\r\n        </head>\r\n        <body>\r\n            <h2>Hello World!</h2>\r\n        </body>\r\n    </html>";
     byte[] buffer = Encoding.UTF8.GetBytes(data);
@@ -38,18 +39,38 @@ while (true)
     switch (url[2])
     {
         case "checklogin":
-            CheckLogin(requestBody, respones);
+            CheckLoginAvailability(requestBody, response);
             break;
 
         case "register":
+            {
+                string login, password;
+                int splitter = requestBody.IndexOf('*');
+                login = requestBody.Substring(0, splitter);
+                password = requestBody.Substring(splitter + 1);
 
-            string login, password;
-            int splitter = requestBody.IndexOf('*');
-            login = requestBody.Substring(0, splitter);
-            password = requestBody.Substring(splitter + 1);
-
-            Register(login, password, respones);
+                Register(login, password, response);
+            }
                 break;
+            
+        case "auth":
+            {
+                string login, password;
+                int splitter = requestBody.IndexOf('*');
+                login = requestBody.Substring(0, splitter);
+                password = requestBody.Substring(splitter + 1);
+                if(dataManager.Auth(login, password))
+                {
+                    string key = sessionManager.CreateSession(login);
+                    SendTextResponse(response, key, 200);
+                }
+                else
+                {
+                    SendTextResponse(response, "неверный логин или пароль", 403);
+                }
+            }
+            break;
+
     }
 
 }
@@ -68,7 +89,7 @@ void SendTextResponse(HttpListenerResponse response, string data, int status)
     response.OutputStream.Write(buffer, 0, buffer.Length);
 }
 
-void CheckLogin(string login, HttpListenerResponse response)
+void CheckLoginAvailability(string login, HttpListenerResponse response)
 {
     bool result = dataManager.CheckLoginAvailability(login);
 
