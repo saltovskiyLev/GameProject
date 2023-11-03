@@ -1,0 +1,6 @@
+INSERT INTO users (login, password, name) VALUES ('Leo', '123', 'Lev');
+          имя таблицы   
+
+SELECT name, password from users 
+WHERE login = 'Leo'
+AND id = 2;
