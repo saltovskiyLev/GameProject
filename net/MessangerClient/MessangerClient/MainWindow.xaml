@@ -28,5 +28,11 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.ColumnSpan="2" Grid.Row="0" Grid.Column="0">
+            <Button x:Name="Invite" Click="Invite_Click" Content="Invites">
+                
+            </Button>
+        </StackPanel>
+        
     </Grid>
 </Window>

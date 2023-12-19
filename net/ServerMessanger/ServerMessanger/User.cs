@@ -1,6 +1,6 @@
 ﻿class User
 {
-    public string Id;
+    public long? Id;
     public string Login;
     public string Password;
 }

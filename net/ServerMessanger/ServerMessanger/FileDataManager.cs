@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿/*using System.IO;
+
 
 class FileDataManager : IDataManager
 {
@@ -47,7 +48,7 @@ class FileDataManager : IDataManager
         return true;
     }
 
-    public Int64 GetNewId()
+    private Int64 GetNewId()
     {
         Int64 id;
         while (true)
@@ -102,3 +103,4 @@ class FileDataManager : IDataManager
     }
 }
 
+*/

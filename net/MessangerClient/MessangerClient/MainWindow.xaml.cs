@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Newtonsoft.Json;
 
 namespace MessangerClient
 {
@@ -21,6 +22,7 @@ namespace MessangerClient
     /// </summary>
     public partial class MainWindow : Window
     {
+        string sessionKey = "";
         public MainWindow()
         {
             InitializeComponent();
@@ -31,15 +33,24 @@ namespace MessangerClient
             contacts.Add(new Contact { Name = "Alex" });
             contacts.Add(new Contact { Name = "Max" });
 
+
             LBContacts.ItemsSource = contacts;
 
             Login login = new Login();
             login.ShowDialog();
+            sessionKey = login.SessionKey;
 
-            if(login.LogInResult == false)
+            if (login.LogInResult == false)
             {
                 Close();
             }
+        }
+
+        private void Invite_Click(object sender, RoutedEventArgs e)
+        {
+            invitesWindow invites = new invitesWindow(sessionKey);
+
+            invites.ShowDialog();
         }
     }
 

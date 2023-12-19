@@ -17,6 +17,13 @@
             <PasswordBox Width="200" Margin="10, 0, 0, 0" Name="PBPass"></PasswordBox>
         </StackPanel>
 
+        <StackPanel Orientation="Horizontal" Margin="0, 0, 0, 10">
+            <TextBlock Text="UserName" Width="100" TextAlignment='Right'> </TextBlock>
+            <TextBox Margin="10, 0, 0, 0" Width="200" Name="UserNameBox">
+                
+            </TextBox>
+        </StackPanel>
+
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>

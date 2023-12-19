@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MessangerCore;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -42,8 +43,7 @@ namespace MessangerClient
             string Result;
 
             RequestResult requestResult;
-
-            requestResult = SendRequest("http://localhost:8000/auth", "POST",
+            requestResult = Network.SendRequest("http://localhost:8000/auth", "POST",
             Encoding.GetEncoding("utf-8").GetBytes(login + "*" + pass), "text/plain", out Result);
 
 
@@ -51,9 +51,10 @@ namespace MessangerClient
             {
                 MessageBox.Show("Вы успешно вошли в систему");
 
-                
-
                 SessionKey = Result;
+                LogInResult = true;
+
+                this.Close();
             }
             else
             {
@@ -74,8 +75,8 @@ namespace MessangerClient
 
             string Result;
 
-            
-            requestResult = SendRequest("http://localhost:8000/checklogin", "POST",
+            // Проверка того, что login не занят
+            requestResult = Network.SendRequest("http://localhost:8000/checklogin", "POST",
                 Encoding.GetEncoding("utf-8").GetBytes(login),
                 "text/plain",  out Result);
 
@@ -90,11 +91,11 @@ namespace MessangerClient
                 MessageBox.Show("Такой логин занят");
                 return;
             }
-
+            // регистрация нового пользователя
             try
             {
-                requestResult = SendRequest("http://localhost:8000/register", "POST",
-                Encoding.GetEncoding("utf-8").GetBytes(login + "*" + pass), "text/plain", out Result);
+                requestResult = Network.SendRequest("http://localhost:8000/register", "POST",
+                Encoding.GetEncoding("utf-8").GetBytes(login + "*" + pass + "*" + UserNameBox.Text), "text/plain", out Result);
 
                 if(requestResult == RequestResult.Sucsess)
                 {
@@ -114,50 +115,6 @@ namespace MessangerClient
 
         }
 
-        RequestResult SendRequest(string adress, string type, byte[] data, string contentType, out string resultString)
-        {
-            RequestResult result;
-
-            resultString = "";
-            try
-            {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(adress);
-                request.Method = type;
-                request.Timeout = 30000;
-                if(type == "POST")
-                {
-                    request.ContentLength = data.Length;
-                    request.ContentType = contentType;
-                    Stream stream = request.GetRequestStream();
-                    stream.Write(data, 0, data.Length);
-                    stream.Close();
-                }
-                request.Headers.Add(HttpRequestHeader.UserAgent, "LevClient...");
-                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-                {
-                    if(response.StatusCode == HttpStatusCode.NotFound)
-                    {
-                        result = RequestResult.TimeOut;
-                    }
-                    using (Stream stream = response.GetResponseStream())
-                    {
-                        using (StreamReader reader = new StreamReader(stream))
-                        {
-                            resultString = reader.ReadToEnd();
-                            result = RequestResult.Sucsess;
-                        }
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-                result = RequestResult.NotAvailible;
-            }
-
-            return result;
-
-        }
 
         private void Quit_Click(object sender, RoutedEventArgs e)
         {

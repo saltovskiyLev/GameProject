@@ -2,6 +2,8 @@
 using System.Net.Mime;
 using System.Runtime.InteropServices;
 using System.Text;
+using MessangerCore;
+using Newtonsoft.Json;
 
 // See https://aka.ms/new-console-template for more information
 
@@ -9,7 +11,7 @@ HttpListener listener = new HttpListener();
 listener.Prefixes.Add("http://localhost:8000/");
 listener.Prefixes.Add("http://localhost:8000/checklogin/");
 listener.Prefixes.Add("http://localhost:8000/register/");
-IDataManager dataManager = new FileDataManager();
+IDataManager dataManager = new SqLiteDataManager(@"Data Source=E:\GameProject\GameProject\net\ServerMessanger\ServerMessanger\messangerDb.db");
 ISessionManager sessionManager = new SimpleSessionManager();
 
 listener.Start();
@@ -44,12 +46,14 @@ while (true)
 
         case "register":
             {
-                string login, password;
+                /*string login, password;
                 int splitter = requestBody.IndexOf('*');
                 login = requestBody.Substring(0, splitter);
-                password = requestBody.Substring(splitter + 1);
+                password = requestBody.Substring(splitter + 1);*/
 
-                Register(login, password, response);
+                string[] userData = requestBody.Split('*');
+
+                Register(userData[0], userData[1], userData[2], response);
             }
                 break;
             
@@ -71,6 +75,54 @@ while (true)
             }
             break;
 
+        case "createInvite":
+            {
+                string sessionKey = requestBody;
+                string login = sessionManager.GetLogin(sessionKey);
+
+                if (string.IsNullOrEmpty(login)) 
+                {
+                    SendTextResponse(response, "Вы не вошли в систему", 403);
+                }
+
+                else
+                {
+                    User user = dataManager.GetUserByLogIn(login);
+                    string invite = dataManager.CreateInvite((int)(user.Id));
+
+                    if(invite == "")
+                    { 
+                        SendTextResponse(response, "Ошибка генерации приглашения", 500);
+                    }
+                    else
+                    {
+                        SendTextResponse(response, invite, 200);
+                    }
+                }
+                break;
+            }
+                
+        case "GetInvites":
+            {
+                string sessionKey = requestBody;
+                string login = sessionManager.GetLogin(sessionKey);
+
+                if (string.IsNullOrEmpty(login))
+                {
+                    SendTextResponse(response, "Вы не вошли в систему", 403);
+                }
+
+                else
+                {
+                    User user = dataManager.GetUserByLogIn(login);
+                    List<string> Invites = dataManager.GetInvites((int)user.Id);
+
+                    SendTextResponse(response, JsonConvert.SerializeObject(Invites), 200);
+
+
+                }    
+                break;
+            }
     }
 
 }
@@ -101,13 +153,13 @@ void CheckLoginAvailability(string login, HttpListenerResponse response)
     SendTextResponse(response, result.ToString(), 200);
 }
 
-void Register(string login, string password, HttpListenerResponse response)
+void Register(string login, string password, string userName, HttpListenerResponse response)
 {
     bool result = false;
 
     if (dataManager.CheckLoginAvailability(login))
     {
-         result = dataManager.Register(login, password);
+         result = dataManager.Register(login, password, userName);
     }
 
     SendTextResponse(response, result.ToString(), result ? 200 : 500);

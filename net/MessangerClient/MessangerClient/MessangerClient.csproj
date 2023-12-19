@@ -7,4 +7,14 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="MessangerCore">
+      <HintPath>..\..\MessangerCore\MessangerCore\bin\Debug\net6.0\MessangerCore.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

@@ -1,6 +1,6 @@
-﻿namespace MessangerClient
+﻿namespace MessangerCore
 {
-    enum RequestResult
+    public enum RequestResult
     {
         Sucsess,
         TimeOut,

@@ -3,8 +3,11 @@
 
 // See https://aka.ms/new-console-template for more information
 Console.WriteLine("Hello, World!");
-TestSelect();
+//TestSelect();
 
+int test = -2147483648;
+test++;
+Console.WriteLine(test.ToString());
 
 void TestInsert()
 {
