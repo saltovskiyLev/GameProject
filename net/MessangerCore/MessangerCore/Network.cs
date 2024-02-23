@@ -35,6 +35,7 @@ namespace MessangerCore
                         {
                             resultString = reader.ReadToEnd();
                             result = RequestResult.Sucsess;
+                            Logger.Write("result: " + resultString);
                         }
                     }
                 }
@@ -43,6 +44,7 @@ namespace MessangerCore
             {
                 //MessageBox.Show(e.Message);
                 result = RequestResult.NotAvailible;
+                Logger.Write(e.Message);
             }
 
             return result;

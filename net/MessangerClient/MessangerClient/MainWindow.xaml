@@ -32,6 +32,10 @@
             <Button x:Name="Invite" Click="Invite_Click" Content="Invites">
                 
             </Button>
+
+            <Button x:Name="UseInvite" Content="Use Invites" Click="UseInvite_Click">
+                
+            </Button>
         </StackPanel>
         
     </Grid>

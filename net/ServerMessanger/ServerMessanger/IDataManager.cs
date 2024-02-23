@@ -13,4 +13,10 @@
     string CreateInvite(int userId);
 
     List<string> GetInvites(int userId);
+
+    int GetUserIdByInvite(string InviteCode);
+
+    void AddContact(int FirstId, int SecondId);
+
+    List<string> GetUsers(string sessionKey);
 }

@@ -70,7 +70,7 @@ while (true)
                 }
                 else
                 {
-                    SendTextResponse(response, "неверный логин или пароль", 403);
+                    SendTextResponse(response, "", 403);
                 }
             }
             break;
@@ -101,6 +101,29 @@ while (true)
                 }
                 break;
             }
+
+        case "UseInvite":
+            {
+                {
+                    List<string> par = JsonConvert.DeserializeObject<List<string>>(requestBody);
+                    string login = sessionManager.GetLogin(par[0]);
+
+                    if (string.IsNullOrEmpty(login))
+                    {
+                        SendTextResponse(response, "Вы не вошли в систему", 403);
+                    }
+
+                    else
+                    {
+                        User user = dataManager.GetUserByLogIn(login);
+
+                        int id2 = dataManager.GetUserIdByInvite(par[1]);
+
+                        dataManager.AddContact((int)(user.Id), id2);
+                    }
+                    break;
+                }
+            }
                 
         case "GetInvites":
             {
@@ -120,7 +143,7 @@ while (true)
                     SendTextResponse(response, JsonConvert.SerializeObject(Invites), 200);
 
 
-                }    
+                } 
                 break;
             }
     }

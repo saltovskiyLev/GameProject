@@ -1,5 +1,7 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using MessangerCore;
+using Microsoft.Data.Sqlite;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 
@@ -14,6 +16,67 @@ class SqLiteDataManager : IDataManager
     {
         connection = new SqliteConnection(ConnectionString);
         connection.Open();
+    }
+
+    //public bool UseInvite(string SessionKey, string Invite)
+
+    public void AddContact(int FirstId, int SecondId)
+    {
+        SqliteCommand sqliteCommand1 = PrepareCommand(string.Format("INSERT INTO contacts (user1, user2)" +
+       " VALUES ('{0}', '{1}')", FirstId, SecondId));
+
+        sqliteCommand1.ExecuteNonQuery();
+
+        SqliteCommand sqliteCommand2 = PrepareCommand(string.Format("INSERT INTO contacts (user1, user2)" +
+        " VALUES ('{1}', '{0}')", FirstId, SecondId));
+
+        sqliteCommand2.ExecuteNonQuery();
+    }
+
+    public List<string> GetUsers(string login)
+    {
+        List<string> users = new List<string>();
+
+        User user = GetUserByLogIn(login);
+
+        SqliteCommand sqliteCommand = PrepareCommand("SELECT user2 FROM contacts WHERE user1 = " + user.Id);
+
+
+        using (SqliteDataReader reader = sqliteCommand.ExecuteReader())
+        {
+
+            if (reader.HasRows)
+            {
+                reader.Read();
+            }
+            else
+            {
+                result = false;
+            }
+        }
+
+        return users;
+    }
+
+    int GetIdByLogin(string login)
+    {
+        int Id;
+
+        string request = string.Format("SELECT id FROM users WHERE login = '{0}'", login);
+        SqliteCommand sqliteCommand = PrepareCommand(request);
+
+        using(SqliteDataReader reader = sqliteCommand.ExecuteReader())
+        {
+            if(reader.HasRows)
+            {
+                reader.Read();
+            }
+
+            else
+            {
+
+            }
+        }
     }
 
     public bool Auth(string login, string password)
@@ -117,6 +180,31 @@ class SqLiteDataManager : IDataManager
 
 
         return invite;
+    }
+
+    public int GetUserIdByInvite(string InviteCode)
+    {
+        int userId = 0;
+
+        try
+        {
+            SqliteCommand command = PrepareCommand("SELECT user_id FROM invites WHERE invite = '" + InviteCode + "'");
+            using (SqliteDataReader reader = command.ExecuteReader())
+            {
+                if (reader.HasRows)
+                {
+                    reader.Read();
+                    userId = (int)(reader.GetValue(0));
+                }
+            }
+        }
+
+        catch
+        {
+
+        }
+
+        return userId;
     }
 
     public bool Register(string login, string password, string userName)

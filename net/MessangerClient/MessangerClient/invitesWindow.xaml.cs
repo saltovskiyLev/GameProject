@@ -39,6 +39,11 @@ namespace MessangerClient
 
             List<string> ResultList = JsonConvert.DeserializeObject<List<string>>(Result);
 
+            if(ResultList == null)
+            {
+                ResultList = new List<string>();
+            }
+
             Invites = new ObservableCollection<string>(ResultList);
 
             LBInvites.ItemsSource = Invites;

@@ -52,6 +52,12 @@ namespace MessangerClient
 
             invites.ShowDialog();
         }
+
+        private void UseInvite_Click(object sender, RoutedEventArgs e)
+        {
+            UserInvite invite = new UserInvite(sessionKey);
+            invite.ShowDialog();
+        }
     }
 
     
