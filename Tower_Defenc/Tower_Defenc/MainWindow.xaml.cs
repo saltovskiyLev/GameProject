@@ -285,18 +285,18 @@ namespace Tower_Defenc
             }
         }
 
-        GameObject GetEnemy(string UnitType, string picture1, string picture2 = "")
+        GameObject GetEnemy(string path)
         {
             counter++;
-            GameObject Enemy;
-            if (picture2 == "")
+            GameObject Enemy = JsonGameObjects.GetJsonGO(path);
+            /*if (picture2 == "")
             {
                 Enemy = new GameObject(picture1, "Enemy1" + counter.ToString(), UnitType);
             }
             else
             {
                 Enemy = new GameObject(picture1, picture2, "Enemy1" + counter.ToString(), UnitType);
-            }
+            }*/
             int x = CenterX, y = CenterY;
             Enemy.mode = 2;
 
@@ -322,7 +322,6 @@ namespace Tower_Defenc
             Enemy.NeedToMove = true;
             Enemy.NeedToRotate = true;
             Enemy.SubdivisionNumber = 1;
-            Enemy.destroyedImage = "Destroyed_Tank_Low_ALLY";
             return Enemy;
         }
 
@@ -375,7 +374,7 @@ namespace Tower_Defenc
             waves[0].Units = new List<WaveUnit>();
             WaveUnit unit = new WaveUnit();
             unit.UnitName = "EnemyLOW";
-            unit.UnitCount = 3;
+            unit.UnitCount = 1;
             waves[0].Units.Add(unit);
         }
 
@@ -402,23 +401,23 @@ namespace Tower_Defenc
                 switch (UnitName)
                 {
                     case "EnemyLOW":
-                        Enemy = GetEnemy(UnitName, "EnemyLOW");
-                        map.ContainerSetMaxSide(Enemy.ContainerName, 72);//
-                        Enemy.Speed = 1;//
-                        Enemy.CanClash = true;
+                        Enemy = GetEnemy(@"C:\Users\Admin\Documents\GitHub\GameProject\Tower_Defenc\Tower_Defenc\Документы\параметры игровых объектов\ПротивникМалый.json");
+                        //map.ContainerSetMaxSide(Enemy.ContainerName, 72);//
+                        //Enemy.Speed = 1;//
+                        //Enemy.CanClash =   true;
                         Shoot Shoot = new Shoot("shoot", Enemy, Allies);
                         Enemy.Actions.Add(Shoot);
                         Enemy.Recharger = new SimpleRechargen();//
                         Enemy.Recharger.ChargeSpeed = 1;//
                         Enemy.Recharger.ChargeReady = 300;//
-                        Enemy.SetHp(72);//
-                        Enemy.MaxAmmo = 10;
-                        Enemy.AddAmmo(10);
-                        Enemy.Range = 150;//
+                        //Enemy.SetHp(72);//
+                        //Enemy.MaxAmmo = 10;
+                        //Enemy.AddAmmo(10);
+                        //Enemy.Range = 150;//
                         break;
 
-                    case "EnemyBoss":
-                        Enemy = GetEnemy(UnitName, "platformRed4", "towerRed");
+                    //case "EnemyBoss":
+                        /*Enemy = GetEnemy(UnitName, "platformRed4", "towerRed");
                         map.ContainerSetMaxSide(Enemy.ContainerName, 120);//
                         map.ContainerSetMaxSide(Enemy.Children[0].ContainerName, 100);
                         Enemy.Speed = 7;//
@@ -431,8 +430,8 @@ namespace Tower_Defenc
                         DefendBase defensBase = new DefendBase("DefBase", Enemy, BaseEnemy);
                         Enemy.Actions.Add(defensBase);
                         Enemy.SetHp(3200);//
-                        Enemy.Range = 150;//
-                        break;
+                        Enemy.Range = 150;// */
+                        //break;
 
                 }
                 /*
@@ -885,6 +884,7 @@ namespace Tower_Defenc
                 //Enemis[i].Rotate();
                 for (int j = 0; j < Enemis[i].Actions.Count; j++)
                 {
+                    
                     Enemis[i].Actions[j].Act();
                 }
                 if (Enemis[i].IsDeleted)

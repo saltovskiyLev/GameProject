@@ -50,6 +50,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\dll\LabLib.dll</HintPath>
     </Reference>
+    <Reference Include="LevJson">
+      <HintPath>..\..\dll\LevJson.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />

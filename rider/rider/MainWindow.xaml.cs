@@ -23,15 +23,21 @@ namespace rider
     {
         CellMapInfo mapInfo = new CellMapInfo(50, 25, 40, 0);
         static public UniversalMap_Wpf map;
-        TimerContainer timer = new TimerContainer(20); 
+        TimerController timer = new TimerController();
+        //int coor = 50;
         int X = 50;
         int Y = 70;
         int GRADUS = 40;
+        int speedFly;
+        bool tr = false;
         bool BmxRamp = false;
+        bool Isfly = false;
+        bool FalseTrick = false;
+        bool TrickFalseYes = false;
 
         //Функция по таймеру TimerController и действие подение на землю после прыжка
         //Заключительный фрейм анимации поставить базовую картинку велосипеда
-        // Функция "полёта" игрока, проверка нажатия на кнопку, тогда скорость градус возростает на 1, а если нет, то на 3(функция по таймеру)
+        //Функция "полёта" игрока, проверка нажатия на кнопку, тогда скорость градус возростает на 1, а если нет, то на 3(функция по таймеру)
 
 
         public MainWindow()
@@ -41,8 +47,16 @@ namespace rider
             SpMap.Children.Add(map.Canvas);
             AddPictures();
             CreateContainers();
-            timer.AddAction(Cycle);
+            timer.AddAction(Cycle, 20);
+            //timer.AddAction(FlyMove, 10);
+
+            Uri res = new Uri(@"C:\Users\Admin\Documents\GitHub\GameProject\rider\rider\images\nac.jpg");
+            BitmapImage img = new BitmapImage(res);
+            ImageBrush br = new ImageBrush(img);
+            //SpMap.Background = br;
+            //map.SetMapBackground("backG");
         }
+
 
         void AddPictures()
         {
@@ -50,7 +64,15 @@ namespace rider
             map.Library.AddPicture("ramp", "ramp.png");
             map.Library.AddPicture("BMX", "bmx.png");
             map.Library.AddPicture("nothing", "nothing.png");
-            CreateAnimathion("bmxA", 3);
+            map.Library.AddPicture("coll", "Collision.png");
+            map.Library.AddPicture("trick1", "trick0.png");
+            map.Library.AddPicture("trick2", "trick2.png");
+            map.Library.AddPicture("trickGG", "trickGG.png");
+            map.Library.AddPicture("trickGG2", "trickGG2.png");
+            map.Library.AddPicture("backG", "nac.jpg");
+            CreateAnimation("bmxA", 3);
+            CreateAnimation("trick", 0);
+            CreateAnimation("anim", 3);
         }
 
         void CreateContainers()
@@ -67,6 +89,21 @@ namespace rider
             map.Library.AddContainer("ramp", "ramp", ContainerType.AutosizedSingleImage);
             map.ContainerSetSize("ramp", 120);
             map.ContainerSetCoordinate("ramp", 500, 70);
+
+            map.Library.AddContainer("coll", "coll", ContainerType.AutosizedSingleImage);
+            map.ContainerSetSize("coll", 1);
+            map.ContainerSetCoordinate("coll", 600, 20);
+
+            map.Library.AddContainer("trick1", "trick1", ContainerType.AutosizedSingleImage);
+            map.ContainerSetSize("trick1", 1);
+
+            map.Library.AddContainer("trickGG", "trick2", ContainerType.AutosizedSingleImage);
+            map.ContainerSetSize("trickGG", 1);
+            map.ContainerSetCoordinate("trickGG", 700, 300);
+
+            map.Library.AddContainer("animS", "anim2", ContainerType.AutosizedSingleImage);
+            map.ContainerSetSize("animS", 100);
+            map.ContainerSetCoordinate("animS", 100, 900);
         }
 
 
@@ -74,7 +111,13 @@ namespace rider
         {
             if (map.CollisionContainers(Container1, Container2))
             {
+                tr = map.CollisionContainers("bmx", "coll");
+                //
+                //
+                //
+                //
                 X++;
+                map.ContainerSetCoordinate("bmx", X, Y);
                 map.ContainerSetAngle(Container1, Angle);
                 BmxRamp = true;
                 GRADUS = Angle;
@@ -96,9 +139,20 @@ namespace rider
             Moving();
             CollisionBmx("bmx", "ramp", 20);
             Restart();
+            Fly();
+            gg();
+            CheckFalseTrick();
+            DrawPlayer(); 
+            //FlyMove();
         }
 
-        void CreateAnimathion(string main, int count)
+        /*void FlyMove()
+        {
+            coor++;
+            map.ContainerSetCoordinate("bmx", coor, Y);
+        }*/
+
+        /*void CreateAnimathion(string main, int count)
         {
             string str;
             AnimationDefinition anim = new AnimationDefinition();
@@ -108,17 +162,109 @@ namespace rider
                 map.Library.AddPicture(main + i, str);
                 anim.AddFrame(70, main + i);
             }
-            anim.AddFrame(1, "nothing");
-            anim.LastFrame = "nothing";
+            anim.AddFrame(1, "BMX");
+            anim.LastFrame = "BMX";
             map.Library.AddAnimation(main, anim);
+        }*/
+
+        void gg()
+        {
+            if(tr == true)
+            {
+                if (Y < 70) Y = Y + 2;
+                map.ContainerSetCoordinate("bmx", X, Y);
+            }
         }
+
+        void Fly()
+        {
+            if(map.CollisionContainers("bmx", "coll"))
+            {
+                X = X + 2;
+                map.ContainerSetCoordinate("bmx", X, Y);
+                map.ContainerSetAngle("bmx", 50);
+                BmxRamp = false;
+                Isfly = true;
+                if (tr == true)
+                {
+                    /*if (map.Keyboard.IsKeyPressed(Key.G))
+                    {
+                        if(Y < 70)
+                        {
+                            Y = Y + 5;
+                        }
+                    }
+                    else
+                    {
+                        if (Y < 70) Y = Y + 2;
+                    }*/
+                }
+            }
+        }
+
+        void CheckFalseTrick()
+        {
+            bool CanRet = false;
+            if(FalseTrick == true)
+            {
+                if(Y >= 70)
+                {
+                    if (TrickFalseYes == true)
+                    {
+                        map.ContainerSetFrame("bmx", "BMX");
+                        map.ContainerSetSize("bmx", 80);
+                        map.ContainerSetAngle("bmx",35);
+                        return;
+                    }
+                    if (CanRet == false)
+                    {
+                        CanRet = true;
+                        TBGameOwer.FontSize = 100;
+                        X = 10000;
+                        Y = 10000;
+                        map.ContainerSetCoordinate("bmx", X, Y);
+                    }
+                }
+            }
+        }
+
+        void DrawPlayer()
+        {
+            map.ContainerSetCoordinate("bmx", X, Y);
+        }
+
+        void CreateAnimation(string BaseName, int count)
+        {
+            AnimationDefinition a = new AnimationDefinition();
+            string path;
+            for (int i = 0; i < count; i++)
+            {
+                path = BaseName + i + ".png";
+                map.Library.AddPicture(BaseName + i, path);
+                a.AddFrame(100, BaseName + i);
+            }
+            a.AddFrame(1, "nothing");
+            a.LastFrame = "nothing";
+            map.Library.AddAnimation(BaseName, a);
+        }
+
+
+
+
+
+
+
+
 
         void Moving()
         {
             if(map.Keyboard.IsKeyPressed(Key.D))
             {
                 X = X + 3;
-                if(BmxRamp == true)
+                map.ContainerSetCoordinate("bmx", X, Y);
+
+
+                if (BmxRamp == true)
                 {
                     Y = Y - 1;
                     map.ContainerSetCoordinate("bmx", X, Y);
@@ -126,10 +272,16 @@ namespace rider
                 else
                 {
                     map.ContainerSetCoordinate("bmx", X, Y);
+                    //map.AnimationStart("bmx", "bmxA", 1);
                 }
             }
 
-            if(map.Keyboard.IsKeyPressed(Key.A))
+            if(map.Keyboard.IsKeyPressed(Key.M))
+            {
+                map.AnimationStart("animS", "anim", 200);
+            }
+
+            if (map.Keyboard.IsKeyPressed(Key.A))
             {
                 if(BmxRamp == true)
                 {
@@ -139,8 +291,13 @@ namespace rider
                 {
                     X = X - 1;
                     map.ContainerSetCoordinate("bmx", X, Y);
-                    map.AnimationStart("bmx", "bmxA", 1);
+                    //map.AnimationStart("bmx", "bmxA", 1);
                 }
+            }
+
+            if(map.Keyboard.IsKeyPressed(Key.H))
+            {
+                speedFly++;
             }
 
             if (map.Keyboard.IsKeyPressed(Key.Down))
@@ -169,9 +326,57 @@ namespace rider
                 {
                     Y = Y - 20;
                     map.ContainerSetCoordinate("bmx", X, Y);
+                    map.AnimationStart("bmx", "bmxA", 1);
                 }
             }
 
+            if(map.Keyboard.IsKeyPressed(Key.L))
+            {
+                if(Isfly == true)
+                {
+                    map.ContainerSetFrame("bmx", "trick1");
+                    FalseTrick = true;
+                    TrickFalseYes = true;
+                    map.ContainerSetSize("bmx", 80);
+                    Isfly = false;
+                    //CreateGGs trick1 = new CreateGGs("trickGG2", 1, 700, 350, "trickGG2");
+                    //trick1.GGTricks("trickGG2");
+                }
+            }
+            
+            if(map.Keyboard.IsKeyPressed(Key.B))
+            {
+                if (Isfly == true)
+                {
+                    map.ContainerSetFrame("bmx", "trick2");
+                    map.ContainerSetSize("bmx", 80);
+                    Isfly = false;
+                    //timer.AddAction(GGTricks, 10);
+                    //GGTricks();
+                    FalseTrick = true;
+                }
+            }
+
+            if(map.Keyboard.IsKeyPressed(Key.Tab))
+            {
+                map.ContainerSetFrame("bmx", "BMX");
+                map.ContainerSetSize("bmx", 80);
+            }
+        }
+
+        //void GGTricks()
+        //{
+         //   for(int i = 0; i < 100; i++)
+         //   {
+         //       map.ContainerSetSize("trickGG", i);
+         //   }
+        //}
+
+        private void BWindow_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            // Открытие окна
+            Window1 win = new Window();
+            win.ShowDialog();
         }
     }
 }

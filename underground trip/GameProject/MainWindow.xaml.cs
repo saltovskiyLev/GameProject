@@ -930,7 +930,7 @@ namespace GameProject
         }
         void LoadLevel(int levelNumber)
         {
-            map.RemoveAllImagesInCells();
+            map.RemoveAllImages();
             ReadFile(levelNumber.ToString() + ".TXT");
             AddFog();
             RemoveAllFog();

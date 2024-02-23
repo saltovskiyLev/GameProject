@@ -24,15 +24,17 @@ namespace LeoJourney
     {
         Scene CurrentScene;
         TextBlock[] Variants = new TextBlock[4];
-        string path = @"C:\Users\Admin\Documents\GitHub\GameProject\LeoJourney\LeoJourney\Levels\";
+        string ProjectPath = "E:\\GameProject\\GameProject\\LeoJourney\\";
+        string path; //@"C:\Users\Admin\Documents\GitHub\GameProject\LeoJourney\LeoJourney\Levels\";
         public MainWindow()
         {
             InitializeComponent();
+            path = ProjectPath + "LeoJourney\\Levels\\";
             Variants[0] = tbVariant1;
             Variants[1] = tbVariant2;
             Variants[2] = tbVariant3;
             Variants[3] = tbVariant4; 
-            PanelBackground.ImageSource = new BitmapImage(new Uri("C:\\Users\\Admin\\Documents\\GitHub\\GameProject\\LeoJourney\\Pushka.jpg"));
+            PanelBackground.ImageSource = new BitmapImage(new Uri(ProjectPath + "Pushka.jpg"));
         }
         Scene ReadScene(string Id)
         {
@@ -85,7 +87,7 @@ namespace LeoJourney
             Scene scene = ReadScene(sceneId);
             DisplayScene(scene);
             CurrentScene = scene;
-            BitmapImage img = new BitmapImage(new Uri("C:\\Users\\Admin\\Documents\\GitHub\\GameProject\\LeoJourney\\" + scene.Picture));
+            BitmapImage img = new BitmapImage(new Uri(ProjectPath + scene.Picture));
             Picture.Source = img;
         }
         private void DisplayScene(Scene scene)

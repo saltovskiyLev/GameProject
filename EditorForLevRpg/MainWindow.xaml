@@ -1,0 +1,22 @@
+﻿<Window x:Class="EditorForLevRpg.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EditorForLevRpg"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+        <StackPanel x:Name="SPmap">
+
+        <Menu>
+            <MenuItem Header="File">
+                <MenuItem Header="Save" Click="MenuItem_Click"></MenuItem>
+                <MenuItem Header="Load" Click="MenuItem_Click_1"></MenuItem>
+            </MenuItem>
+        </Menu>
+        <WrapPanel Name="WPObjects" MouseDown="WPObjects_MouseDown">
+            
+            
+        </WrapPanel>
+        </StackPanel>
+</Window>
