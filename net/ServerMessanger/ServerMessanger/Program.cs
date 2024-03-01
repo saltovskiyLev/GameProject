@@ -87,7 +87,7 @@ while (true)
 
                 else
                 {
-                    User user = dataManager.GetUserByLogIn(login);
+                    User user = dataManager.GetUser(login);
                     string invite = dataManager.CreateInvite((int)(user.Id));
 
                     if(invite == "")
@@ -115,7 +115,7 @@ while (true)
 
                     else
                     {
-                        User user = dataManager.GetUserByLogIn(login);
+                        User user = dataManager.GetUser(login);
 
                         int id2 = dataManager.GetUserIdByInvite(par[1]);
 
@@ -137,7 +137,7 @@ while (true)
 
                 else
                 {
-                    User user = dataManager.GetUserByLogIn(login);
+                    User user = dataManager.GetUser(login);
                     List<string> Invites = dataManager.GetInvites((int)user.Id);
 
                     SendTextResponse(response, JsonConvert.SerializeObject(Invites), 200);

@@ -42,6 +42,12 @@ namespace MessangerClient
             string pass = PBPass.Password;
             string Result;
 
+            if (string.IsNullOrEmpty(login))
+            {
+                MessageBox.Show("Поле login не должно быть пустым");
+                return;
+            }
+
             RequestResult requestResult;
             requestResult = Network.SendRequest("http://localhost:8000/auth", "POST",
             Encoding.GetEncoding("utf-8").GetBytes(login + "*" + pass), "text/plain", out Result);
@@ -67,11 +73,18 @@ namespace MessangerClient
 
             RequestResult requestResult;
 
+
             LogInResult = false;
             string login, pass;
 
             login = TBLoG.Text;
             pass = PBPass.Password;
+
+            if(string.IsNullOrEmpty(login))
+            {
+                MessageBox.Show("Поле login не должно быть пустым");
+                return;
+            }
 
             string Result;
 

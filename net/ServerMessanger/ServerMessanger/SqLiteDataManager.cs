@@ -32,12 +32,13 @@ class SqLiteDataManager : IDataManager
 
         sqliteCommand2.ExecuteNonQuery();
     }
+    
 
-    public List<string> GetUsers(string login)
+    public List<User> GetFriends(string login)
     {
-        List<string> users = new List<string>();
+        List<User> users = new List<User>();
 
-        User user = GetUserByLogIn(login);
+        User user = GetUser(login);
 
         SqliteCommand sqliteCommand = PrepareCommand("SELECT user2 FROM contacts WHERE user1 = " + user.Id);
 
@@ -47,20 +48,27 @@ class SqLiteDataManager : IDataManager
 
             if (reader.HasRows)
             {
-                reader.Read();
+
+                while (reader.Read())
+                {
+                    long id = (long)reader.GetValue(0);
+
+                    User u = GetUser((int)id);
+
+                    users.Add(u);
+                }
             }
-            else
-            {
-                result = false;
-            }
+
         }
 
         return users;
     }
 
+
+
     int GetIdByLogin(string login)
     {
-        int Id;
+        int Id = 0;
 
         string request = string.Format("SELECT id FROM users WHERE login = '{0}'", login);
         SqliteCommand sqliteCommand = PrepareCommand(request);
@@ -70,13 +78,10 @@ class SqLiteDataManager : IDataManager
             if(reader.HasRows)
             {
                 reader.Read();
-            }
-
-            else
-            {
-
+                Id = (int)(reader.GetValue(0));
             }
         }
+        return Id;
     }
 
     public bool Auth(string login, string password)
@@ -130,11 +135,33 @@ class SqLiteDataManager : IDataManager
         }
     }
 
-    public User GetUserByLogIn(string login)
+    public User GetUser(string login)
     {
         User user = null;
 
         string request = string.Format("SELECT * FROM users WHERE login = '{0}'", login);
+
+        user = GetUserByQuery(request);
+
+        return user;
+    }
+
+    public User GetUser(int id)
+    {
+        User user = null;
+
+        string request = string.Format("SELECT * FROM users WHERE id = '{0}'", id);
+
+        user = GetUserByQuery(request);
+
+
+        return user;
+    }
+
+    private User GetUserByQuery(string request)
+    {
+        User user = null;
+
         SqliteCommand sqliteCommand = PrepareCommand(request);
 
         using (SqliteDataReader reader = sqliteCommand.ExecuteReader())
@@ -148,7 +175,7 @@ class SqLiteDataManager : IDataManager
 
                 user.Id = (long?)(reader.GetValue(0));
 
-                user.Login = login;
+                user.Login = (string)reader.GetValue(1);
 
                 user.Password = (string)(reader.GetValue(2));
             }
@@ -194,7 +221,10 @@ class SqLiteDataManager : IDataManager
                 if (reader.HasRows)
                 {
                     reader.Read();
-                    userId = (int)(reader.GetValue(0));
+                    var v = reader.GetValue(0);
+                    Type t = v.GetType();
+
+                    userId = (int)(long)(reader.GetValue(0));
                 }
             }
         }

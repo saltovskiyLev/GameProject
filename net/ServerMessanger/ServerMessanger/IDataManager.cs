@@ -8,7 +8,7 @@
 
     bool Register(string login, string password, string userName);
 
-    User GetUserByLogIn(string logInId);
+    //User GetUserByLogIn(string logInId);
 
     string CreateInvite(int userId);
 
@@ -18,5 +18,8 @@
 
     void AddContact(int FirstId, int SecondId);
 
-    List<string> GetUsers(string sessionKey);
+    List<User> GetFriends(string login);
+    public User GetUser(string login);
+    public User GetUser(int id);
+
 }
