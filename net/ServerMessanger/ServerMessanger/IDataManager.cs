@@ -1,4 +1,6 @@
-﻿interface IDataManager
+﻿using MessangerCore;
+
+interface IDataManager
 {
     bool CheckLoginAvailability(string login);
 

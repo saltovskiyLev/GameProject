@@ -178,6 +178,9 @@ class SqLiteDataManager : IDataManager
                 user.Login = (string)reader.GetValue(1);
 
                 user.Password = (string)(reader.GetValue(2));
+
+                user.Name = (string)(reader.GetValue(3));
+
             }
         }
 

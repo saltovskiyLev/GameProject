@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Newtonsoft.Json;
+using MessangerCore;
 
 namespace MessangerClient
 {
@@ -27,14 +28,17 @@ namespace MessangerClient
         {
             InitializeComponent();
 
-            ObservableCollection<Contact> contacts = new ObservableCollection<Contact>();
+            ObservableCollection<User> contacts;
 
-            contacts.Add(new Contact { Name = "Lev" });
+            
+
+            /*contacts.Add(new Contact { Name = "Lev" });
             contacts.Add(new Contact { Name = "Alex" });
-            contacts.Add(new Contact { Name = "Max" });
+            contacts.Add(new Contact { Name = "Max" });*/
+
+            
 
 
-            LBContacts.ItemsSource = contacts;
 
             Login login = new Login();
             login.ShowDialog();
@@ -44,6 +48,16 @@ namespace MessangerClient
             {
                 Close();
             }
+
+            string Result;
+
+            Network.SendRequest("http://localhost:8000/GetFriends", "POST",
+            Encoding.GetEncoding("utf-8").GetBytes(sessionKey), "text/plain", out Result);
+
+            List<User> friends = JsonConvert.DeserializeObject<List<User>>(Result);
+            contacts = new ObservableCollection<User>(friends);
+
+            LBContacts.ItemsSource = contacts;
         }
 
         private void Invite_Click(object sender, RoutedEventArgs e)

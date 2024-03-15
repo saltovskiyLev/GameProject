@@ -56,6 +56,26 @@ while (true)
                 Register(userData[0], userData[1], userData[2], response);
             }
                 break;
+
+        case "GetFriends":
+            {
+                string sessionKey = requestBody;
+                string login = sessionManager.GetLogin(sessionKey);
+
+                if(string.IsNullOrEmpty(login))
+                {
+                    SendTextResponse(response, "", 403);
+
+                    break;
+                }
+
+                List<User> friends = dataManager.GetFriends(login);
+
+                string result = JsonConvert.SerializeObject(friends);
+
+                SendTextResponse(response, result, 200);
+            }
+            break;
             
         case "auth":
             {
